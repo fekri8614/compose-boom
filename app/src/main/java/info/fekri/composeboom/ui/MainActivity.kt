@@ -16,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
-import info.fekri.composeboom.ui.feature.entry1.EntryFirstScreen
+import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.MyScreens
@@ -66,7 +66,7 @@ fun MainAppUi() {
 
 
         composable(MyScreens.EntryScreenFirst.route) {
-            EntryFirstScreen()
+            FirstEntryScreen()
         }
 
         composable(MyScreens.EntryScreenSecond.route) {
