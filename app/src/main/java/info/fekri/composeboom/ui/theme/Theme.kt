@@ -22,6 +22,6 @@ fun ComposeBoomTheme(content: @Composable () -> Unit) {
     )
 
     val uiController = rememberSystemUiController()
-    uiController.setSystemBarsColor(PrimaryColor)
+    uiController.setSystemBarsColor(BackgroundMain)
 
 }

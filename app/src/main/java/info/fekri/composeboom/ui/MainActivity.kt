@@ -1,6 +1,7 @@
 package info.fekri.composeboom.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
-import info.fekri.composeboom.ui.feature.splash.SplashScreen
+import info.fekri.composeboom.ui.feature.entry1.EntryFirstScreen
+import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.MyScreens
 import org.koin.android.ext.koin.androidContext
@@ -36,12 +38,20 @@ fun MainPreview() {
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
         setContent {
             Koin(appDeclaration = {
                 androidContext(this@MainActivity)
                 modules(myModules)
             }) {
-                MainAppUi()
+                ComposeBoomTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = BackgroundMain
+                    ) {
+                        MainAppUi()
+                    }
+                }
             }
         }
     }
@@ -52,11 +62,8 @@ fun MainAppUi() {
     val context = LocalContext.current
     val controller = rememberNavController()
     
-    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.EntryScreenFirst.route) {
 
-        composable(MyScreens.SplashScreen.route) {
-            SplashScreen()
-        }
 
         composable(MyScreens.EntryScreenFirst.route) {
             EntryFirstScreen()
@@ -74,7 +81,16 @@ fun MainAppUi() {
             ShowBookScreen()
         }
 
+        composable(MyScreens.SearchScreen.route) {
+            SearchScreen()
+        }
+
     }
+
+}
+
+@Composable
+fun SearchScreen() {
 
 }
 
@@ -93,8 +109,5 @@ fun EntrySecondScreen() {
 
 }
 
-@Composable
-fun EntryFirstScreen() {
 
-}
 

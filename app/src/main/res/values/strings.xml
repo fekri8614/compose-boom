@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Compose Boom</string>
+    <string name="welcome_text">Welcome to Boom!</string>
 </resources>
