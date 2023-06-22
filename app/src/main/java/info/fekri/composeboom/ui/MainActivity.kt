@@ -1,44 +1,47 @@
 package info.fekri.composeboom.ui
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
+import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
+import info.fekri.composeboom.util.IS_USER_FIRST_TIME
+import info.fekri.composeboom.util.KEY_FIRST_ENTRY
+import info.fekri.composeboom.util.KEY_SPLASH_VALUE
 import info.fekri.composeboom.util.MyScreens
+import info.fekri.composeboom.util.NAME_PREF
 import org.koin.android.ext.koin.androidContext
-
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    ComposeBoomTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colors.background
-        ) {
-            MainAppUi()
-        }
-    }
-}
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
+
+        val sharedPreferences = getSharedPreferences("boom_preferences", Context.MODE_PRIVATE)
+        val isFirstTime = sharedPreferences.getBoolean(IS_USER_FIRST_TIME, true)
+        if (isFirstTime) {
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putBoolean(IS_USER_FIRST_TIME, false)
+            editor.apply()
+        }
+
         setContent {
             Koin(appDeclaration = {
                 androidContext(this@MainActivity)
@@ -49,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         color = BackgroundMain
                     ) {
-                        MainAppUi()
+                        MainAppUi(isFirstTime)
                     }
                 }
             }
@@ -58,15 +61,20 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainAppUi() {
+fun MainAppUi(isFirstTime:Boolean) {
     val context = LocalContext.current
     val controller = rememberNavController()
-    
-    KoinNavHost(navController = controller, startDestination = MyScreens.EntryScreenFirst.route) {
+
+    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
 
 
-        composable(MyScreens.EntryScreenFirst.route) {
-            FirstEntryScreen()
+        composable(
+            route = MyScreens.EntryScreenFirst.route + "/{$KEY_FIRST_ENTRY}",
+            arguments = listOf(navArgument(KEY_FIRST_ENTRY) {
+                type = NavType.BoolType
+            })
+        ) {
+            FirstEntryScreen(it.arguments!!.getBoolean(KEY_FIRST_ENTRY, true))
         }
 
         composable(MyScreens.EntryScreenSecond.route) {
@@ -83,6 +91,12 @@ fun MainAppUi() {
 
         composable(MyScreens.SearchScreen.route) {
             SearchScreen()
+        }
+
+        composable(
+            MyScreens.SplashScreen.route
+        ) {
+            SplashScreen(isFirstTime)
         }
 
     }

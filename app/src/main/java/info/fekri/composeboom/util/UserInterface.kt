@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
@@ -18,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,7 +50,7 @@ fun IconMainApp() {
 }
 
 @Composable
-fun MyEditText(edtValue: String, icon: ImageVector, hint: String, onValueChanges: (String) -> Unit) {
+fun MyEditText(edtValue: String, icon: ImageVector, hint: String, keyboardType: KeyboardType = KeyboardType.Text, imeAction: ImeAction = ImeAction.Next, onValueChanges: (String) -> Unit) {
     OutlinedTextField(
         label = { Text(hint) },
         value = edtValue,
@@ -57,7 +61,7 @@ fun MyEditText(edtValue: String, icon: ImageVector, hint: String, onValueChanges
             .fillMaxWidth(0.9f),
         shape = Shapes.medium,
         leadingIcon = { Icon(icon, null) },
-
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction)
     )
 }
 

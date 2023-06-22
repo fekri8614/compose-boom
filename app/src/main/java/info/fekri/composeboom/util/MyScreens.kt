@@ -6,4 +6,5 @@ sealed class MyScreens(val route: String) {
     object MainScreen : MyScreens("mainScreen")
     object ShowBookScreen: MyScreens("showBookScreen")
     object SearchScreen: MyScreens("searchScreen")
+    object SplashScreen: MyScreens("splashScreen")
 }
