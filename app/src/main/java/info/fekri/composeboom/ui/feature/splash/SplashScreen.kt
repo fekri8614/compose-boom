@@ -33,6 +33,7 @@ import org.koin.core.parameter.parametersOf
 fun SplashScreen(isFirstTime: Boolean) {
     val context = LocalContext.current
     val navigation = getNavController()
+    val viewModel = getNavViewModel<SplashViewModel>()
 
     Column(
         modifier = Modifier
@@ -53,8 +54,8 @@ fun SplashScreen(isFirstTime: Boolean) {
 
         Handler().postDelayed({
 
-            if (isFirstTime) {
-                navigation.navigate(MyScreens.EntryScreenSecond.route)
+            if (isFirstTime && !viewModel.isUserDataSaved()) {
+                navigation.navigate(MyScreens.EntryScreenFirst.route)
             } else {
                 navigation.navigate(MyScreens.MainScreen.route) {
                     popUpTo(MyScreens.SplashScreen.route)

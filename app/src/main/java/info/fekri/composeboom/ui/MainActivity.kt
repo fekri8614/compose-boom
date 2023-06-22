@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,18 +25,16 @@ import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
-import info.fekri.composeboom.util.KEY_FIRST_ENTRY
-import info.fekri.composeboom.util.KEY_SPLASH_VALUE
 import info.fekri.composeboom.util.MyScreens
-import info.fekri.composeboom.util.NAME_PREF
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
 
-        val sharedPreferences = getSharedPreferences("boom_preferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("my_fist_t_checker_sh", Context.MODE_PRIVATE)
         val isFirstTime = sharedPreferences.getBoolean(IS_USER_FIRST_TIME, true)
         if (isFirstTime) {
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -67,14 +67,8 @@ fun MainAppUi(isFirstTime:Boolean) {
 
     KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
 
-
-        composable(
-            route = MyScreens.EntryScreenFirst.route + "/{$KEY_FIRST_ENTRY}",
-            arguments = listOf(navArgument(KEY_FIRST_ENTRY) {
-                type = NavType.BoolType
-            })
-        ) {
-            FirstEntryScreen(it.arguments!!.getBoolean(KEY_FIRST_ENTRY, true))
+        composable(route = MyScreens.EntryScreenFirst.route) {
+            FirstEntryScreen()
         }
 
         composable(MyScreens.EntryScreenSecond.route) {
