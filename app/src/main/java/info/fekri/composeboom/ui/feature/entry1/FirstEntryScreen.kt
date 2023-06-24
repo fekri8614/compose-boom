@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -55,13 +56,39 @@ fun FirstEntryScreen() {
             Text(
                 text = "Boom!",
                 style = TextStyle(
-                    fontSize = 24.sp,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
             )
         }
 
         Spacer(modifier = Modifier.height(100.dp))
+
+        Text(
+            text = "Let's get to know each other!", style = TextStyle(
+                fontSize = 14.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .align(Alignment.Start)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = "I'm Boom, your book owl friend!\nAnd you?", style = TextStyle(
+                fontSize = 14.sp,
+                color = Color.Black,
+                fontWeight = FontWeight.Bold
+            ),
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .align(Alignment.Start)
+        )
+
+        Spacer(modifier = Modifier.height(40.dp))
 
         MyInputs(viewModel)
 
@@ -119,7 +146,7 @@ fun MyInputs(viewModel: FirstEntryViewModel) {
     MyEditText(
         edtValue = userName.value,
         icon = Icons.Default.Person,
-        hint = "Your name",
+        hint = "I'm ...",
         onValueChanges = { name ->
             viewModel.fullName.value = name
         }
@@ -130,7 +157,7 @@ fun MyInputs(viewModel: FirstEntryViewModel) {
     MyEditText(
         edtValue = userID.value,
         icon = Icons.Default.Person,
-        hint = "Your id",
+        hint = "My id-name is ...",
         onValueChanges = { id ->
             viewModel.userID.value = id
         }

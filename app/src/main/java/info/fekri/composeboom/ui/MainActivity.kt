@@ -21,6 +21,7 @@ import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
+import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
@@ -112,10 +113,7 @@ fun MainScreen() {
 
 }
 
-@Composable
-fun EntrySecondScreen() {
 
-}
 
 
 
