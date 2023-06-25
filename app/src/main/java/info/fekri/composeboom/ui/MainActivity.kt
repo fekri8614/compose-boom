@@ -24,7 +24,6 @@ import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
-import info.fekri.composeboom.util.KEY_MAIN_VALUE
 import info.fekri.composeboom.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 
@@ -62,10 +61,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainAppUi(isFirstTime: Boolean) {
-    val context = LocalContext.current
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.EntryScreenSecond.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.MainScreen.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()
