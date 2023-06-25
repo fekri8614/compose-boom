@@ -1,7 +1,6 @@
 package info.fekri.composeboom.ui.feature.splash
 
 import android.os.Handler
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +26,6 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.R
 import info.fekri.composeboom.util.MyScreens
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun SplashScreen(isFirstTime: Boolean) {
@@ -53,15 +51,8 @@ fun SplashScreen(isFirstTime: Boolean) {
         )
 
         Handler().postDelayed({
-
-            if (isFirstTime && !viewModel.isUserDataSaved()) {
-                navigation.navigate(MyScreens.EntryScreenFirst.route)
-            } else {
-                navigation.navigate(MyScreens.MainScreen.route) {
-                    popUpTo(MyScreens.SplashScreen.route)
-                }
-            }
-
+            if (isFirstTime && !viewModel.isUserDataSaved()) navigation.navigate(MyScreens.EntryScreenFirst.route)
+            else navigation.navigate(MyScreens.MainScreen.route) { popUpTo(MyScreens.SplashScreen.route) }
         }, 3500)
 
     }
