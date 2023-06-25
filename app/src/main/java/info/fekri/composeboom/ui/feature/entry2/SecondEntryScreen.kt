@@ -37,7 +37,6 @@ import info.fekri.composeboom.util.MyScreens
 
 @Composable
 fun EntrySecondScreen() {
-    val context = LocalContext.current
     val navigation = getNavController()
     val viewModel = getNavViewModel<SecondEntryViewModel>()
 
@@ -121,7 +120,6 @@ fun SelectableItems(
     isScienceChecked: (Boolean) -> Unit,
     isKidsChecked: (Boolean) -> Unit
 ) {
-    val context = LocalContext.current
 
     Column(
         modifier = modifier
