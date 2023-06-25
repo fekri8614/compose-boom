@@ -62,7 +62,7 @@ fun SplashScreen(isFirstTime: Boolean) {
                 }
             }
 
-        }, 3000)
+        }, 3500)
 
     }
 
