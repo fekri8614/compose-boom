@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,6 +24,7 @@ import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
+import info.fekri.composeboom.util.KEY_MAIN_VALUE
 import info.fekri.composeboom.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 
@@ -62,11 +61,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainAppUi(isFirstTime:Boolean) {
+fun MainAppUi(isFirstTime: Boolean) {
     val context = LocalContext.current
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.EntryScreenSecond.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()

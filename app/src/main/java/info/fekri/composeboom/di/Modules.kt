@@ -19,6 +19,6 @@ val myModules = module {
 
     viewModel { SplashViewModel(get()) }
     viewModel { FirstEntryViewModel(get()) }
-    viewModel { SecondEntryViewModel() }
+    viewModel { SecondEntryViewModel(get()) }
 
 }

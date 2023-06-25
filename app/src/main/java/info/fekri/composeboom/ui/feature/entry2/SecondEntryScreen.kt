@@ -3,11 +3,16 @@ package info.fekri.composeboom.ui.feature.entry2
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.MaterialTheme
@@ -27,6 +32,7 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.util.IconMainApp
+import info.fekri.composeboom.util.MyScreens
 
 @Composable
 fun EntrySecondScreen() {
@@ -37,20 +43,91 @@ fun EntrySecondScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(8.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        MainDesign(viewModel)
+        MainDesign(
+            viewModel,
+            isScienceChecked = { viewModel.saveScienceSub(it) },
+            isKidsChecked = { viewModel.saveKidsSub(it) }
+        )
+
+        TextButton(
+            onClick = {
+                navigation.navigate(MyScreens.MainScreen.route) {
+                    popUpTo(MyScreens.SplashScreen.route)
+                }
+            },
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
+            Text(text = "Submit!", modifier = Modifier.padding(4.dp))
+        }
 
     }
 
 }
 
 @Composable
-fun MainDesign(viewModel: SecondEntryViewModel, modifier: Modifier = Modifier) {
+fun MainDesign(
+    viewModel: SecondEntryViewModel,
+    modifier: Modifier = Modifier,
+    isScienceChecked: (Boolean) -> Unit,
+    isKidsChecked: (Boolean) -> Unit
+) {
+    Column {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+        ) {
+            IconMainApp()
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Boom!",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+        }
+
+        Spacer(modifier = modifier.height(100.dp))
+
+        SelectableItems(
+            viewModel,
+            isScienceChecked = isScienceChecked,
+            isKidsChecked = isKidsChecked
+        )
+
+        TextButton(
+            onClick = { viewModel.showDialog.value = true },
+            modifier = modifier.padding(top = 16.dp)
+        ) {
+            Text(text = "Couldn't find?", fontSize = 13.sp)
+        }
+
+    }
+}
+
+@Composable
+fun SelectableItems(
+    viewModel: SecondEntryViewModel,
+    modifier: Modifier = Modifier,
+    isScienceChecked: (Boolean) -> Unit,
+    isKidsChecked: (Boolean) -> Unit
+) {
+    val context = LocalContext.current
+
     Column(
-        modifier = modifier.padding(top = 16.dp, start = 8.dp)
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxWidth()
     ) {
+
         Text(
             text = "Your favorites:", style = TextStyle(
                 fontSize = 18.sp,
@@ -59,91 +136,132 @@ fun MainDesign(viewModel: SecondEntryViewModel, modifier: Modifier = Modifier) {
             )
         )
 
-        SelectableItems(viewModel)
-    }
-}
-
-@Composable
-fun SelectableItems(viewModel: SecondEntryViewModel, modifier: Modifier = Modifier) {
-    val context = LocalContext.current
-
-    Column(
-        modifier = modifier.padding(start = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-
-        Row(horizontalArrangement = Arrangement.Center) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.weight(1f)) {
-                Text(text = "Science")
-                Checkbox(
-                    checked = viewModel.isScienceChecked.value,
-                    onCheckedChange = { viewModel.isScienceChecked.value = it },
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = MaterialTheme.colors.primary,
-                        uncheckedColor = Color.Gray
-                    )
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.weight(1f)) {
-                Text(text = "Poems")
-                Checkbox(
-                    checked = viewModel.isPoemsChecked.value,
-                    onCheckedChange = { viewModel.isPoemsChecked.value = it },
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = MaterialTheme.colors.primary,
-                        uncheckedColor = Color.Gray
-                    )
-                )
-            }
-        }
-
-        Row(horizontalArrangement = Arrangement.Center) {
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.weight(1f)) {
-                Text(text = "History")
-                Checkbox(
-                    checked = viewModel.isHistoryChecked.value,
-                    onCheckedChange = { viewModel.isHistoryChecked.value = it },
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = MaterialTheme.colors.primary,
-                        uncheckedColor = Color.Gray
-                    )
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.weight(1f)) {
-                Text(text = "Kids")
-                Checkbox(
-                    checked = viewModel.isKidsChecked.value,
-                    onCheckedChange = { viewModel.isKidsChecked.value = it },
-                    colors = CheckboxDefaults.colors(
-                        checkedColor = MaterialTheme.colors.primary,
-                        uncheckedColor = Color.Gray
-                    )
-                )
-            }
-        }
-
-        TextButton(
-            onClick = {
-                if (viewModel.isKidsChecked.value) {
-                    viewModel.showDialog.value = true
-                }
-            },
+        Row(
             modifier = modifier
-                .fillMaxWidth(0.7f)
                 .padding(top = 16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Submit!", style= TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Bold), modifier = modifier.padding(4.dp))
-        }
 
-        if (viewModel.showDialog.value) {
-            ShowAnnounceDialog(
-                viewModel = viewModel,
-                msg = "Kids items is checked off, Kids item is not completed yet."
-            )
-            viewModel.isKidsChecked.value = false
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Card(
+                    modifier = modifier
+                        .width(140.dp)
+                        .height(60.dp)
+                        .padding(start = 8.dp, top = 8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier.padding(horizontal = 8.dp)
+                    ) {
+                        Text(text = "History")
+                        Checkbox(
+                            checked = viewModel.isHistoryChecked.value,
+                            onCheckedChange = { viewModel.isHistoryChecked.value = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = MaterialTheme.colors.primary,
+                                uncheckedColor = Color.Gray
+                            )
+                        )
+                    }
+                }
+
+                Card(
+                    modifier = modifier
+                        .width(140.dp)
+                        .height(60.dp)
+                        .padding(start = 8.dp, top = 8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier.padding(horizontal = 8.dp)
+                    ) {
+                        Text(text = "Kids")
+                        Checkbox(
+                            checked = viewModel.isKidsChecked.value,
+                            onCheckedChange = { viewModel.isKidsChecked.value = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = MaterialTheme.colors.primary,
+                                uncheckedColor = Color.Gray
+                            )
+                        )
+                    }
+                }
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Card(
+                    modifier = modifier
+                        .width(140.dp)
+                        .height(60.dp)
+                        .padding(start = 8.dp, top = 8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier.padding(horizontal = 8.dp)
+                    ) {
+                        Text(text = "Science")
+                        Checkbox(
+                            checked = viewModel.isScienceChecked.value,
+                            onCheckedChange = { viewModel.isScienceChecked.value = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = MaterialTheme.colors.primary,
+                                uncheckedColor = Color.Gray
+                            )
+                        )
+                    }
+                }
+
+                Card(
+                    modifier = modifier
+                        .width(140.dp)
+                        .height(60.dp)
+                        .padding(start = 8.dp, top = 8.dp)
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = modifier.padding(horizontal = 8.dp)
+                    ) {
+                        Text(text = "Poems")
+                        Checkbox(
+                            checked = viewModel.isPoemsChecked.value,
+                            onCheckedChange = { viewModel.isPoemsChecked.value = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = MaterialTheme.colors.primary,
+                                uncheckedColor = Color.Gray
+                            )
+                        )
+                    }
+                }
+            }
+
+            if (viewModel.showDialog.value) {
+                viewModel.isHistoryChecked.value = false
+                viewModel.isPoemsChecked.value = false
+                ShowAnnounceDialog(
+                    viewModel = viewModel,
+                    msg = "Poems and History are checked off, those item are not completed yet"
+                )
+            }
+
+            if (viewModel.isScienceChecked.value) isScienceChecked.invoke(true) else isScienceChecked.invoke(true)
+            if (viewModel.isKidsChecked.value) isKidsChecked.invoke(true) else isKidsChecked.invoke(true)
+
         }
 
     }
+
 }
 
 @Composable

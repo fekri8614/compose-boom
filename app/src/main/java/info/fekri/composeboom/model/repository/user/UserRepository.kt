@@ -8,4 +8,10 @@ interface UserRepository {
     fun getUserID(): String?
     fun saveUserID(id: String)
 
+    fun getScienceSub(): String?
+    fun saveScienceSub(sub: String)
+
+    fun getKidsSub(): String?
+    fun saveKidsSub(sub: String)
+
 }
