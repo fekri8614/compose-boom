@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
@@ -55,7 +56,7 @@ fun EntrySecondScreen() {
             isKidsChecked = { viewModel.saveKidsSub(it) }
         )
 
-        TextButton(
+        Button(
             onClick = {
                 navigation.navigate(MyScreens.MainScreen.route) {
                     popUpTo(MyScreens.SplashScreen.route)
