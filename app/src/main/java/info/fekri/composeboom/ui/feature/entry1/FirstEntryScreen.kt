@@ -139,7 +139,6 @@ fun FirstEntryScreen() {
 
 @Composable
 fun MyInputs(viewModel: FirstEntryViewModel) {
-    val context = LocalContext.current
     val userName = viewModel.fullName.observeAsState("")
     val userID = viewModel.userID.observeAsState("")
 

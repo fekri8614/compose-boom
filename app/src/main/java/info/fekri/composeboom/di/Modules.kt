@@ -21,6 +21,6 @@ val myModules = module {
     viewModel { SplashViewModel(get()) }
     viewModel { FirstEntryViewModel(get()) }
     viewModel { SecondEntryViewModel(get()) }
-    viewModel { MainScreenViewModel() }
+//    viewModel { MainScreenViewModel(get()) }
 
 }
