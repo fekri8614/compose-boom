@@ -5,20 +5,12 @@ import androidx.lifecycle.ViewModel
 import info.fekri.composeboom.model.repository.user.UserRepository
 
 class MainScreenViewModel(private val userRepository: UserRepository) : ViewModel() {
-    val dataKids = mutableStateOf("")
-    val dataScience = mutableStateOf("")
+    val dataKids = mutableStateOf<List<String>>(listOf())
+    val dataScience = mutableStateOf<List<String>>(listOf())
+    val dataPoems = mutableStateOf<List<String>>(listOf()) // will change the list-type.
+    // will use Poem/Science/Kid data class(s) instead of String
 
-    init {
-        setupSubData(loadDataFromCache())
-    }
 
-    private fun loadDataFromCache(): Pair<String, String> {
-        return Pair(userRepository.getScienceSub()!!, userRepository.getKidsSub()!!)
-    }
 
-    private fun setupSubData(data: Pair<String, String>) {
-        dataScience.value = data.first
-        dataKids.value = data.second
-    }
 
 }

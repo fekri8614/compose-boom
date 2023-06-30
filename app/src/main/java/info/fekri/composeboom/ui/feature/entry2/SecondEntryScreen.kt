@@ -52,7 +52,8 @@ fun EntrySecondScreen() {
         MainDesign(
             viewModel,
             isScienceChecked = { viewModel.saveScienceSub(it) },
-            isKidsChecked = { viewModel.saveKidsSub(it) }
+            isKidsChecked = { viewModel.saveKidsSub(it) },
+            isPoemsChecked = { viewModel.savePoems(it) }
         )
 
         Button(
@@ -75,7 +76,8 @@ fun MainDesign(
     viewModel: SecondEntryViewModel,
     modifier: Modifier = Modifier,
     isScienceChecked: (Boolean) -> Unit,
-    isKidsChecked: (Boolean) -> Unit
+    isKidsChecked: (Boolean) -> Unit,
+    isPoemsChecked: (Boolean) -> Unit
 ) {
     Column {
         Column(
@@ -100,7 +102,8 @@ fun MainDesign(
         SelectableItems(
             viewModel,
             isScienceChecked = isScienceChecked,
-            isKidsChecked = isKidsChecked
+            isKidsChecked = isKidsChecked,
+            isPoemsChecked = isPoemsChecked
         )
 
         TextButton(
@@ -118,7 +121,8 @@ fun SelectableItems(
     viewModel: SecondEntryViewModel,
     modifier: Modifier = Modifier,
     isScienceChecked: (Boolean) -> Unit,
-    isKidsChecked: (Boolean) -> Unit
+    isKidsChecked: (Boolean) -> Unit,
+    isPoemsChecked: (Boolean) -> Unit
 ) {
 
     Column(
@@ -247,15 +251,15 @@ fun SelectableItems(
 
             if (viewModel.showDialog.value) {
                 viewModel.isHistoryChecked.value = false
-                viewModel.isPoemsChecked.value = false
                 ShowAnnounceDialog(
                     viewModel = viewModel,
-                    msg = "Poems and History are checked off, those item are not completed yet"
+                    msg = "History is checked off, this item is not completed yet"
                 )
             }
 
-            if (viewModel.isScienceChecked.value) isScienceChecked.invoke(true) else isScienceChecked.invoke(true)
-            if (viewModel.isKidsChecked.value) isKidsChecked.invoke(true) else isKidsChecked.invoke(true)
+            if (viewModel.isScienceChecked.value) isScienceChecked(true) else isScienceChecked(false)
+            if (viewModel.isKidsChecked.value) isKidsChecked(true) else isKidsChecked(false)
+            if (viewModel.isPoemsChecked.value) isPoemsChecked(true) else isPoemsChecked(false)
 
         }
 
