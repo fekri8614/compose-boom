@@ -96,4 +96,8 @@ dependencies {
     // Room
     implementation "androidx.room:room-ktx:2.6.0-alpha01"
     kapt "androidx.room:room-compiler:2.5.1"
+
+    // collapsing toolbar
+    implementation "me.onebone:toolbar-compose:2.3.5"
+
 }
