@@ -6,12 +6,15 @@ interface UserRepository {
     fun saveUserName(name: String)
 
     fun getUserID(): String?
-    fun saveUserID(id: String)
+    fun saveUserID(id: String?)
 
     fun getScienceSub(): String?
-    fun saveScienceSub(sub: String)
+    fun saveScienceSub(sub: String?)
 
     fun getKidsSub(): String?
-    fun saveKidsSub(sub: String)
+    fun saveKidsSub(sub: String?)
+
+    fun getPoemsSub() : String?
+    fun savePoems(sub: String?)
 
 }
