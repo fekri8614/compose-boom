@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.fekri.composeboom.model.data.ISBN
-import info.fekri.composeboom.model.data.ISBNInfoBook
 import info.fekri.composeboom.model.data.KidsBook
 import info.fekri.composeboom.model.data.PoemBook
 import info.fekri.composeboom.model.data.ScienceBook
-import info.fekri.composeboom.model.repository.movie.MovieRepository
+import info.fekri.composeboom.model.repository.movie.BookRepository
 import info.fekri.composeboom.model.repository.user.UserRepository
 import info.fekri.composeboom.util.EMPTY_ISBN_DATA
 import info.fekri.composeboom.util.coroutineExceptionHandler
@@ -17,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
     private val userRepository: UserRepository,
-    private val movieRepository: MovieRepository,
+    private val bookRepository: BookRepository,
     isNetConnected: Boolean
 ) : ViewModel() {
     val dataKids = mutableStateOf<List<KidsBook>>(listOf())
@@ -46,7 +45,7 @@ class MainScreenViewModel(
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val poemsData = movieRepository.getPoemBooks()
+            val poemsData = bookRepository.getPoemBooks()
             dataPoems.value = poemsData
 
             showProgress.value = false
@@ -56,7 +55,7 @@ class MainScreenViewModel(
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val scienceData = movieRepository.getScienceBooks()
+            val scienceData = bookRepository.getScienceBooks()
             dataScience.value = scienceData
 
             showProgress.value = false
@@ -66,7 +65,7 @@ class MainScreenViewModel(
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val dataKidsFromServer = movieRepository.getKidBooks()
+            val dataKidsFromServer = bookRepository.getKidBooks()
             dataKids.value = dataKidsFromServer
 
             showProgress.value = false
@@ -77,7 +76,7 @@ class MainScreenViewModel(
         viewModelScope.launch (coroutineExceptionHandler){
             showProgress.value = true
 
-            val dataISBNToSet = movieRepository.getBookByISBN(isbn)
+            val dataISBNToSet = bookRepository.getBookByISBN(isbn)
             dataISBN.value = dataISBNToSet.iSBN
 
             showProgress.value = false

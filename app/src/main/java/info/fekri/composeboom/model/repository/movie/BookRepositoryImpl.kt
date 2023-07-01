@@ -3,7 +3,7 @@ package info.fekri.composeboom.model.repository.movie
 import info.fekri.composeboom.model.data.*
 import info.fekri.composeboom.model.net.ApiService
 
-class MovieRepositoryImpl(private val apiService: ApiService) : MovieRepository {
+class BookRepositoryImpl(private val apiService: ApiService) : BookRepository {
 
     override suspend fun getKidBooks(): List<KidsBook> {
         val kidsFromService = apiService.getKidBooks()
