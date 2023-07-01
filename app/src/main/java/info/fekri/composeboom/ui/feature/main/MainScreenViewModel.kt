@@ -1,16 +1,87 @@
 package info.fekri.composeboom.ui.feature.main
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import info.fekri.composeboom.model.data.ISBN
+import info.fekri.composeboom.model.data.ISBNInfoBook
+import info.fekri.composeboom.model.data.KidsBook
+import info.fekri.composeboom.model.data.PoemBook
+import info.fekri.composeboom.model.data.ScienceBook
+import info.fekri.composeboom.model.repository.movie.MovieRepository
 import info.fekri.composeboom.model.repository.user.UserRepository
+import info.fekri.composeboom.util.EMPTY_ISBN_DATA
+import info.fekri.composeboom.util.coroutineExceptionHandler
+import kotlinx.coroutines.launch
 
-class MainScreenViewModel(private val userRepository: UserRepository) : ViewModel() {
-    val dataKids = mutableStateOf<List<String>>(listOf())
-    val dataScience = mutableStateOf<List<String>>(listOf())
-    val dataPoems = mutableStateOf<List<String>>(listOf()) // will change the list-type.
-    // will use Poem/Science/Kid data class(s) instead of String
+class MainScreenViewModel(
+    private val userRepository: UserRepository,
+    private val movieRepository: MovieRepository,
+    isNetConnected: Boolean
+) : ViewModel() {
+    val dataKids = mutableStateOf<List<KidsBook>>(listOf())
+    val dataScience = mutableStateOf<List<ScienceBook>>(listOf())
+    val dataPoems = mutableStateOf<List<PoemBook>>(listOf())
+    val showProgress = mutableStateOf(false)
+    val isUserInternetOK = MutableLiveData(true)
+    val dataISBN = mutableStateOf<ISBN>(EMPTY_ISBN_DATA)
 
+    private fun showKids(): Boolean = !userRepository.getKidsSub().isNullOrEmpty()
+    private fun showScience(): Boolean = !userRepository.getScienceSub().isNullOrEmpty()
+    private fun showPoems(): Boolean = !userRepository.getPoemsSub().isNullOrEmpty()
 
+    init {
+        checkNetwork(isNetConnected)
+        if (showKids()) setupKids()
+        if (showPoems()) setupPoems()
+        if (showScience()) setupScience()
+    }
 
+    private fun checkNetwork(isNetConnected: Boolean) {
+        isUserInternetOK.value = isNetConnected
+    }
+
+    private fun setupPoems() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            showProgress.value = true
+
+            val poemsData = movieRepository.getPoemBooks()
+            dataPoems.value = poemsData
+
+            showProgress.value = false
+        }
+    }
+    private fun setupScience() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            showProgress.value = true
+
+            val scienceData = movieRepository.getScienceBooks()
+            dataScience.value = scienceData
+
+            showProgress.value = false
+        }
+    }
+    private fun setupKids() {
+        viewModelScope.launch(coroutineExceptionHandler) {
+            showProgress.value = true
+
+            val dataKidsFromServer = movieRepository.getKidBooks()
+            dataKids.value = dataKidsFromServer
+
+            showProgress.value = false
+        }
+    }
+
+    fun getDataISBN(isbn: String) {
+        viewModelScope.launch (coroutineExceptionHandler){
+            showProgress.value = true
+
+            val dataISBNToSet = movieRepository.getBookByISBN(isbn)
+            dataISBN.value = dataISBNToSet.iSBN
+
+            showProgress.value = false
+        }
+    }
 
 }

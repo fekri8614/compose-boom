@@ -1,6 +1,8 @@
 package info.fekri.composeboom.model.net
 
+import info.fekri.composeboom.model.data.ISBNInfoBook
 import info.fekri.composeboom.model.data.KidsBookResult
+import info.fekri.composeboom.model.data.PoemBookResult
 import info.fekri.composeboom.model.data.ScienceBookResult
 import info.fekri.composeboom.model.data.Search
 import info.fekri.composeboom.model.data.SearchResult
@@ -29,9 +31,18 @@ interface ApiService {
         @Query("q=") query: String = "Kids"
     ): KidsBookResult
 
-}
+    @GET("/search.json")
+    suspend fun getPoemBooks(
+        @Query("q=") query: String = "literature"
+    ): PoemBookResult
 
-// science, kids, poems, local
+    // http://openlibrary.org/books?bibkeys=ISBN:
+    @GET("/books")
+    suspend fun getBookByISBN(
+        @Query("bibkeys=") bibKey: String
+    ): ISBNInfoBook
+
+}
 
 fun createApiService(): ApiService {
     val retrofit = Retrofit.Builder()
