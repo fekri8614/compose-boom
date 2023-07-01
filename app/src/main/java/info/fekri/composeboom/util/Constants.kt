@@ -9,3 +9,5 @@ const val KEY_SUB_SCIENCE = "scienceSubjectKey"
 const val KEY_SUB_KIDS = "kidsSubjectKey"
 const val KEY_SUB_POEMS = "poemsSubjectKey"
 
+// api -->
+const val BASE_URL = "http://openlibrary.org"

@@ -1,6 +1,7 @@
 package info.fekri.composeboom.di
 
 import android.content.Context
+import info.fekri.composeboom.model.net.createApiService
 import info.fekri.composeboom.model.repository.user.UserRepository
 import info.fekri.composeboom.model.repository.user.UserRepositoryImpl
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryViewModel
@@ -15,6 +16,7 @@ import org.koin.dsl.module
 val myModules = module {
 
     single { androidContext().getSharedPreferences("data_sh_book", Context.MODE_PRIVATE) }
+    single { createApiService() }
 
     single<UserRepository> { UserRepositoryImpl(get()) }
 
