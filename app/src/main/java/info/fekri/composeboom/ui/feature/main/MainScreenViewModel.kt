@@ -17,15 +17,33 @@ class MainScreenViewModel(
     val dataScience = mutableStateOf<List<ScienceBook>>(listOf())
     val dataPoems = mutableStateOf<List<PoemBook>>(listOf())
     val showProgress = mutableStateOf(false)
+    val showDialog = mutableStateOf(false)
 
-    private fun showKids(): Boolean = !userRepository.getKidsSub().isNullOrEmpty()
-    private fun showScience(): Boolean = !userRepository.getScienceSub().isNullOrEmpty()
-    private fun showPoems(): Boolean = !userRepository.getPoemsSub().isNullOrEmpty()
+    val showUiKids = mutableStateOf(false)
+    val showUiScience = mutableStateOf(false)
+    val showUiPoems = mutableStateOf(false)
+
+    private fun showKids(): Boolean = userRepository.getKidsSub()
+    private fun showScience(): Boolean = userRepository.getScienceSub()
+    private fun showPoems(): Boolean = userRepository.getPoemsSub()
 
     init {
-        if (showKids()) setupKids()
-        if (showPoems()) setupPoems()
-        if (showScience()) setupScience()
+
+        if (showKids()) {
+            showUiKids.value = true
+            setupKids()
+        }
+
+        if (showScience()) {
+            showUiScience.value = true
+            setupScience()
+        }
+
+        if (showPoems()) {
+            showUiPoems.value = true
+            setupPoems()
+        }
+
     }
 
     private fun setupPoems() {

@@ -15,22 +15,22 @@ interface ApiService {
 
     // https://www.googleapis.com/books/v1/volumes?q=YOUR_QUERY
 
-    @GET("/volumes")
+    @GET("volumes")
     suspend fun getSearchedBook(
         @Query("q") query: String
     ): SearchedBookResponse
 
-    @GET("/volumes")
+    @GET("volumes")
     suspend fun getScienceBooks(
         @Query("q") query: String = "Science"
     ): ScienceBookResponse
 
-    @GET("/volumes")
+    @GET("volumes")
     suspend fun getKidBooks(
         @Query("q") query: String = "for kids"
     ): KidBookResponse
 
-    @GET("/volumes")
+    @GET("volumes")
     suspend fun getPoemBooks(
         @Query("q") query: String = "Poems"
     ): PoemBookResponse

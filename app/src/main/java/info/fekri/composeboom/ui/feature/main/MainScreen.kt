@@ -1,5 +1,6 @@
 package info.fekri.composeboom.ui.feature.main
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,15 +20,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -43,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.developer.kalert.KAlertDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
@@ -51,7 +48,11 @@ import info.fekri.composeboom.model.data.books.KidBook
 import info.fekri.composeboom.model.data.books.PoemBook
 import info.fekri.composeboom.model.data.books.ScienceBook
 import info.fekri.composeboom.ui.feature.splash.MyAnimaShower
-import info.fekri.composeboom.ui.theme.*
+import info.fekri.composeboom.ui.theme.BlueBackground
+import info.fekri.composeboom.ui.theme.GreenBackground
+import info.fekri.composeboom.ui.theme.PrimaryDarkColor
+import info.fekri.composeboom.ui.theme.Shapes
+import info.fekri.composeboom.ui.theme.YellowBackground
 import info.fekri.composeboom.util.NetworkChecker
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -131,7 +132,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
             if (NetworkChecker(context).isInternetConnected) {
 
-                if (viewModel.dataKids.value.isNotEmpty()) {
+                if (viewModel.showUiKids.value) {
                     KidBookSection(
                         onBookItemClicked = { id -> /*`id` will be used to show more data*/ },
                         backColor = GreenBackground,
@@ -139,17 +140,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     )
                 }
 
-                if (viewModel.dataPoems.value.isNotEmpty()) {
+                if (viewModel.showUiPoems.value) {
                     PoemBookSection(
-                        onBookItemClicked = { id ->  },
+                        onBookItemClicked = { id -> },
                         backColor = BlueBackground,
                         data = dataPoems
                     )
                 }
 
-                if (viewModel.dataScience.value.isNotEmpty()) {
+                if (viewModel.showUiScience.value) {
                     ScienceBookSection(
-                        onBookItemClicked = { id ->  },
+                        onBookItemClicked = { id -> },
                         backColor = GreenBackground,
                         data = dataScience
                     )
@@ -157,9 +158,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
             } else {
                 MyAnimaShower(name = R.raw.connection_error_owl)
+                viewModel.showDialog.value = true
             }
 
         }
+    }
+
+    if (viewModel.showDialog.value) {
+        showMessageDialog(context = context, title = "Connection!", msg = "Please, check if you're connected to Internet!", viewModel = viewModel)
     }
 
 }
@@ -268,7 +274,7 @@ fun PoemBookSection(
                 modifier = modifier.padding(top = 16.dp),
                 contentPadding = PaddingValues(start = 8.dp)
             ) {
-                items(10) {
+                items(data.size) {
                     PoemBookItem(onItemClicked = onBookItemClicked, data = data[it])
                 }
             }
@@ -309,7 +315,7 @@ fun ScienceBookSection(
     Surface(
         modifier = modifier
             .fillMaxWidth(0.95f)
-            .clip(Shapes.large)
+            .clip(Shapes.medium)
             .padding(top = 8.dp),
         color = backColor
     ) {
@@ -331,7 +337,7 @@ fun ScienceBookSection(
                 modifier = modifier.padding(top = 16.dp),
                 contentPadding = PaddingValues(start = 8.dp)
             ) {
-                items(10) {
+                items(data.size) {
                     ScienceBookItem(onItemClicked = onBookItemClicked, data = data[it])
                 }
             }
@@ -340,7 +346,11 @@ fun ScienceBookSection(
 }
 
 @Composable
-fun ScienceBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, data: ScienceBook) {
+fun ScienceBookItem(
+    modifier: Modifier = Modifier,
+    onItemClicked: (String) -> Unit,
+    data: ScienceBook
+) {
     Card(
         modifier = modifier
             .size(width = 160.dp, height = 200.dp)
@@ -411,3 +421,12 @@ fun CircularIcon(
 }
 
 // -----------------------------------------------------------
+
+fun showMessageDialog(context: Context, type: Int = KAlertDialog.SUCCESS_TYPE, title: String, msg: String, viewModel: MainScreenViewModel) {
+    val dialog = KAlertDialog(context, type)
+    dialog.titleText = title
+    dialog.contentText = msg
+    dialog.setConfirmClickListener("OK") { viewModel.showDialog.value = false }
+    dialog.show()
+}
+

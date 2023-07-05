@@ -100,4 +100,8 @@ dependencies {
     // collapsing toolbar
     implementation "me.onebone:toolbar-compose:2.3.5"
 
+    // show dialog
+    implementation 'io.github.tutorialsandroid:kalertdialog:20.3.6'
+    implementation 'com.github.TutorialsAndroid:progressx:v6.0.19'
+
 }

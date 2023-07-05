@@ -1,5 +1,6 @@
 package info.fekri.composeboom.ui.feature.entry2
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import info.fekri.composeboom.util.MyScreens
 
 @Composable
 fun EntrySecondScreen() {
+    val context = LocalContext.current
     val navigation = getNavController()
     val viewModel = getNavViewModel<SecondEntryViewModel>()
 
@@ -65,6 +67,11 @@ fun EntrySecondScreen() {
             modifier = Modifier.fillMaxWidth(0.9f)
         ) {
             Text(text = "Submit!", modifier = Modifier.padding(4.dp))
+        }
+
+        if (viewModel.isHistoryChecked.value) {
+            viewModel.isHistoryChecked.value = false
+            Toast.makeText(context, "History item is checked off", Toast.LENGTH_SHORT).show()
         }
 
     }
