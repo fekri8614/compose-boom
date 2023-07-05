@@ -13,6 +13,6 @@ const val KEY_SUB_KIDS = "kidsSubjectKey"
 const val KEY_SUB_POEMS = "poemsSubjectKey"
 
 // api -->
-const val BASE_URL = "http://openlibrary.org"
+const val BASE_URL = "https://www.googleapis.com/books/v1"
 
 val EMPTY_ISBN_DATA = ISBN("", "", "", "")

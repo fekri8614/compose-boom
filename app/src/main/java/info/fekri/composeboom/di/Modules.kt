@@ -2,8 +2,8 @@ package info.fekri.composeboom.di
 
 import android.content.Context
 import info.fekri.composeboom.model.net.createApiService
-import info.fekri.composeboom.model.repository.movie.BookRepository
-import info.fekri.composeboom.model.repository.movie.BookRepositoryImpl
+import info.fekri.composeboom.model.repository.book.BookRepository
+import info.fekri.composeboom.model.repository.book.BookRepositoryImpl
 import info.fekri.composeboom.model.repository.user.UserRepository
 import info.fekri.composeboom.model.repository.user.UserRepositoryImpl
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryViewModel
@@ -26,6 +26,6 @@ val myModules = module {
     viewModel { SplashViewModel(get()) }
     viewModel { FirstEntryViewModel(get()) }
     viewModel { SecondEntryViewModel(get()) }
-    viewModel { (isNetConnected: Boolean) -> MainScreenViewModel(get(), get(), isNetConnected) }
+    viewModel { MainScreenViewModel(get(), get()) }
 
 }

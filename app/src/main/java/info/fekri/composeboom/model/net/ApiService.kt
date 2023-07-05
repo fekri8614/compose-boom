@@ -1,11 +1,9 @@
 package info.fekri.composeboom.model.net
 
-import info.fekri.composeboom.model.data.ISBNInfoBook
-import info.fekri.composeboom.model.data.KidsBookResult
-import info.fekri.composeboom.model.data.PoemBookResult
-import info.fekri.composeboom.model.data.ScienceBookResult
-import info.fekri.composeboom.model.data.Search
-import info.fekri.composeboom.model.data.SearchResult
+import info.fekri.composeboom.model.data.SearchedBookResponse
+import info.fekri.composeboom.model.data.books.KidBookResponse
+import info.fekri.composeboom.model.data.books.PoemBookResponse
+import info.fekri.composeboom.model.data.books.ScienceBookResponse
 import info.fekri.composeboom.util.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,32 +13,27 @@ import retrofit2.http.Query
 /* write your http(s) requests here */
 interface ApiService {
 
-    @GET("/search.json")
-    suspend fun getBookByQuery(
-        @Query("q=") query: String,
-        @Query("format") format: String = "json"
-    ): SearchResult
+    // https://www.googleapis.com/books/v1/volumes?q=YOUR_QUERY
 
-    @GET("/search.json")
+    @GET("/volumes")
+    suspend fun getSearchedBook(
+        @Query("q") query: String
+    ): SearchedBookResponse
+
+    @GET("/volumes")
     suspend fun getScienceBooks(
-        @Query("q=") query: String = "Science book"
-    ): ScienceBookResult
+        @Query("q") query: String = "Science"
+    ): ScienceBookResponse
 
-    @GET("/search.json")
+    @GET("/volumes")
     suspend fun getKidBooks(
-        @Query("q=") query: String = "Kids"
-    ): KidsBookResult
+        @Query("q") query: String = "for kids"
+    ): KidBookResponse
 
-    @GET("/search.json")
+    @GET("/volumes")
     suspend fun getPoemBooks(
-        @Query("q=") query: String = "literature"
-    ): PoemBookResult
-
-    // http://openlibrary.org/books?bibkeys=ISBN:
-    @GET("/books")
-    suspend fun getBookByISBN(
-        @Query("bibkeys=") bibKey: String
-    ): ISBNInfoBook
+        @Query("q") query: String = "Poems"
+    ): PoemBookResponse
 
 }
 

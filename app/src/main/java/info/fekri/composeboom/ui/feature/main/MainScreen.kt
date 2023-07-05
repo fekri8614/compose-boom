@@ -20,12 +20,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,18 +46,15 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.R
-import info.fekri.composeboom.model.data.ISBN
-import info.fekri.composeboom.model.data.KidsBook
-import info.fekri.composeboom.ui.theme.BlueBackground
-import info.fekri.composeboom.ui.theme.GreenBackground
-import info.fekri.composeboom.ui.theme.PrimaryDarkColor
-import info.fekri.composeboom.ui.theme.Shapes
-import info.fekri.composeboom.ui.theme.YellowBackground
+import info.fekri.composeboom.model.data.books.KidBook
+import info.fekri.composeboom.model.data.books.PoemBook
+import info.fekri.composeboom.model.data.books.ScienceBook
+import info.fekri.composeboom.ui.feature.splash.MyAnimaShower
+import info.fekri.composeboom.ui.theme.*
 import info.fekri.composeboom.util.NetworkChecker
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
-import org.koin.core.parameter.parametersOf
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
@@ -64,14 +64,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
         uiController.setStatusBarColor(PrimaryDarkColor)
     }
     val navigation = getNavController()
-    val viewModel =
-        getNavViewModel<MainScreenViewModel>(parameters = { parametersOf(NetworkChecker(context).isInternetConnected) })
+    val viewModel = getNavViewModel<MainScreenViewModel>()
     val state = rememberCollapsingToolbarScaffoldState()
 
     val dataKids = viewModel.dataKids.value
     val dataPoems = viewModel.dataPoems.value
     val dataScience = viewModel.dataScience.value
-    val dataISBN = viewModel.dataISBN
 
     CollapsingToolbarScaffold(
         modifier = modifier.fillMaxSize(),
@@ -130,39 +128,34 @@ fun MainScreen(modifier: Modifier = Modifier) {
             TopCircularIcons()
             if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 
-            if (viewModel.isUserInternetOK.observeAsState(initial = true).value) {
+            if (NetworkChecker(context).isInternetConnected) {
 
                 if (viewModel.dataKids.value.isNotEmpty()) {
                     KidBookSection(
-                        onBookItemClicked = { id ->  },
+                        onBookItemClicked = { id -> /*`id` will be used to show more data*/ },
                         backColor = GreenBackground,
                         data = dataKids,
-                        viewModel = viewModel,
-                        dataISBN = dataISBN.value
                     )
                 }
 
                 if (viewModel.dataPoems.value.isNotEmpty()) {
                     PoemBookSection(
-                        onBookItemClicked = {},
+                        onBookItemClicked = { id ->  },
                         backColor = BlueBackground,
-                        title = "Literature",
-                        img = "IMAGE_URL"
+                        data = dataPoems
                     )
                 }
 
                 if (viewModel.dataScience.value.isNotEmpty()) {
                     ScienceBookSection(
-                        onBookItemClicked = {},
+                        onBookItemClicked = { id ->  },
                         backColor = GreenBackground,
-                        title = "Scientific",
-                        img = ""
+                        data = dataScience
                     )
                 }
 
-
             } else {
-                // show something
+                MyAnimaShower(name = R.raw.connection_error_owl)
             }
 
         }
@@ -177,9 +170,7 @@ fun KidBookSection(
     modifier: Modifier = Modifier,
     onBookItemClicked: (String) -> Unit,
     backColor: Color,
-    data: List<KidsBook>,
-    viewModel: MainScreenViewModel,
-    dataISBN: ISBN
+    data: List<KidBook>
 ) {
     Surface(
         modifier = modifier
@@ -209,9 +200,7 @@ fun KidBookSection(
                 items(data.size) {
                     KidBookItem(
                         onItemClicked = onBookItemClicked,
-                        data = data[it],
-                        viewModel = viewModel,
-                        dataISBN = dataISBN
+                        data = data[it]
                     )
                 }
             }
@@ -223,24 +212,20 @@ fun KidBookSection(
 fun KidBookItem(
     modifier: Modifier = Modifier,
     onItemClicked: (String) -> Unit,
-    data: KidsBook,
-    viewModel: MainScreenViewModel,
-    dataISBN: ISBN
+    data: KidBook
 ) {
-    viewModel.getDataISBN(data.isbn[0])
-
     Card(
         modifier = modifier
             .size(width = 160.dp, height = 200.dp)
             .padding(end = 16.dp)
             .clickable {
-                onItemClicked.invoke("id") // will pass the real id
+                onItemClicked.invoke(data.id)
             },
         border = BorderStroke(2.dp, YellowBackground),
         elevation = 3.dp
     ) {
         AsyncImage(
-            model = dataISBN.bibKey,
+            model = data.volumeInfo.imageLinks.thumbnail,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -255,8 +240,7 @@ fun PoemBookSection(
     modifier: Modifier = Modifier,
     onBookItemClicked: (String) -> Unit,
     backColor: Color,
-    title: String,
-    img: String
+    data: List<PoemBook>
 ) {
     Surface(
         modifier = modifier
@@ -272,7 +256,7 @@ fun PoemBookSection(
                 .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = title,
+                text = "Poems",
                 style = TextStyle(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -284,7 +268,7 @@ fun PoemBookSection(
                 contentPadding = PaddingValues(start = 8.dp)
             ) {
                 items(10) {
-                    PoemBookItem(onItemClicked = onBookItemClicked, img = img)
+                    PoemBookItem(onItemClicked = onBookItemClicked, data = data[it])
                 }
             }
         }
@@ -292,19 +276,19 @@ fun PoemBookSection(
 }
 
 @Composable
-fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, img: String) {
+fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, data: PoemBook) {
     Card(
         modifier = modifier
             .size(width = 160.dp, height = 200.dp)
             .padding(end = 16.dp)
             .clickable {
-                onItemClicked.invoke("id") // will pass the real id
+                onItemClicked.invoke(data.id) // will pass the real id
             },
         border = BorderStroke(2.dp, YellowBackground),
         elevation = 3.dp
     ) {
         AsyncImage(
-            model = img,
+            model = data.volumeInfo.imageLinks.thumbnail,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -319,8 +303,7 @@ fun ScienceBookSection(
     modifier: Modifier = Modifier,
     onBookItemClicked: (String) -> Unit,
     backColor: Color,
-    title: String,
-    img: String
+    data: List<ScienceBook>
 ) {
     Surface(
         modifier = modifier
@@ -336,7 +319,7 @@ fun ScienceBookSection(
                 .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = title,
+                text = "Science",
                 style = TextStyle(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -348,7 +331,7 @@ fun ScienceBookSection(
                 contentPadding = PaddingValues(start = 8.dp)
             ) {
                 items(10) {
-                    ScienceBookItem(onItemClicked = onBookItemClicked, img = img)
+                    ScienceBookItem(onItemClicked = onBookItemClicked, data = data[it])
                 }
             }
         }
@@ -356,19 +339,19 @@ fun ScienceBookSection(
 }
 
 @Composable
-fun ScienceBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, img: String) {
+fun ScienceBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, data: ScienceBook) {
     Card(
         modifier = modifier
             .size(width = 160.dp, height = 200.dp)
             .padding(end = 16.dp)
             .clickable {
-                onItemClicked.invoke("id") // will pass the real id
+                onItemClicked.invoke(data.id) // will pass the real id
             },
         border = BorderStroke(2.dp, YellowBackground),
         elevation = 3.dp
     ) {
         AsyncImage(
-            model = img,
+            model = data.volumeInfo.imageLinks.thumbnail,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,

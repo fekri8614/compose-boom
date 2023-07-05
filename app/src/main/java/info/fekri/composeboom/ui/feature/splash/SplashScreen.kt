@@ -41,7 +41,7 @@ fun SplashScreen(isFirstTime: Boolean) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        WelcomeAnimation()
+        MyAnimaShower(R.raw.welcome_owl)
 
         Text(
             text = "Welcome to Boom!",
@@ -60,8 +60,8 @@ fun SplashScreen(isFirstTime: Boolean) {
 }
 
 @Composable
-fun WelcomeAnimation() {
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.welcome_owl))
+fun MyAnimaShower(name: Int) {
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(name))
     LottieAnimation(
         composition = composition, iterations = LottieConstants.IterateForever,
         modifier = Modifier.size(240.dp)
