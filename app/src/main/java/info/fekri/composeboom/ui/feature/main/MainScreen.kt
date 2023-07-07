@@ -188,7 +188,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             context = context,
             title = "Connection!",
             msg = "Please, check if you're connected to Internet!",
-            viewModel = viewModel,
             type = KAlertDialog.ERROR_TYPE
         )
     }
@@ -460,12 +459,11 @@ fun showMessageDialog(
     context: Context,
     type: Int = KAlertDialog.SUCCESS_TYPE,
     title: String,
-    msg: String,
-    viewModel: MainScreenViewModel
+    msg: String
 ) {
     val dialog = KAlertDialog(context, type)
     dialog.titleText = title
     dialog.contentText = msg
-    dialog.setConfirmClickListener("OK") { viewModel.showDialog.value = false }
+    dialog.setConfirmClickListener("OK") { dialog.dismiss() }
     dialog.show()
 }
