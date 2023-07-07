@@ -1,8 +1,6 @@
 package info.fekri.composeboom.ui.feature.main
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,9 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -170,7 +165,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }
 
     if (viewModel.showDialog.value) {
-        showMessageDialog(context = context, title = "Connection!", msg = "Please, check if you're connected to Internet!", viewModel = viewModel)
+        showMessageDialog(
+            context = context,
+            title = "Connection!",
+            msg = "Please, check if you're connected to Internet!",
+            viewModel = viewModel,
+            type = KAlertDialog.ERROR_TYPE
+        )
     }
 
 }
@@ -236,8 +237,11 @@ fun KidBookItem(
         border = BorderStroke(2.dp, YellowBackground),
         elevation = 3.dp
     ) {
+        val image =
+            if (!data.volumeInfo.imageLinks.thumbnail.isNullOrEmpty()) data.volumeInfo.imageLinks.thumbnail
+            else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
-            model = data.volumeInfo.imageLinks.thumbnail ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg",
+            model = image,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -299,8 +303,11 @@ fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit,
         border = BorderStroke(2.dp, YellowBackground),
         elevation = 3.dp
     ) {
+        val image =
+            if (!data.volumeInfo.imageLinks.thumbnail.isNullOrEmpty()) data.volumeInfo.imageLinks.thumbnail
+            else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
-            model = data.volumeInfo.imageLinks.thumbnail ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg" ,
+            model = image,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -366,8 +373,11 @@ fun ScienceBookItem(
         border = BorderStroke(2.dp, YellowBackground),
         elevation = 3.dp
     ) {
+        val image =
+            if (!data.volumeInfo.imageLinks.thumbnail.isNullOrEmpty()) data.volumeInfo.imageLinks.thumbnail
+            else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
-            model = data.volumeInfo.imageLinks.thumbnail ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg",
+            model = image,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -384,7 +394,10 @@ fun TopCircularIcons() {
         CircularIcon(img = R.drawable.img_all, title = "all") { /*will handle later*/ }
         CircularIcon(img = R.drawable.img_audio_lib, title = "voice lib") { /*will handle later*/ }
         CircularIcon(img = R.drawable.img_watch_list, title = "video lib") { /*will handle later*/ }
-        CircularIcon(img = R.drawable.img_library_all, title = "photo lib") { /*will handle later*/ }
+        CircularIcon(
+            img = R.drawable.img_library_all,
+            title = "photo lib"
+        ) { /*will handle later*/ }
     }
 }
 
@@ -424,7 +437,13 @@ fun CircularIcon(
 
 // -----------------------------------------------------------
 
-fun showMessageDialog(context: Context, type: Int = KAlertDialog.SUCCESS_TYPE, title: String, msg: String, viewModel: MainScreenViewModel) {
+fun showMessageDialog(
+    context: Context,
+    type: Int = KAlertDialog.SUCCESS_TYPE,
+    title: String,
+    msg: String,
+    viewModel: MainScreenViewModel
+) {
     val dialog = KAlertDialog(context, type)
     dialog.titleText = title
     dialog.contentText = msg
