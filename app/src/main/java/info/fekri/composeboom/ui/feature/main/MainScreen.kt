@@ -21,9 +21,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -36,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -47,17 +53,16 @@ import info.fekri.composeboom.R
 import info.fekri.composeboom.model.data.books.KidBook
 import info.fekri.composeboom.model.data.books.PoemBook
 import info.fekri.composeboom.model.data.books.ScienceBook
-import info.fekri.composeboom.ui.feature.splash.MyAnimaShower
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.GreenBackground
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
-import info.fekri.composeboom.util.NetworkChecker
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
+@Preview
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
@@ -76,10 +81,15 @@ fun MainScreen(modifier: Modifier = Modifier) {
     CollapsingToolbarScaffold(
         modifier = modifier.fillMaxSize(),
         state = state,
-        scrollStrategy = ScrollStrategy.EnterAlwaysCollapsed,
+        scrollStrategy = ScrollStrategy.EnterAlways,
         toolbar = {
             val progress = state.toolbarState.progress
 
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            )
             Box {
                 Box {
                     Image(
@@ -87,7 +97,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                         contentDescription = null,
                         modifier = modifier
                             .fillMaxSize()
-                            .pin(),
+                            .parallax(ratio = 0.2f),
                         contentScale = ContentScale.Crop
                     )
                 }
@@ -99,7 +109,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     Text(
                         text = "Boom!",
                         style = TextStyle(
-                            fontSize = (20 + (30 - 18) * progress).sp,
+                            fontSize = (20 + (20 - 18) * progress).sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.White,
                             textAlign = TextAlign.Justify
@@ -108,7 +118,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     Text(
                         text = "Your book-owl friend!",
                         style = TextStyle(
-                            fontSize = (20 + (30 - 18) * progress).sp,
+                            fontSize = (20 + (20 - 18) * progress).sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.White,
                             textAlign = TextAlign.Justify
@@ -116,21 +126,24 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     )
                 }
             }
+
         },
         toolbarModifier = modifier.verticalScroll(rememberScrollState())
     ) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(8.dp)
-                .verticalScroll(rememberScrollState())
-                .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TopCircularIcons()
-            if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
+        Box {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+                    .verticalScroll(rememberScrollState())
+                    .clip(RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            if (NetworkChecker(context).isInternetConnected) {
+                TopCircularIcons()
+                if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
+
+//            if (NetworkChecker(context).isInternetConnected) {
 
                 if (viewModel.showUiKids.value) {
                     KidBookSection(
@@ -156,11 +169,17 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     )
                 }
 
-            } else {
-                MyAnimaShower(name = R.raw.connection_error_owl)
-                viewModel.showDialog.value = true
-            }
+//            } else {
+//                MyAnimaShower(name = R.raw.connection_error_owl)
+//                viewModel.showDialog.value = true
+//            }
 
+            }
+            Box(modifier.align(Alignment.BottomEnd).padding(32.dp)) {
+                FloatingActionButton(onClick = { /*TODO*/ }, backgroundColor = PrimaryDarkColor) {
+                    Icon(imageVector = Icons.Default.Add, contentDescription = null, tint = Color.White)
+                }
+            }
         }
     }
 
@@ -450,4 +469,3 @@ fun showMessageDialog(
     dialog.setConfirmClickListener("OK") { viewModel.showDialog.value = false }
     dialog.show()
 }
-
