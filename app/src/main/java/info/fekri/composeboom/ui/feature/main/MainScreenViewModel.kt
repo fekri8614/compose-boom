@@ -1,6 +1,5 @@
 package info.fekri.composeboom.ui.feature.main
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,19 +15,21 @@ class MainScreenViewModel(
     private val userRepository: UserRepository,
     private val bookRepository: BookRepository
 ) : ViewModel() {
-    val dataKids = mutableStateOf<List<KidBook>>(listOf())
-    val dataScience = mutableStateOf<List<ScienceBook>>(listOf())
-    val dataPoems = mutableStateOf<List<PoemBook>>(listOf())
-    val showProgress = mutableStateOf(false)
-    val showDialog = mutableStateOf(false)
+    val dataKids      = mutableStateOf<List<KidBook>>(listOf())
+    val dataScience   = mutableStateOf<List<ScienceBook>>(listOf())
+    val dataPoems     = mutableStateOf<List<PoemBook>>(listOf())
 
-    val showUiKids = mutableStateOf(false)
+    val showProgress  = mutableStateOf(false)
+    val showDialog    = mutableStateOf(false)
+    val showNavDrawer = mutableStateOf(false)
+
+    val showUiKids    = mutableStateOf(false)
     val showUiScience = mutableStateOf(false)
-    val showUiPoems = mutableStateOf(false)
+    val showUiPoems   = mutableStateOf(false)
 
-    private fun showKids(): Boolean = userRepository.getKidsSub()
+    private fun showKids(): Boolean    = userRepository.getKidsSub()
     private fun showScience(): Boolean = userRepository.getScienceSub()
-    private fun showPoems(): Boolean = userRepository.getPoemsSub()
+    private fun showPoems(): Boolean   = userRepository.getPoemsSub()
 
     init {
 
@@ -53,7 +54,7 @@ class MainScreenViewModel(
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val poemsData = bookRepository.getPoemBooks()
+            val poemsData   = bookRepository.getPoemBooks()
             dataPoems.value = poemsData
 
             showProgress.value = false
@@ -63,7 +64,7 @@ class MainScreenViewModel(
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val scienceData = bookRepository.getScienceBooks()
+            val scienceData   = bookRepository.getScienceBooks()
             dataScience.value = scienceData
 
             showProgress.value = false
@@ -74,7 +75,7 @@ class MainScreenViewModel(
             showProgress.value = true
 
             val dataKidsFromServer = bookRepository.getKidBooks()
-            dataKids.value = dataKidsFromServer
+            dataKids.value         = dataKidsFromServer
 
             showProgress.value = false
         }
