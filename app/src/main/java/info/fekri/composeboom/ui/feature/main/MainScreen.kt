@@ -28,7 +28,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
@@ -175,9 +174,16 @@ fun MainScreen(modifier: Modifier = Modifier) {
 //            }
 
             }
-            Box(modifier.align(Alignment.BottomEnd).padding(32.dp)) {
+            Box(
+                modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(32.dp)) {
                 FloatingActionButton(onClick = { /*TODO*/ }, backgroundColor = PrimaryDarkColor) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = null, tint = Color.White)
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        tint = Color.White
+                    )
                 }
             }
         }
@@ -188,7 +194,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
             context = context,
             title = "Connection!",
             msg = "Please, check if you're connected to Internet!",
-            type = KAlertDialog.ERROR_TYPE
+            type = KAlertDialog.ERROR_TYPE,
+            viewModel = viewModel
         )
     }
 
@@ -459,11 +466,15 @@ fun showMessageDialog(
     context: Context,
     type: Int = KAlertDialog.SUCCESS_TYPE,
     title: String,
+    viewModel: MainScreenViewModel,
     msg: String
 ) {
     val dialog = KAlertDialog(context, type)
     dialog.titleText = title
     dialog.contentText = msg
-    dialog.setConfirmClickListener("OK") { dialog.dismiss() }
+    dialog.setConfirmClickListener("OK") {
+        dialog.dismiss()
+        viewModel.showDialog.value = false
+    }
     dialog.show()
 }
