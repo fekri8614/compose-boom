@@ -1,6 +1,8 @@
 package info.fekri.composeboom.ui.feature.main
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +32,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -232,7 +237,7 @@ fun KidBookItem(
         elevation = 3.dp
     ) {
         AsyncImage(
-            model = data.volumeInfo.imageLinks.thumbnail,
+            model = data.volumeInfo.imageLinks.thumbnail ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg",
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -295,7 +300,7 @@ fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit,
         elevation = 3.dp
     ) {
         AsyncImage(
-            model = data.volumeInfo.imageLinks.thumbnail,
+            model = data.volumeInfo.imageLinks.thumbnail ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg" ,
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -362,7 +367,7 @@ fun ScienceBookItem(
         elevation = 3.dp
     ) {
         AsyncImage(
-            model = data.volumeInfo.imageLinks.thumbnail,
+            model = data.volumeInfo.imageLinks.thumbnail ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg",
             contentDescription = null,
             modifier = modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,
@@ -379,10 +384,7 @@ fun TopCircularIcons() {
         CircularIcon(img = R.drawable.img_all, title = "all") { /*will handle later*/ }
         CircularIcon(img = R.drawable.img_audio_lib, title = "voice lib") { /*will handle later*/ }
         CircularIcon(img = R.drawable.img_watch_list, title = "video lib") { /*will handle later*/ }
-        CircularIcon(
-            img = R.drawable.img_library_all,
-            title = "photo lib"
-        ) { /*will handle later*/ }
+        CircularIcon(img = R.drawable.img_library_all, title = "photo lib") { /*will handle later*/ }
     }
 }
 

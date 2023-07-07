@@ -85,9 +85,9 @@ data class KidBook(
     ) {
         data class ImageLinks(
             @SerializedName("smallThumbnail")
-            val smallThumbnail: String,
+            val smallThumbnail: String?,
             @SerializedName("thumbnail")
-            val thumbnail: String
+            val thumbnail: String?
         )
     }
 }

@@ -1,9 +1,12 @@
 package info.fekri.composeboom.ui.feature.main
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import info.fekri.composeboom.model.data.books.*
+import info.fekri.composeboom.model.data.books.KidBook
+import info.fekri.composeboom.model.data.books.PoemBook
+import info.fekri.composeboom.model.data.books.ScienceBook
 import info.fekri.composeboom.model.repository.book.BookRepository
 import info.fekri.composeboom.model.repository.user.UserRepository
 import info.fekri.composeboom.util.coroutineExceptionHandler
