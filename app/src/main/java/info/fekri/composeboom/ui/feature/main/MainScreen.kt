@@ -16,23 +16,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.DrawerState
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.rememberDrawerState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -52,7 +53,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.developer.kalert.KAlertDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -71,6 +71,7 @@ import info.fekri.composeboom.ui.theme.YellowBackground
 import info.fekri.composeboom.util.NavDrawerItem
 import info.fekri.composeboom.util.NetworkChecker
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -82,9 +83,13 @@ fun MainScreen(modifier: Modifier = Modifier) {
     SideEffect {
         uiController.setStatusBarColor(PrimaryDarkColor)
     }
+
     val navigation = getNavController()
     val viewModel = getNavViewModel<MainScreenViewModel>()
+
     val state = rememberCollapsingToolbarScaffoldState()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
     val dataKids = viewModel.dataKids.value
     val dataPoems = viewModel.dataPoems.value
@@ -152,8 +157,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
             onKidItemClicked = { id -> },
             onScienceItemClicked = { id -> },
             onPoemItemClicked = { id -> },
-            onMoreFABClicked = { }
+            onMoreFABClicked = {
+                viewModel.showNavDrawer.value = true
+            }
         )
+    }
+
+    if (viewModel.showNavDrawer.value) {
+        MyDrawer(scope = scope, drawerState = drawerState, navController = navigation, viewModel)
     }
 
     if (viewModel.showDialog.value) {
@@ -529,23 +540,44 @@ fun showMessageDialog(
 @Composable
 fun MyDrawer(
     scope: CoroutineScope,
-    scaffoldState: ScaffoldState,
-    navController: NavController
+    drawerState: DrawerState,
+    navController: NavController,
+    viewModel: MainScreenViewModel
 ) {
     val items = listOf(NavDrawerItem.Search, NavDrawerItem.More)
 
-    Column() {
+    Column(modifier = Modifier
+        .fillMaxWidth(0.4f)
+        .background(PrimaryDarkColor)) {
         Image(imageVector = Icons.Default.Home, contentDescription = null)
-        Spacer(modifier = Modifier.fillMaxWidth().height(5.dp))
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(5.dp)
+        )
 
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
-            /* Add code later */
+            MyDrawerItem(item = item, selected = currentRoute == item.route, onItemClicked = {
+                navController.navigate(item.route) {
+                    navController.graph.startDestinationRoute?.let { route ->
+                        popUpTo(route) {
+                            saveState = true
+                        }
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+                scope.launch {
+                    viewModel.showNavDrawer.value = false
+                    drawerState.close()
+                }
+            })
         }
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = "Developed by Android",
+            text = "Developed by fekri8614",
             color = Color.White,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
@@ -560,9 +592,36 @@ fun MyDrawer(
 @Preview(showBackground = true)
 @Composable
 fun DrawerPreview() {
-    val scope = rememberCoroutineScope()
-    val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
-    val navController = rememberNavController()
-    MyDrawer(scope = scope, scaffoldState = scaffoldState, navController = navController)
+    MyDrawerItem(item = NavDrawerItem.Search, selected = false, onItemClicked = {})
 }
 
+@Composable
+fun MyDrawerItem(item: NavDrawerItem, selected: Boolean, onItemClicked: (NavDrawerItem) -> Unit) {
+    val background = if (selected) PrimaryDarkColor else Color.Transparent
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onItemClicked.invoke(item) }
+            .height(45.dp)
+            .background(background)
+            .padding(start = 10.dp)
+    ) {
+        Image(
+            imageVector = item.icon,
+            contentDescription = item.title,
+            colorFilter = ColorFilter.tint(Color.White),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .height(35.dp)
+                .width(35.dp)
+        )
+
+        Spacer(modifier = Modifier.width(7.dp))
+
+        Text(
+            text = item.title,
+            fontSize = 18.sp,
+            color = Color.White
+        )
+    }
+}

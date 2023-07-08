@@ -26,14 +26,13 @@ import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.MyScreens
+import info.fekri.composeboom.util.NavDrawerItem
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
-
         val sharedPreferences = getSharedPreferences("my_fist_t_checker_sh", Context.MODE_PRIVATE)
         val isFirstTime = sharedPreferences.getBoolean(IS_USER_FIRST_TIME, true)
         if (isFirstTime) {
@@ -41,7 +40,6 @@ class MainActivity : ComponentActivity() {
             editor.putBoolean(IS_USER_FIRST_TIME, false)
             editor.apply()
         }
-
         setContent {
             Koin(appDeclaration = {
                 androidContext(this@MainActivity)
@@ -92,7 +90,16 @@ fun MainAppUi(isFirstTime: Boolean) {
             SplashScreen(isFirstTime)
         }
 
+        composable(NavDrawerItem.More.route) {
+            MoreScreen()
+        }
+
     }
+
+}
+
+@Composable
+fun MoreScreen() {
 
 }
 
