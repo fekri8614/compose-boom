@@ -225,7 +225,7 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
                     .height(1.dp)
-                    .background(BlueBackground)
+                    .background(Color.LightGray)
             )
 
             DrawerItem(text = "More", onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) } )
