@@ -10,11 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
@@ -26,7 +23,6 @@ import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.MyScreens
-import info.fekri.composeboom.util.NavDrawerItem
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
@@ -88,10 +84,6 @@ fun MainAppUi(isFirstTime: Boolean) {
             MyScreens.SplashScreen.route
         ) {
             SplashScreen(isFirstTime)
-        }
-
-        composable(NavDrawerItem.More.route) {
-            MoreScreen()
         }
 
     }

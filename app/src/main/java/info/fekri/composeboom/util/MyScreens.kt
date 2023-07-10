@@ -5,6 +5,12 @@ sealed class MyScreens(val route: String) {
     object EntryScreenSecond : MyScreens("entryScreenSecond")
     object MainScreen : MyScreens("mainScreen")
     object ShowBookScreen: MyScreens("showBookScreen")
-    object SearchScreen: MyScreens("searchScreen")
     object SplashScreen: MyScreens("splashScreen")
+    object SearchScreen: MyScreens("searchScreen")
+    object MoreScreen: MyScreens("moreScreen")
 }
+
+val screens = listOf(
+    MyScreens.MoreScreen,
+    MyScreens.SearchScreen
+)

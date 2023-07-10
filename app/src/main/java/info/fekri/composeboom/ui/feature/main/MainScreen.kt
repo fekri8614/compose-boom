@@ -16,45 +16,41 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
-import androidx.compose.material.DrawerState
 import androidx.compose.material.DrawerValue
+import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
-import com.developer.kalert.KAlertDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
@@ -63,14 +59,14 @@ import info.fekri.composeboom.model.data.books.KidBook
 import info.fekri.composeboom.model.data.books.PoemBook
 import info.fekri.composeboom.model.data.books.ScienceBook
 import info.fekri.composeboom.ui.feature.splash.MyAnimaShower
+import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.GreenBackground
+import info.fekri.composeboom.ui.theme.PrimaryColor
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
-import info.fekri.composeboom.util.NavDrawerItem
 import info.fekri.composeboom.util.NetworkChecker
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -87,97 +83,159 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val navigation = getNavController()
     val viewModel = getNavViewModel<MainScreenViewModel>()
 
-    val state = rememberCollapsingToolbarScaffoldState()
+    val collapsingState = rememberCollapsingToolbarScaffoldState()
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scaffoldState = rememberScaffoldState(drawerState = drawerState)
     val scope = rememberCoroutineScope()
 
     val dataKids = viewModel.dataKids.value
     val dataPoems = viewModel.dataPoems.value
     val dataScience = viewModel.dataScience.value
 
-    CollapsingToolbarScaffold(
-        modifier = modifier.fillMaxSize(),
-        state = state,
-        scrollStrategy = ScrollStrategy.EnterAlways,
-        toolbar = {
-            val progress = state.toolbarState.progress
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            )
-            Box {
-                Box {
-                    Image(
-                        painter = painterResource(id = R.drawable.img1),
-                        contentDescription = null,
-                        modifier = modifier
-                            .fillMaxSize()
-                            .parallax(ratio = 0.2f),
-                        contentScale = ContentScale.Crop
-                    )
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = {
+            DrawerContent(onItemClicked= {
+                scope.launch {
+                    scaffoldState.drawerState.close()
+                    // TODO("Handle the open drawer item")
                 }
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = modifier.align(Alignment.Center)
-                ) {
-                    Text(
-                        text = "Boom!",
-                        style = TextStyle(
-                            fontSize = (20 + (20 - 18) * progress).sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            textAlign = TextAlign.Justify
-                        ),
-                    )
-                    Text(
-                        text = "Your book-owl friend!",
-                        style = TextStyle(
-                            fontSize = (20 + (20 - 18) * progress).sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White,
-                            textAlign = TextAlign.Justify
-                        ),
-                    )
-                }
-            }
-
+            })
         },
-        toolbarModifier = modifier.verticalScroll(rememberScrollState())
-    ) {
-        MyCollapsingBody(
-            modifier,
-            viewModel,
-            context,
-            dataKids,
-            dataPoems,
-            dataScience,
-            onKidItemClicked = { id -> },
-            onScienceItemClicked = { id -> },
-            onPoemItemClicked = { id -> },
-            onMoreFABClicked = {
-                viewModel.showNavDrawer.value = true
+        backgroundColor = BackgroundMain,
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                text = { Text(text = "Open Drawer") },
+                icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") },
+                onClick = {  scope.launch { scaffoldState.drawerState.open() }  }
+            )
+        },
+        content = {
+            CollapsingToolbarScaffold(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(it),
+                state = collapsingState,
+                scrollStrategy = ScrollStrategy.EnterAlways,
+                toolbar = {
+                    val progress = collapsingState.toolbarState.progress
+
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp)
+                    )
+                    Box {
+                        Box {
+                            Image(
+                                painter = painterResource(id = R.drawable.img1),
+                                contentDescription = null,
+                                modifier = modifier
+                                    .fillMaxSize()
+                                    .parallax(ratio = 0.2f),
+                                contentScale = ContentScale.Crop
+                            )
+                        }
+
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = modifier.align(Alignment.Center)
+                        ) {
+                            Text(
+                                text = "Boom!",
+                                style = TextStyle(
+                                    fontSize = (20 + (20 - 18) * progress).sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Justify
+                                )
+                            )
+                            Text(
+                                text = "Your book-owl friend!",
+                                style = TextStyle(
+                                    fontSize = (20 + (20 - 18) * progress).sp,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Justify
+                                )
+                            )
+                        }
+                    }
+
+                },
+                toolbarModifier = modifier.verticalScroll(rememberScrollState())
+            ) {
+                MyCollapsingBody(
+                    modifier,
+                    viewModel,
+                    context,
+                    dataKids,
+                    dataPoems,
+                    dataScience,
+                    onKidItemClicked = { id -> },
+                    onScienceItemClicked = { id -> },
+                    onPoemItemClicked = { id -> },
+                    onMoreFABClicked = {
+
+                    }
+                )
             }
+        }
+    )
+
+}
+
+@Composable
+fun DrawerContent(onItemClicked: () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(BackgroundMain)) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .background(PrimaryColor)
+        ) {
+            Image(painter = painterResource(id = 0), contentDescription = null)
+        }
+
+        Spacer(modifier = Modifier.height(80.dp))
+
+        DrawerItem(text = "Search", onItemClick = onItemClicked)
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(1.dp)
+                .background(Color.LightGray)
+        )
+
+        DrawerItem(text = "More", onItemClick = onItemClicked)
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(1.dp)
+                .background(Color.LightGray)
         )
     }
+}
 
-    if (viewModel.showNavDrawer.value) {
-        MyDrawer(scope = scope, drawerState = drawerState, navController = navigation, viewModel)
+@Composable
+fun DrawerItem(text: String, onItemClick: () -> Unit) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .height(50.dp)
+        .clickable { onItemClick() },
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.padding(start = 8.dp)
+        )
     }
-
-    if (viewModel.showDialog.value) {
-        showMessageDialog(
-            context = context,
-            title = "Connection!",
-            msg = "Please, check if you're connected to Internet!",
-            type = KAlertDialog.ERROR_TYPE
-        ) {
-            viewModel.showDialog.value = false
-        }
-    }
-
 }
 
 @Composable
@@ -516,112 +574,6 @@ fun CircularIcon(
     }
 }
 
-// -----------------------------------------------------------
-
-fun showMessageDialog(
-    context: Context,
-    type: Int = KAlertDialog.SUCCESS_TYPE,
-    title: String,
-    msg: String,
-    onCancelButtonClicked: () -> Unit
-) {
-    val dialog = KAlertDialog(context, type)
-    dialog.titleText = title
-    dialog.contentText = msg
-    dialog.setConfirmClickListener("OK") {
-        onCancelButtonClicked.invoke()
-        dialog.dismiss()
-    }
-    dialog.show()
-}
-
 // ----------------------------------------------------------------------
 
-@Composable
-fun MyDrawer(
-    scope: CoroutineScope,
-    drawerState: DrawerState,
-    navController: NavController,
-    viewModel: MainScreenViewModel
-) {
-    val items = listOf(NavDrawerItem.Search, NavDrawerItem.More)
 
-    Column(modifier = Modifier
-        .fillMaxWidth(0.4f)
-        .background(PrimaryDarkColor)) {
-        Image(imageVector = Icons.Default.Home, contentDescription = null)
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(5.dp)
-        )
-
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        items.forEach { item ->
-            MyDrawerItem(item = item, selected = currentRoute == item.route, onItemClicked = {
-                navController.navigate(item.route) {
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
-                        }
-                    }
-                    launchSingleTop = true
-                    restoreState = true
-                }
-                scope.launch {
-                    viewModel.showNavDrawer.value = false
-                    drawerState.close()
-                }
-            })
-        }
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = "Developed by fekri8614",
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .padding(12.dp)
-                .align(Alignment.CenterHorizontally)
-        )
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DrawerPreview() {
-    MyDrawerItem(item = NavDrawerItem.Search, selected = false, onItemClicked = {})
-}
-
-@Composable
-fun MyDrawerItem(item: NavDrawerItem, selected: Boolean, onItemClicked: (NavDrawerItem) -> Unit) {
-    val background = if (selected) PrimaryDarkColor else Color.Transparent
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onItemClicked.invoke(item) }
-            .height(45.dp)
-            .background(background)
-            .padding(start = 10.dp)
-    ) {
-        Image(
-            imageVector = item.icon,
-            contentDescription = item.title,
-            colorFilter = ColorFilter.tint(Color.White),
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .height(35.dp)
-                .width(35.dp)
-        )
-
-        Spacer(modifier = Modifier.width(7.dp))
-
-        Text(
-            text = item.title,
-            fontSize = 18.sp,
-            color = Color.White
-        )
-    }
-}
