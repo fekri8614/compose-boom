@@ -68,6 +68,7 @@ import info.fekri.composeboom.ui.theme.PrimaryColor
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
+import info.fekri.composeboom.util.MyScreens
 import info.fekri.composeboom.util.NetworkChecker
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -98,7 +99,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
-            DrawerContent(onItemClicked= {
+            DrawerContent(onItemClicked= { id ->
                 scope.launch {
                     scaffoldState.drawerState.close()
                     // TODO("Handle the open drawer item")
@@ -186,7 +187,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun DrawerContent(onItemClicked: () -> Unit) {
+fun DrawerContent(onItemClicked: (String) -> Unit) {
     Column(modifier = Modifier
         .fillMaxSize()
         .background(BackgroundMain)) {
@@ -214,14 +215,8 @@ fun DrawerContent(onItemClicked: () -> Unit) {
         }
 
         Spacer(modifier = Modifier.height(40.dp))
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .height(1.dp)
-                .background(Color.LightGray)
-        )
 
-        DrawerItem(text = "Search", onItemClick = onItemClicked)
+        DrawerItem(text = "Search", onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) } )
 
         Spacer(
             modifier = Modifier
@@ -230,14 +225,8 @@ fun DrawerContent(onItemClicked: () -> Unit) {
                 .background(Color.LightGray)
         )
 
-        DrawerItem(text = "More", onItemClick = onItemClicked)
+        DrawerItem(text = "More", onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) } )
 
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .height(1.dp)
-                .background(Color.LightGray)
-        )
     }
 }
 
