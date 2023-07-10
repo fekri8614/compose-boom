@@ -175,10 +175,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     dataScience,
                     onKidItemClicked = { id -> },
                     onScienceItemClicked = { id -> },
-                    onPoemItemClicked = { id -> },
-                    onMoreFABClicked = {
-
-                    }
+                    onPoemItemClicked = { id -> }
                 )
             }
         }
@@ -197,7 +194,20 @@ fun DrawerContent(onItemClicked: () -> Unit) {
                 .height(200.dp)
                 .background(PrimaryColor)
         ) {
-            Image(painter = painterResource(id = 0), contentDescription = null)
+            Image(
+                painter = painterResource(id = R.drawable.img_icon_main),
+                contentDescription = null,
+                modifier = Modifier.size(80.dp).padding(16.dp),
+                alignment = Alignment.TopStart
+            )
+            Text(
+                text = "Boom!",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            )
         }
 
         Spacer(modifier = Modifier.height(80.dp))
@@ -248,8 +258,7 @@ private fun MyCollapsingBody(
     dataScience: List<ScienceBook>,
     onKidItemClicked: (String) -> Unit,
     onScienceItemClicked: (String) -> Unit,
-    onPoemItemClicked: (String) -> Unit,
-    onMoreFABClicked: () -> Unit
+    onPoemItemClicked: (String) -> Unit
 ) {
     Box {
         Column(
@@ -295,22 +304,6 @@ private fun MyCollapsingBody(
                 viewModel.showDialog.value = true
             }
 
-        }
-        Box(
-            modifier
-                .align(Alignment.BottomEnd)
-                .padding(32.dp)
-        ) {
-            FloatingActionButton(
-                onClick = { onMoreFABClicked.invoke() },
-                backgroundColor = PrimaryDarkColor
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
         }
     }
 }

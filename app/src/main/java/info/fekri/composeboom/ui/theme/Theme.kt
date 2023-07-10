@@ -7,7 +7,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColors(
     primary = PrimaryDarkColor,
-    secondary = SecondaryColor,
+    secondary = PrimaryDarkColor,
     background = BackgroundMain
 )
 
