@@ -46,8 +46,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -173,9 +175,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     dataKids,
                     dataPoems,
                     dataScience,
-                    onKidItemClicked = { id -> },
-                    onScienceItemClicked = { id -> },
-                    onPoemItemClicked = { id -> }
+                    onKidItemClicked = { id -> /*TODO("Complete onKidItemClicked")*/ },
+                    onScienceItemClicked = { id -> /*TODO("Complete onScienceItemClicked")*/ },
+                    onPoemItemClicked = { id -> /*TODO("Complete onPoemItemClicked")*/ }
                 )
             }
         }
@@ -190,33 +192,40 @@ fun DrawerContent(onItemClicked: () -> Unit) {
         .background(BackgroundMain)) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp)
-                .background(PrimaryColor)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.img_icon_main),
+                painter = painterResource(id = R.drawable.img_icon_main_no_back),
                 contentDescription = null,
-                modifier = Modifier.size(80.dp).padding(16.dp),
+                modifier = Modifier.size(100.dp),
                 alignment = Alignment.TopStart
             )
             Text(
                 text = "Boom!",
                 style = TextStyle(
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Medium,
                     color = Color.Black
                 )
             )
+            Text(text = "Search and Read book with Boom!", color = Color.Gray)
         }
 
-        Spacer(modifier = Modifier.height(80.dp))
+        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth(0.3f)
+                .height(1.dp)
+                .background(Color.LightGray)
+        )
 
         DrawerItem(text = "Search", onItemClick = onItemClicked)
 
         Spacer(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
+                .fillMaxWidth(0.3f)
                 .height(1.dp)
                 .background(Color.LightGray)
         )
@@ -225,7 +234,7 @@ fun DrawerContent(onItemClicked: () -> Unit) {
 
         Spacer(
             modifier = Modifier
-                .fillMaxWidth(0.7f)
+                .fillMaxWidth(0.3f)
                 .height(1.dp)
                 .background(Color.LightGray)
         )
@@ -243,7 +252,7 @@ fun DrawerItem(text: String, onItemClick: () -> Unit) {
         Text(
             text = text,
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(start = 8.dp)
+            modifier = Modifier.padding(start = 16.dp)
         )
     }
 }
@@ -569,4 +578,10 @@ fun CircularIcon(
 
 // ----------------------------------------------------------------------
 
+@Preview("DrawerPreview")
+@Composable
+fun DrawerPreview() {
+    DrawerContent {
 
+    }
+}
