@@ -64,7 +64,6 @@ import info.fekri.composeboom.ui.feature.splash.MyAnimaShower
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.GreenBackground
-import info.fekri.composeboom.ui.theme.PrimaryColor
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
@@ -190,42 +189,54 @@ fun MainScreen(modifier: Modifier = Modifier) {
 fun DrawerContent(onItemClicked: (String) -> Unit) {
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(BackgroundMain)) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_icon_main_no_back),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp),
-                alignment = Alignment.TopStart
-            )
-            Text(
-                text = "Boom!",
-                style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black
+        .background(BackgroundMain),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.img_icon_main_no_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp),
+                    alignment = Alignment.TopStart
                 )
+                Text(
+                    text = "Boom!",
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.Black
+                    )
+                )
+                Text(text = "Search and Read book with Boom!", color = Color.Gray)
+            }
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+            DrawerItem(text = "Search", onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) } )
+
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth(0.3f)
+                    .height(1.dp)
+                    .background(BlueBackground)
             )
-            Text(text = "Search and Read book with Boom!", color = Color.Gray)
+
+            DrawerItem(text = "More", onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) } )
         }
 
-        Spacer(modifier = Modifier.height(40.dp))
-
-        DrawerItem(text = "Search", onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) } )
-
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth(0.3f)
-                .height(1.dp)
-                .background(Color.LightGray)
+        Text(
+            text = "Developed by Mohammad Reza Fekri",
+            fontSize = 18.sp,
+            color = PrimaryDarkColor,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
-
-        DrawerItem(text = "More", onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) } )
 
     }
 }

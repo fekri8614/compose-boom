@@ -7,7 +7,4 @@ val YellowBackground = Color(0xFFE8BC15)
 val GreenBackground = Color(0xFF3342F554)
 val BlueBackground = Color(0xFF3342A5F5)
 
-val PrimaryColor = Color(0xFF42A5F5)
 val PrimaryDarkColor = Color(0xFF3D8B97)
-val SecondaryColor = Color(0xFF4FC3F7)
-

@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavArgument
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
@@ -22,6 +25,7 @@ import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
+import info.fekri.composeboom.util.KEY_SHOW_BOOK
 import info.fekri.composeboom.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 
@@ -72,18 +76,27 @@ fun MainAppUi(isFirstTime: Boolean) {
             MainScreen()
         }
 
-        composable(MyScreens.ShowBookScreen.route) {
-            ShowBookScreen()
-        }
-
-        composable(MyScreens.SearchScreen.route) {
-            SearchScreen()
+        composable(
+            MyScreens.ShowBookScreen.route + "/{$KEY_SHOW_BOOK}",
+            arguments = listOf(navArgument(KEY_SHOW_BOOK) {
+                type = NavType.StringType
+            })
+        ) {
+            ShowBookScreen(it.arguments!!.getString(KEY_SHOW_BOOK, "null"))
         }
 
         composable(
             MyScreens.SplashScreen.route
         ) {
             SplashScreen(isFirstTime)
+        }
+
+        composable(MyScreens.SearchScreen.route) {
+            SearchScreen()
+        }
+
+        composable(MyScreens.MoreScreen.route) {
+            MoreScreen()
         }
 
     }
@@ -101,7 +114,7 @@ fun SearchScreen() {
 }
 
 @Composable
-fun ShowBookScreen() {
+fun ShowBookScreen(bookId: String) {
 
 }
 
