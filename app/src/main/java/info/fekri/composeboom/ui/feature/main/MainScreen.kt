@@ -101,8 +101,8 @@ fun MainScreen(modifier: Modifier = Modifier) {
             DrawerContent(onItemClicked= { id ->
                 scope.launch {
                     scaffoldState.drawerState.close()
-                    // TODO("Handle the open drawer item")
                 }
+                navigation.navigate(id)
             })
         },
         backgroundColor = BackgroundMain,
