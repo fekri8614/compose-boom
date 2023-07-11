@@ -9,8 +9,3 @@ sealed class MyScreens(val route: String) {
     object SearchScreen: MyScreens("searchScreen")
     object MoreScreen: MyScreens("moreScreen")
 }
-
-val screens = listOf(
-    MyScreens.MoreScreen,
-    MyScreens.SearchScreen
-)
