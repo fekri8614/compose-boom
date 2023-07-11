@@ -191,7 +191,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             "Please, check your Internet Connection and click on Try Again!",
             btnText = "Try Again"
         ) {
-            /*re-call the MainScreen as reload screen ;-)*/
+            /*re-call the MainScreen as reload-screen ;-)*/
             navigation.navigate(MyScreens.MainScreen.route) {
                 popUpTo(MyScreens.MainScreen.route) {
                     inclusive = true
@@ -212,15 +212,15 @@ fun showAlertDialog(
     btnText: String,
     onConfirmClicked: () -> Unit
 ) {
-    val dialog = KAlertDialog(context, type).apply {
+    KAlertDialog(context, type).apply {
         titleText = "Information!"
         contentText = msg
         setConfirmClickListener(btnText) {
             onConfirmClicked.invoke()
             it.dismiss()
-            setCancelable(true)
-            show()
         }
+        setCancelable(true)
+        show()
     }
 }
 
