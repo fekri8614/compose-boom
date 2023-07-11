@@ -50,6 +50,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.developer.kalert.KAlertDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
@@ -94,7 +95,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
-            DrawerContent(onItemClicked= { id ->
+            DrawerContent(onItemClicked = { id ->
                 scope.launch {
                     scaffoldState.drawerState.close()
                 }
@@ -106,7 +107,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             ExtendedFloatingActionButton(
                 text = { Text(text = "Open Drawer") },
                 icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") },
-                onClick = {  scope.launch { scaffoldState.drawerState.open() }  }
+                onClick = { scope.launch { scaffoldState.drawerState.open() } }
             )
         },
         content = {
@@ -174,7 +175,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onKidItemClicked = { id -> navigation.navigate(id) },
                     onScienceItemClicked = { id -> navigation.navigate(id) },
                     onPoemItemClicked = { id -> navigation.navigate(id) },
-                    onAllLibClicked = { viewModel.showDialog.value = true },
+                    onAllLibClicked = { /*TODO("Complete onAllLibClicked event")*/ },
                     onVoiceLibClicked = { id -> navigation.navigate(id) },
                     onVideoLibClicked = { id -> navigation.navigate(id) },
                     onPhotoLibClicked = { id -> navigation.navigate(id) }
@@ -182,15 +183,55 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     )
+
+    if (viewModel.showNetDialog.value) {
+        showAlertDialog(
+            context.applicationContext,
+            KAlertDialog.WARNING_TYPE,
+            "Please, check your Internet Connection and click on Try Again!",
+            btnText = "Try Again"
+        ) {
+            /*re-call the MainScreen as reload screen ;-)*/
+            navigation.navigate(MyScreens.MainScreen.route) {
+                popUpTo(MyScreens.MainScreen.route) {
+                    inclusive = true
+                }
+            }
+            viewModel.showNetDialog.value = false
+        }
+    }
+
+}
+
+// ----------------------------------------------------------
+
+fun showAlertDialog(
+    context: Context,
+    type: Int,
+    msg: String,
+    btnText: String,
+    onConfirmClicked: () -> Unit
+) {
+    val dialog = KAlertDialog(context, type).apply {
+        titleText = "Information!"
+        contentText = msg
+        setConfirmClickListener(btnText) {
+            onConfirmClicked.invoke()
+            it.dismiss()
+            setCancelable(true)
+            show()
+        }
+    }
 }
 
 // -----------------------------------------------------------
 
 @Composable
 fun DrawerContent(onItemClicked: (String) -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(BackgroundMain),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(BackgroundMain),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -220,7 +261,9 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            DrawerItem(text = "Search", onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) } )
+            DrawerItem(
+                text = "Search",
+                onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) })
 
             Spacer(
                 modifier = Modifier
@@ -229,7 +272,9 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
                     .background(Color.LightGray)
             )
 
-            DrawerItem(text = "More", onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) } )
+            DrawerItem(
+                text = "More",
+                onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) })
         }
 
         Text(
@@ -244,10 +289,11 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
 
 @Composable
 fun DrawerItem(text: String, onItemClick: () -> Unit) {
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .height(50.dp)
-        .clickable { onItemClick() },
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+            .clickable { onItemClick() },
         verticalArrangement = Arrangement.Center
     ) {
         Text(
@@ -322,7 +368,7 @@ private fun MyCollapsingBody(
 
             } else {
                 MyAnimaShower(name = R.raw.connection_error_owl)
-                viewModel.showDialog.value = true
+                viewModel.showNetDialog.value = true
             }
 
         }
@@ -542,12 +588,26 @@ fun ScienceBookItem(
 // -----------------------------------------------------------
 
 @Composable
-fun TopCircularIcons(onAllIconClicked: () -> Unit, onVoiceLibClicked: (String) -> Unit, onVideoLibClicked: (String) -> Unit, onPhotoLibClicked: (String) -> Unit) {
+fun TopCircularIcons(
+    onAllIconClicked: () -> Unit,
+    onVoiceLibClicked: (String) -> Unit,
+    onVideoLibClicked: (String) -> Unit,
+    onPhotoLibClicked: (String) -> Unit
+) {
     Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
         CircularIcon(img = R.drawable.img_all, title = "all") { onAllIconClicked.invoke() }
-        CircularIcon(img = R.drawable.img_audio_lib, title = "voice lib") { onVoiceLibClicked.invoke(MyScreens.VoiceLibScreen.route) }
-        CircularIcon(img = R.drawable.img_watch_list, title = "video lib") { onVideoLibClicked.invoke(MyScreens.VideoLibScreen.route) }
-        CircularIcon(img = R.drawable.img_library_all, title = "photo lib") { onPhotoLibClicked.invoke(MyScreens.PhotoLibScreen.route) }
+        CircularIcon(
+            img = R.drawable.img_audio_lib,
+            title = "voice lib"
+        ) { onVoiceLibClicked.invoke(MyScreens.VoiceLibScreen.route) }
+        CircularIcon(
+            img = R.drawable.img_watch_list,
+            title = "video lib"
+        ) { onVideoLibClicked.invoke(MyScreens.VideoLibScreen.route) }
+        CircularIcon(
+            img = R.drawable.img_library_all,
+            title = "photo lib"
+        ) { onPhotoLibClicked.invoke(MyScreens.PhotoLibScreen.route) }
     }
 }
 
