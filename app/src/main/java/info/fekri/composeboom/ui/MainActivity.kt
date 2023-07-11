@@ -85,9 +85,7 @@ fun MainAppUi(isFirstTime: Boolean) {
             ShowBookScreen(it.arguments!!.getString(KEY_SHOW_BOOK, "null"))
         }
 
-        composable(
-            MyScreens.SplashScreen.route
-        ) {
+        composable(MyScreens.SplashScreen.route) {
             SplashScreen(isFirstTime)
         }
 
@@ -99,7 +97,34 @@ fun MainAppUi(isFirstTime: Boolean) {
             MoreScreen()
         }
 
+        composable(MyScreens.VoiceLibScreen.route) {
+            VoiceLibScreen()
+        }
+
+        composable(MyScreens.VideoLibScreen.route) {
+            VideoLibScreen()
+        }
+
+        composable(MyScreens.PhotoLibScreen.route) {
+            PhotoLibScreen()
+        }
+
     }
+
+}
+
+@Composable
+fun PhotoLibScreen() {
+
+}
+
+@Composable
+fun VideoLibScreen() {
+
+}
+
+@Composable
+fun VoiceLibScreen() {
 
 }
 
@@ -117,10 +142,3 @@ fun SearchScreen() {
 fun ShowBookScreen(bookId: String) {
 
 }
-
-
-
-
-
-
-
