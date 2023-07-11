@@ -191,13 +191,14 @@ fun MainScreen(modifier: Modifier = Modifier) {
             "Please, check your Internet Connection and click on Try Again!",
             btnText = "Try Again"
         ) {
-            /*re-call the MainScreen as reload-screen ;-)*/
+            /*re-call the MainScreen to reload-screen ;-)*/
             navigation.navigate(MyScreens.MainScreen.route) {
-                popUpTo(MyScreens.MainScreen.route) {
-                    inclusive = true
-                }
+                popUpTo(MyScreens.MainScreen.route) { inclusive = true }
             }
             viewModel.showNetDialog.value = false
+        }
+        navigation.navigate(MyScreens.MainScreen.route) {
+            popUpTo(MyScreens.MainScreen.route) { inclusive = true }
         }
     }
 
