@@ -174,7 +174,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onKidItemClicked = { id -> navigation.navigate(id) },
                     onScienceItemClicked = { id -> navigation.navigate(id) },
                     onPoemItemClicked = { id -> navigation.navigate(id) },
-                    onAllLibClicked = { /*show alert dialog*/ },
+                    onAllLibClicked = { viewModel.showDialog.value = true },
                     onVoiceLibClicked = { id -> navigation.navigate(id) },
                     onVideoLibClicked = { id -> navigation.navigate(id) },
                     onPhotoLibClicked = { id -> navigation.navigate(id) }
@@ -182,7 +182,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     )
-
 }
 
 // -----------------------------------------------------------
