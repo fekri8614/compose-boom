@@ -171,15 +171,21 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     dataKids,
                     dataPoems,
                     dataScience,
-                    onKidItemClicked = { id -> /*TODO("Complete onKidItemClicked")*/ },
-                    onScienceItemClicked = { id -> /*TODO("Complete onScienceItemClicked")*/ },
-                    onPoemItemClicked = { id -> /*TODO("Complete onPoemItemClicked")*/ }
+                    onKidItemClicked = { id -> navigation.navigate(id) },
+                    onScienceItemClicked = { id -> navigation.navigate(id) },
+                    onPoemItemClicked = { id -> navigation.navigate(id) },
+                    onAllLibClicked = {},
+                    onVoiceLibClicked = { id ->  },
+                    onVideoLibClicked = { id ->  },
+                    onPhotoLibClicked = { id ->  }
                 )
             }
         }
     )
 
 }
+
+// -----------------------------------------------------------
 
 @Composable
 fun DrawerContent(onItemClicked: (String) -> Unit) {
@@ -253,6 +259,8 @@ fun DrawerItem(text: String, onItemClick: () -> Unit) {
     }
 }
 
+// -----------------------------------------------------------
+
 @Composable
 private fun MyCollapsingBody(
     modifier: Modifier,
@@ -263,7 +271,11 @@ private fun MyCollapsingBody(
     dataScience: List<ScienceBook>,
     onKidItemClicked: (String) -> Unit,
     onScienceItemClicked: (String) -> Unit,
-    onPoemItemClicked: (String) -> Unit
+    onPoemItemClicked: (String) -> Unit,
+    onAllLibClicked: () -> Unit,
+    onVoiceLibClicked: (String) -> Unit,
+    onVideoLibClicked: (String) -> Unit,
+    onPhotoLibClicked: (String) -> Unit
 ) {
     Box {
         Column(
@@ -275,7 +287,12 @@ private fun MyCollapsingBody(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            TopCircularIcons()
+            TopCircularIcons(
+                onAllIconClicked = { onAllLibClicked.invoke() },
+                onVoiceLibClicked = { id -> onVoiceLibClicked.invoke(id) },
+                onVideoLibClicked = { id -> onVideoLibClicked.invoke(id) },
+                onPhotoLibClicked = { id -> onPhotoLibClicked.invoke(id) }
+            )
             if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 
             if (NetworkChecker(context).isInternetConnected) {
@@ -526,15 +543,12 @@ fun ScienceBookItem(
 // -----------------------------------------------------------
 
 @Composable
-fun TopCircularIcons() {
+fun TopCircularIcons(onAllIconClicked: () -> Unit, onVoiceLibClicked: (String) -> Unit, onVideoLibClicked: (String) -> Unit, onPhotoLibClicked: (String) -> Unit) {
     Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
-        CircularIcon(img = R.drawable.img_all, title = "all") { /*will handle later*/ }
-        CircularIcon(img = R.drawable.img_audio_lib, title = "voice lib") { /*will handle later*/ }
-        CircularIcon(img = R.drawable.img_watch_list, title = "video lib") { /*will handle later*/ }
-        CircularIcon(
-            img = R.drawable.img_library_all,
-            title = "photo lib"
-        ) { /*will handle later*/ }
+        CircularIcon(img = R.drawable.img_all, title = "all") { onAllIconClicked.invoke() }
+        CircularIcon(img = R.drawable.img_audio_lib, title = "voice lib") { onVoiceLibClicked.invoke(MyScreens.VoiceLibScreen.route) }
+        CircularIcon(img = R.drawable.img_watch_list, title = "video lib") { onVideoLibClicked.invoke(MyScreens.VideoLibScreen.route) }
+        CircularIcon(img = R.drawable.img_library_all, title = "photo lib") { onPhotoLibClicked.invoke(MyScreens.PhotoLibScreen.route) }
     }
 }
 
