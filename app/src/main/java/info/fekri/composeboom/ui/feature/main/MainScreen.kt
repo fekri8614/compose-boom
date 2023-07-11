@@ -174,10 +174,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onKidItemClicked = { id -> navigation.navigate(id) },
                     onScienceItemClicked = { id -> navigation.navigate(id) },
                     onPoemItemClicked = { id -> navigation.navigate(id) },
-                    onAllLibClicked = {},
-                    onVoiceLibClicked = { id ->  },
-                    onVideoLibClicked = { id ->  },
-                    onPhotoLibClicked = { id ->  }
+                    onAllLibClicked = { /*show alert dialog*/ },
+                    onVoiceLibClicked = { id -> navigation.navigate(id) },
+                    onVideoLibClicked = { id -> navigation.navigate(id) },
+                    onPhotoLibClicked = { id -> navigation.navigate(id) }
                 )
             }
         }
