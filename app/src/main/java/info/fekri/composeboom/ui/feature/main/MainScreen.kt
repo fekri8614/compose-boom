@@ -194,7 +194,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             onConfirmClicked = {
                 viewModel.showNetDialog.value = false
                 viewModel.getDataFromNet()
-                navigation.navigate(MyScreens.MainScreen.route)
             },
             onDismissRequest = {
                 viewModel.showNetDialog.value = false
