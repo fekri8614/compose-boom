@@ -26,7 +26,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -34,7 +33,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -164,7 +162,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
                             )
                         }
                     }
-
                 },
                 toolbarModifier = modifier.verticalScroll(rememberScrollState())
             ) {
@@ -175,9 +172,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     dataKids,
                     dataPoems,
                     dataScience,
-                    onKidItemClicked = { id -> navigation.navigate(id) },
-                    onScienceItemClicked = { id -> navigation.navigate(id) },
-                    onPoemItemClicked = { id -> navigation.navigate(id) },
+                    onKidItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
+                    onScienceItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
+                    onPoemItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
                     onAllLibClicked = { navigation.navigate(MyScreens.MainScreen.route) },
                     onVoiceLibClicked = { id -> navigation.navigate(id) },
                     onVideoLibClicked = { id -> navigation.navigate(id) },
@@ -272,8 +269,8 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
                 onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) })
 
             DrawerItem(
-                text = "More",
-                onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) })
+                text = "About Us",
+                onItemClick = { onItemClicked.invoke(MyScreens.AboutUsScreen.route) })
         }
 
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 16.dp)) {

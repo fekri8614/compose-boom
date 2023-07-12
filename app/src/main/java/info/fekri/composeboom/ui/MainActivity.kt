@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -93,8 +92,8 @@ fun MainAppUi(isFirstTime: Boolean) {
             SearchScreen()
         }
 
-        composable(MyScreens.MoreScreen.route) {
-            MoreScreen()
+        composable(MyScreens.AboutUsScreen.route) {
+            AboutUsScreen()
         }
 
         composable(MyScreens.VoiceLibScreen.route) {
@@ -129,7 +128,7 @@ fun VoiceLibScreen() {
 }
 
 @Composable
-fun MoreScreen() {
+fun AboutUsScreen() {
 
 }
 
