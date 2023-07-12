@@ -34,7 +34,7 @@ class MainScreenViewModel(
         getDataFromNet()
     }
 
-    private fun getDataFromNet() {
+    fun getDataFromNet() {
         if (showKids()) {
             showUiKids.value = true
             setupKids()

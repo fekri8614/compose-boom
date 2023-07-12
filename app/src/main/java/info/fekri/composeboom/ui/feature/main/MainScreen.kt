@@ -20,10 +20,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -31,6 +34,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -50,7 +54,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.developer.kalert.KAlertDialog
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
@@ -178,51 +181,48 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onAllLibClicked = { /*TODO("Complete onAllLibClicked event")*/ },
                     onVoiceLibClicked = { id -> navigation.navigate(id) },
                     onVideoLibClicked = { id -> navigation.navigate(id) },
-                    onPhotoLibClicked = { id -> navigation.navigate(id) }
+                    onPhotoLibClicked = { id -> navigation.navigate(id) },
                 )
             }
         }
     )
 
     if (viewModel.showNetDialog.value) {
-        showAlertDialog(
-            context.applicationContext,
-            KAlertDialog.WARNING_TYPE,
-            "Please, check your Internet Connection and click on Try Again!",
-            btnText = "Try Again"
-        ) {
-            /*re-call the MainScreen to reload-screen ;-)*/
-            navigation.navigate(MyScreens.MainScreen.route) {
-                popUpTo(MyScreens.MainScreen.route) { inclusive = true }
+        ShowAlertDialog(
+            msg = "Please, check your internet connection and try again!",
+            btnMsg = "Try Again",
+            onConfirmClicked = {
+                viewModel.showNetDialog.value = false
+                viewModel.getDataFromNet()
+                navigation.navigate(MyScreens.MainScreen.route)
+            },
+            onDismissRequest = {
+                viewModel.showNetDialog.value = false
             }
-            viewModel.showNetDialog.value = false
-        }
-        navigation.navigate(MyScreens.MainScreen.route) {
-            popUpTo(MyScreens.MainScreen.route) { inclusive = true }
-        }
+        )
     }
 
 }
 
 // ----------------------------------------------------------
 
-fun showAlertDialog(
-    context: Context,
-    type: Int,
+@Composable
+fun ShowAlertDialog(
     msg: String,
-    btnText: String,
-    onConfirmClicked: () -> Unit
+    btnMsg: String,
+    onConfirmClicked: () -> Unit,
+    onDismissRequest: () -> Unit
 ) {
-    KAlertDialog(context, type).apply {
-        titleText = "Information!"
-        contentText = msg
-        setConfirmClickListener(btnText) {
-            onConfirmClicked.invoke()
-            it.dismiss()
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = { Text(text = "Information", textAlign = TextAlign.Center) },
+        text = { Text(text = msg, textAlign = TextAlign.Justify) },
+        confirmButton = {
+            Button(onClick = onConfirmClicked) {
+                Text(text = btnMsg)
+            }
         }
-        setCancelable(true)
-        show()
-    }
+    )
 }
 
 // -----------------------------------------------------------
@@ -239,51 +239,58 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
         Column {
             Column(
                 modifier = Modifier
-                    .padding(16.dp),
+                    .background(PrimaryDarkColor)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_icon_main_no_back),
-                    contentDescription = null,
-                    modifier = Modifier.size(100.dp),
-                    alignment = Alignment.TopStart
-                )
-                Text(
-                    text = "Boom!",
-                    style = TextStyle(
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Black
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_icon_main_no_back),
+                        contentDescription = null,
+                        modifier = Modifier.size(80.dp),
+                        alignment = Alignment.TopStart
                     )
-                )
-                Text(text = "Search and Read book with Boom!", color = Color.Gray)
+                    Text(
+                        text = "Boom!",
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    )
+                    Text(text = "Search and Read book with Boom!", color = Color.White)
+                }
+
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(10.dp))
 
             DrawerItem(
                 text = "Search",
                 onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) })
-
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth(0.3f)
-                    .height(1.dp)
-                    .background(Color.LightGray)
-            )
 
             DrawerItem(
                 text = "More",
                 onItemClick = { onItemClicked.invoke(MyScreens.MoreScreen.route) })
         }
 
-        Text(
-            text = "Developed by Mohammad Reza Fekri",
-            fontSize = 18.sp,
-            color = PrimaryDarkColor,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 16.dp)) {
+            Text(
+                text = "Developed by ",
+                fontSize = 14.sp,
+                color = Color.Black
+            )
+            Text(
+                text = "fekri8614",
+                fontSize = 16.sp,
+                color = PrimaryDarkColor,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
 
     }
 }
