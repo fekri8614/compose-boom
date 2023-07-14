@@ -17,6 +17,7 @@ import androidx.navigation.navArgument
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
+import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.main.MainScreen
@@ -61,7 +62,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.MainScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.AboutUsScreen.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()
@@ -127,10 +128,7 @@ fun VoiceLibScreen() {
 
 }
 
-@Composable
-fun AboutUsScreen() {
 
-}
 
 @Composable
 fun SearchScreen() {
