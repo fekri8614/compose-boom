@@ -1,6 +1,5 @@
 package info.fekri.composeboom.ui.feature.aboutUs
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -33,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -46,8 +44,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import info.fekri.composeboom.R
-import info.fekri.composeboom.ui.feature.main.CircularIcon
-import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.util.ABOUT_US_ITEMS
@@ -77,9 +73,10 @@ fun AboutUsScreen() {
 @Preview
 @Composable
 fun BodyAboutUs() {
-    val activityLauncher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
-        // Handle the result of the launched activity, if needed
-    }
+    val activityLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+            // Handle the result of the launched activity, if needed
+        }
 
     Column(
         modifier = Modifier.padding(8.dp),
@@ -102,12 +99,15 @@ fun BodyAboutUs() {
 
 @Composable
 fun SecondInfoContact(onClick: (String) -> Unit) {
-    LazyRow(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+    LazyRow(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         items(ABOUT_US_ITEMS.size) {
             CircularInfo(
-                ABOUT_US_ITEMS[it].first,
-                ABOUT_US_ITEMS[it].second,
-                onClick = { onClick.invoke(ABOUT_US_ITEMS[it].third) }
+                ABOUT_US_ITEMS[it].first, // name
+                ABOUT_US_ITEMS[it].second, // color
+                onClick = { onClick.invoke(ABOUT_US_ITEMS[it].third) } // url
             )
         }
     }
@@ -152,7 +152,7 @@ fun TopImagePart() {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Text(
             text = "Mohammad Reza Fekri",
             style = TextStyle(
@@ -168,7 +168,7 @@ fun TopImagePart() {
                 color = Color.Gray
             )
         )
-        
+
     }
 }
 
