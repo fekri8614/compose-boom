@@ -1,6 +1,7 @@
 package info.fekri.composeboom.util
 
 import androidx.compose.ui.graphics.Color
+import java.io.Serializable
 
 const val IS_USER_FIRST_TIME = "IsUsersFirstTime"
 
@@ -16,8 +17,8 @@ const val KEY_SUB_POEMS = "poemsSubjectKey"
 const val BASE_URL = "https://www.googleapis.com/books/v1/"
 
 // usages -->
-val ABOUT_US_ITEMS: List<Pair<String, Color>> = listOf(
-    Pair("LinkedIn", Color.Blue),
-    Pair("Github", Color.Gray),
-    Pair("E-mail", Color.White)
+val ABOUT_US_ITEMS: List<ThreePair<String, Color, String>> = listOf(
+    ThreePair("LinkedIn", Color.Blue, "https://linkedin.com/in/fekri8614"),
+    ThreePair("Github", Color.DarkGray, "https://github.com/fekri8614"),
+    ThreePair("E-mail", Color.Gray, "mailto:fekri8614@gmail.com")
 )

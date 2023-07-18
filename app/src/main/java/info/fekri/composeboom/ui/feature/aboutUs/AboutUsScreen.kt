@@ -1,10 +1,15 @@
 package info.fekri.composeboom.ui.feature.aboutUs
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -27,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import info.fekri.composeboom.R
-import info.fekri.composeboom.ui.feature.main.CircularIcon
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
@@ -57,7 +62,9 @@ fun AboutUsScreen() {
     val navigation = getNavController()
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         AboutTopBar {
             navigation.navigate(MyScreens.MainScreen.route)
@@ -71,6 +78,11 @@ fun AboutUsScreen() {
 @Preview
 @Composable
 fun BodyAboutUs() {
+    val activityLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+            // Handle the result of the launched activity, if needed
+        }
+
     Column(
         modifier = Modifier.padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,34 +94,56 @@ fun BodyAboutUs() {
 
         FirstInfoContent()
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
-        SecondInfoContact()
+        SecondInfoContact { url ->
+            activityLauncher.launch(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        }
     }
 }
 
 @Composable
-fun SecondInfoContact() {
-    LazyRow(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+fun SecondInfoContact(onClick: (String) -> Unit) {
+    LazyRow(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         items(ABOUT_US_ITEMS.size) {
             CircularInfo(
-                ABOUT_US_ITEMS[it].first,
-                ABOUT_US_ITEMS[it].second
+                ABOUT_US_ITEMS[it].first, // name
+                ABOUT_US_ITEMS[it].second, // color
+                onClick = { onClick.invoke(ABOUT_US_ITEMS[it].third) } // url
             )
         }
     }
 }
 
 @Composable
-fun CircularInfo(text: String, txtColor: Color = Color.White) {
+fun CircularInfo(text: String, txtColor: Color = Color.White, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(70),
-        backgroundColor = BlueLightBack,
         elevation = 4.dp,
-        border = BorderStroke(2.dp, Color.White)
+        border = BorderStroke(2.dp, BlueBackground),
+        modifier = Modifier
+            .size(120.dp)
+            .clickable {
+                onClick.invoke()
+            }
+            .padding(8.dp)
     ) {
-        Column {
-            Text(text = text, color = txtColor, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = text,
+                color = txtColor,
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+            )
         }
     }
 }
@@ -136,7 +170,7 @@ fun TopImagePart() {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         Text(
             text = "Mohammad Reza Fekri",
             style = TextStyle(
@@ -152,7 +186,7 @@ fun TopImagePart() {
                 color = Color.Gray
             )
         )
-        
+
     }
 }
 
