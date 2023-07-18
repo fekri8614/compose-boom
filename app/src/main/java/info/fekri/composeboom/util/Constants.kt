@@ -19,6 +19,6 @@ const val BASE_URL = "https://www.googleapis.com/books/v1/"
 // usages -->
 val ABOUT_US_ITEMS: List<ThreePair<String, Color, String>> = listOf(
     ThreePair("LinkedIn", Color.Blue, "https://linkedin.com/in/fekri8614"),
-    ThreePair("Github", Color.Gray, "https://github.com/fekri8614"),
-    ThreePair("E-mail", Color.White, "mailto:fekri8614@gmail.com")
+    ThreePair("Github", Color.DarkGray, "https://github.com/fekri8614"),
+    ThreePair("E-mail", Color.Gray, "mailto:fekri8614@gmail.com")
 )

@@ -20,7 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -44,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import info.fekri.composeboom.R
+import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.util.ABOUT_US_ITEMS
@@ -59,7 +62,9 @@ fun AboutUsScreen() {
     val navigation = getNavController()
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         AboutTopBar {
             navigation.navigate(MyScreens.MainScreen.route)
@@ -89,7 +94,7 @@ fun BodyAboutUs() {
 
         FirstInfoContent()
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
         SecondInfoContact { url ->
             activityLauncher.launch(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
@@ -117,15 +122,28 @@ fun SecondInfoContact(onClick: (String) -> Unit) {
 fun CircularInfo(text: String, txtColor: Color = Color.White, onClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(70),
-        backgroundColor = BlueLightBack,
         elevation = 4.dp,
-        border = BorderStroke(2.dp, Color.White),
-        modifier = Modifier.clickable {
-            onClick.invoke()
-        }
+        border = BorderStroke(2.dp, BlueBackground),
+        modifier = Modifier
+            .size(120.dp)
+            .clickable {
+                onClick.invoke()
+            }
+            .padding(8.dp)
     ) {
-        Column {
-            Text(text = text, color = txtColor, fontWeight = FontWeight.Medium, fontSize = 16.sp)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = text,
+                color = txtColor,
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+            )
         }
     }
 }
