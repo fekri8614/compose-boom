@@ -1,5 +1,6 @@
 package info.fekri.composeboom.model.net
 
+import info.fekri.composeboom.model.data.ByIdBook
 import info.fekri.composeboom.model.data.SearchedBookResponse
 import info.fekri.composeboom.model.data.books.KidBookResponse
 import info.fekri.composeboom.model.data.books.PoemBookResponse
@@ -8,6 +9,7 @@ import info.fekri.composeboom.util.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /* write your http(s) requests here */
@@ -34,6 +36,12 @@ interface ApiService {
     suspend fun getPoemBooks(
         @Query("q") query: String = "Poems"
     ): PoemBookResponse
+
+    @GET("volumes/{book_id}")
+    suspend fun getBookById(
+        @Path("book_id")
+        book_id: String
+    ): ByIdBook
 
 }
 
