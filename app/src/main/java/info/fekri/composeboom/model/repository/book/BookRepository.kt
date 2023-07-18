@@ -11,6 +11,6 @@ interface BookRepository {
     suspend fun getPoemBooks(): List<PoemBook>
 
     suspend fun getSearchedBook(search: String): List<SearchedBook>
-    suspend fun getBookById(id: String): ByIdBook
+    suspend fun getBookInfoById(id: String): ByIdBook
 
 }

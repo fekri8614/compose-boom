@@ -31,12 +31,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import dev.burnoo.cokoin.navigation.getNavController
+import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.R
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueLightBack
@@ -50,10 +53,18 @@ fun ShowBookScreen(bookId: String) {
         uiController.setStatusBarColor(PrimaryDarkColor)
     }
 
+    val context = LocalContext.current
+    val viewModel = getNavViewModel<ShowBookViewModel>()
+    viewModel.getDataBookFromNet(bookId)
+
+    val navigation = getNavController()
+
     Scaffold(
         scaffoldState = rememberScaffoldState(),
         backgroundColor = BackgroundMain,
-        topBar = { ShowBookTopBar("book_title") { /*TODO("Handle this")*/ } }
+        topBar = { ShowBookTopBar("book_title") {
+            navigation.popBackStack()
+        } }
     ) {
         Column(
             modifier = Modifier

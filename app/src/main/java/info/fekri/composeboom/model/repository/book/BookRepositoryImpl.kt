@@ -25,7 +25,7 @@ class BookRepositoryImpl(private val apiService: ApiService) : BookRepository {
         return apiService.getSearchedBook(search).searchedData
     }
 
-    override suspend fun getBookById(id: String): ByIdBook {
+    override suspend fun getBookInfoById(id: String): ByIdBook {
         return apiService.getBookById(id)
     }
 
