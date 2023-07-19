@@ -15,3 +15,8 @@ data class ThreePair<A, B, C>(
 ) : Serializable {
     override fun toString(): String = "$first, $second, $third"
 }
+
+fun textLengthStyle(txt: String, length: Int): String {
+    if (txt.length > length) return txt.substring(0, length) + "..."
+    return txt
+}

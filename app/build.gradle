@@ -104,4 +104,10 @@ dependencies {
     implementation 'io.github.tutorialsandroid:kalertdialog:20.3.6'
     implementation 'com.github.TutorialsAndroid:progressx:v6.0.19'
 
+    // google analystics
+    implementation 'com.google.android.gms:play-services-analytics:18.0.2'
+
+    // pdf-viewer
+    implementation 'io.github.grizzi91:bouquet:1.1.2'
+
 }

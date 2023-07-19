@@ -31,6 +31,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
@@ -68,6 +69,7 @@ import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
 import info.fekri.composeboom.util.MyScreens
 import info.fekri.composeboom.util.NetworkChecker
+import info.fekri.composeboom.util.ShowAlertDialog
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -186,6 +188,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     if (viewModel.showNetDialog.value) {
         ShowAlertDialog(
+            title = "Check your Connection!",
             msg = "Please, check your internet connection and try again!",
             btnMsg = "Try Again",
             onConfirmClicked = {
@@ -198,27 +201,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
         )
     }
 
-}
-
-// ----------------------------------------------------------
-
-@Composable
-fun ShowAlertDialog(
-    msg: String,
-    btnMsg: String,
-    onConfirmClicked: () -> Unit,
-    onDismissRequest: () -> Unit
-) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = { Text(text = "Information", textAlign = TextAlign.Center) },
-        text = { Text(text = msg, textAlign = TextAlign.Justify) },
-        confirmButton = {
-            Button(onClick = onConfirmClicked) {
-                Text(text = btnMsg)
-            }
-        }
-    )
 }
 
 // -----------------------------------------------------------
@@ -390,7 +372,7 @@ fun KidBookSection(
 ) {
     Surface(
         modifier = modifier
-            .fillMaxWidth(0.95f)
+            .fillMaxWidth(1f)
             .clip(Shapes.large)
             .padding(top = 8.dp),
         color = backColor
@@ -441,7 +423,7 @@ fun KidBookItem(
         elevation = 3.dp
     ) {
         val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.isNullOrEmpty()) data.volumeInfo.imageLinks.thumbnail
+            if (!data.volumeInfo.imageLinks.thumbnail.toString().isNotEmpty()) data.volumeInfo.imageLinks.thumbnail
             else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
@@ -463,7 +445,7 @@ fun PoemBookSection(
 ) {
     Surface(
         modifier = modifier
-            .fillMaxWidth(0.95f)
+            .fillMaxWidth(1f)
             .clip(Shapes.large)
             .padding(top = 8.dp),
         color = backColor
@@ -507,7 +489,7 @@ fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit,
         elevation = 3.dp
     ) {
         val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.isNullOrEmpty()) data.volumeInfo.imageLinks.thumbnail
+            if (!data.volumeInfo.imageLinks.thumbnail.toString().isNotEmpty()) data.volumeInfo.imageLinks.thumbnail
             else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
@@ -529,7 +511,7 @@ fun ScienceBookSection(
 ) {
     Surface(
         modifier = modifier
-            .fillMaxWidth(0.95f)
+            .fillMaxWidth(1f)
             .clip(Shapes.medium)
             .padding(top = 8.dp),
         color = backColor
@@ -577,7 +559,7 @@ fun ScienceBookItem(
         elevation = 3.dp
     ) {
         val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.isNullOrEmpty()) data.volumeInfo.imageLinks.thumbnail
+            if (!data.volumeInfo.imageLinks.thumbnail.toString().isNotEmpty()) data.volumeInfo.imageLinks.thumbnail
             else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,

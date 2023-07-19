@@ -1,10 +1,18 @@
 package info.fekri.composeboom.ui.feature.showbook
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
@@ -26,22 +36,32 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import info.fekri.composeboom.R
+import dev.burnoo.cokoin.navigation.getNavController
+import dev.burnoo.cokoin.navigation.getNavViewModel
+import info.fekri.composeboom.model.data.ByIdBook
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
-import info.fekri.composeboom.ui.theme.YellowBackground
+import info.fekri.composeboom.util.ShowAlertDialog
+import info.fekri.composeboom.util.textLengthStyle
 
 @Composable
 fun ShowBookScreen(bookId: String) {
@@ -50,30 +70,79 @@ fun ShowBookScreen(bookId: String) {
         uiController.setStatusBarColor(PrimaryDarkColor)
     }
 
+    val context = LocalContext.current
+    val viewModel = getNavViewModel<ShowBookViewModel>()
+    viewModel.getDataBookFromNet(bookId)
+
+    val navigation = getNavController()
+
+    val stateDataBook = viewModel.dataShowBook
+
     Scaffold(
         scaffoldState = rememberScaffoldState(),
         backgroundColor = BackgroundMain,
-        topBar = { ShowBookTopBar("book_title") { /*TODO("Handle this")*/ } }
+        topBar = {
+            ShowBookTopBar(stateDataBook.value.volumeInfo.title) {
+                navigation.popBackStack()
+            }
+        }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(it)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            AboutUsBody()
+            AboutUsBody(stateDataBook.value) {
+                viewModel.downloadPDF.value = true
+            }
         }
+    }
+
+    if (viewModel.downloadPDF.value) {
+        ShowAlertDialog(
+            title = "Are you sure?",
+            msg = "The suffix of file is .ascm, which means you need to have Adobe Digital Editions as installed.",
+            btnMsg = "I'm Sure",
+            onConfirmClicked = {
+                viewModel.downloadPDF.value = false
+                context.apply {
+                    if (stateDataBook.value.accessInfo.pdf.isAvailable) {
+                        // download
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(stateDataBook.value.accessInfo.pdf.acsTokenLink)))
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "The PDF file is not available.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            },
+            onDismissRequest = {
+                viewModel.downloadPDF.value = false
+            }
+        )
     }
 
 }
 
 @Composable
-fun AboutUsBody() {
+fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
+    var showContent by remember { mutableStateOf(false) }
+    val transition = updateTransition(showContent, label = "")
+
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
+            .padding(8.dp)
             .fillMaxWidth(0.8f)
             .border(BorderStroke(1.dp, Color.White), shape = RoundedCornerShape(18.dp))
-            .background(BlueLightBack, RoundedCornerShape(18.dp)),
+            .background(BlueLightBack, RoundedCornerShape(18.dp))
+            .clickable { showContent = !showContent },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -86,8 +155,8 @@ fun AboutUsBody() {
                 shape = RoundedCornerShape(18.dp),
                 elevation = 4.dp
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_imagin1),
+                AsyncImage(
+                    model = data.volumeInfo.imageLinks.thumbnail,
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
                 )
@@ -96,14 +165,15 @@ fun AboutUsBody() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Book name",
-                fontSize = 18.sp,
+                text = textLengthStyle(data.volumeInfo.title, 26),
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
             Text(
-                text = "by Writer Name",
-                fontSize = 16.sp
+                text = "by ${data.volumeInfo.publisher}",
+                fontSize = 14.sp,
+                fontWeight = FontWeight.W500
             )
         }
 
@@ -121,54 +191,111 @@ fun AboutUsBody() {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp)
         ) {
             Text(
-                text = "Published on: 2002",
-                fontSize = 16.sp
+                text = "Published on: ${data.volumeInfo.publishedDate}",
+                fontSize = 16.sp,
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Medium
             )
             Text(
-                text = "120 pages",
-                fontSize = 16.sp
+                text = "${data.volumeInfo.pageCount} pages",
+                fontSize = 16.sp,
+                fontStyle = FontStyle.Italic,
+                fontWeight = FontWeight.Medium
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris ...",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier.padding(8.dp)
-        )
+        if (showContent) {
+            val visibleState = transition.animateDp(
+                transitionSpec = {
+                    if (false isTransitioningTo true) {
+                        tween(durationMillis = 300)
+                    } else {
+                        spring()
+                    }
+                }, label = ""
+            ) { if (it) 200.dp else 0.dp }
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-        ) {
-            InfoButton(txt = "Buy", txtColor = YellowBackground) {
-                // TODO("Handle Buy button")
-            }
-            InfoButton(txt = "Preview") {
-                // TODO("Handle Preview button")
-            }
-            InfoButton(txt = "Read") {
-                // TODO("Handle Read button")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(visibleState.value)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = data.volumeInfo.description,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.padding(16.dp)
+                )
             }
         }
 
     }
+
+    Column (modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
+            InfoButton(txt = "E-book") {
+                context.apply {
+                    val urlEbook = data.accessInfo.epub
+                    if (urlEbook.isAvailable) {
+                        onDownloadPDFClicked.invoke()
+                    } else {
+                        Toast.makeText(context, "The E-book is not available!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+            }
+            InfoButton(txt = "Preview") {
+                context.apply {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(data.volumeInfo.previewLink)))
+                }
+            }
+
+        }
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Button(
+            onClick = {
+                // download the pdf
+                onDownloadPDFClicked.invoke()
+            },
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
+            Text(text = "Download PDF", modifier = Modifier.padding(8.dp))
+        }
+    }
+
 }
 
 @Composable
 fun InfoButton(
-    txt: String, txtColor: Color = Color.Gray, onButtonClicked: () -> Unit
+    txt: String,
+    txtColor: Color = Color.White,
+    width: Dp = 120.dp, height: Dp = 60.dp,
+    onButtonClicked: () -> Unit
 ) {
-    Button(onClick = onButtonClicked, modifier = Modifier.clip(RoundedCornerShape(40))) {
+    Button(
+        onClick = onButtonClicked, modifier = Modifier
+            .size(width, height)
+            .clip(RoundedCornerShape(40))
+
+    ) {
         Text(
-            text = txt, 
+            text = txt,
             color = txtColor,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(8.dp)
@@ -188,6 +315,6 @@ fun ShowBookTopBar(title: String, onBackPressed: () -> Unit) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
         },
-        title = { Text(text = title) }
+        title = { Text(text = textLengthStyle(title, 20)) }
     )
 }
