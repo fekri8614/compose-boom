@@ -57,10 +57,11 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.model.data.ByIdBook
-import info.fekri.composeboom.ui.feature.main.ShowAlertDialog
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
+import info.fekri.composeboom.util.ShowAlertDialog
+import info.fekri.composeboom.util.textLengthStyle
 
 @Composable
 fun ShowBookScreen(bookId: String) {
@@ -164,7 +165,7 @@ fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = data.volumeInfo.title,
+                text = textLengthStyle(data.volumeInfo.title, 26),
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -314,6 +315,6 @@ fun ShowBookTopBar(title: String, onBackPressed: () -> Unit) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
         },
-        title = { Text(text = title) }
+        title = { Text(text = textLengthStyle(title, 20)) }
     )
 }
