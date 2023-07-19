@@ -13,6 +13,7 @@ class ShowBookViewModel(private val bookRepository: BookRepository): ViewModel()
 
     val dataShowBook = mutableStateOf(BY_ID_BOOK_DATA_FAKE)
     val showProgress = mutableStateOf(false)
+    val downloadPDF = mutableStateOf(false)
 
     fun getDataBookFromNet(id: String) {
         viewModelScope.launch(coroutineExceptionHandler) {

@@ -11,7 +11,7 @@ data class ByIdBook(
     @SerializedName("id")
     val id: String,
     @SerializedName("selfLink")
-    val selfLink: String,
+    val selfLink: String?,
     @SerializedName("volumeInfo")
     val volumeInfo: VolumeInfo
 ) {
@@ -35,14 +35,14 @@ data class ByIdBook(
     ) {
         data class Epub(
             @SerializedName("acsTokenLink")
-            val acsTokenLink: String,
+            val acsTokenLink: String?,
             @SerializedName("isAvailable")
             val isAvailable: Boolean
         )
 
         data class Pdf(
             @SerializedName("acsTokenLink")
-            val acsTokenLink: String,
+            val acsTokenLink: String?,
             @SerializedName("isAvailable")
             val isAvailable: Boolean
         )

@@ -31,6 +31,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
@@ -186,6 +187,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
     if (viewModel.showNetDialog.value) {
         ShowAlertDialog(
+            title = "Check your Connection!",
             msg = "Please, check your internet connection and try again!",
             btnMsg = "Try Again",
             onConfirmClicked = {
@@ -204,6 +206,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun ShowAlertDialog(
+    title: String,
     msg: String,
     btnMsg: String,
     onConfirmClicked: () -> Unit,
@@ -211,10 +214,10 @@ fun ShowAlertDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = "Information", textAlign = TextAlign.Center) },
-        text = { Text(text = msg, textAlign = TextAlign.Justify) },
+        title = { Text(text = title, fontWeight = FontWeight.Bold) },
+        text = { Text(text = msg, fontWeight = FontWeight.Medium) },
         confirmButton = {
-            Button(onClick = onConfirmClicked) {
+            TextButton(onClick = onConfirmClicked) {
                 Text(text = btnMsg)
             }
         }

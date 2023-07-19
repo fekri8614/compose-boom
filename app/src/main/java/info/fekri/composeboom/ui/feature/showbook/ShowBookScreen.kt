@@ -1,11 +1,13 @@
 package info.fekri.composeboom.ui.feature.showbook
 
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,38 +46,42 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
-import info.fekri.composeboom.R
+import dev.burnoo.cokoin.navigation.getNavViewModel
+import info.fekri.composeboom.model.data.ByIdBook
+import info.fekri.composeboom.ui.feature.main.ShowAlertDialog
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
-import info.fekri.composeboom.ui.theme.YellowBackground
 
 @Composable
-fun ShowBookScreen(/*bookId: String = ""*/) {
+fun ShowBookScreen(bookId: String) {
     val uiController = rememberSystemUiController()
     SideEffect {
         uiController.setStatusBarColor(PrimaryDarkColor)
     }
 
     val context = LocalContext.current
-//    val viewModel = getNavViewModel<ShowBookViewModel>()
-//    viewModel.getDataBookFromNet(bookId)
+    val viewModel = getNavViewModel<ShowBookViewModel>()
+    viewModel.getDataBookFromNet(bookId)
 
     val navigation = getNavController()
+
+    val stateDataBook = viewModel.dataShowBook
 
     Scaffold(
         scaffoldState = rememberScaffoldState(),
         backgroundColor = BackgroundMain,
         topBar = {
-            ShowBookTopBar("book_title") {
+            ShowBookTopBar(stateDataBook.value.volumeInfo.title) {
                 navigation.popBackStack()
             }
         }
@@ -88,16 +94,46 @@ fun ShowBookScreen(/*bookId: String = ""*/) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            AboutUsBody()
+            AboutUsBody(stateDataBook.value) {
+                viewModel.downloadPDF.value = true
+            }
         }
+    }
+
+    if (viewModel.downloadPDF.value) {
+        ShowAlertDialog(
+            title = "Are you sure?",
+            msg = "The suffix of file is .ascm, which means you need to have Adobe Digital Editions as installed.",
+            btnMsg = "I'm Sure",
+            onConfirmClicked = {
+                viewModel.downloadPDF.value = false
+                context.apply {
+                    if (stateDataBook.value.accessInfo.pdf.isAvailable) {
+                        // download
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(stateDataBook.value.accessInfo.pdf.acsTokenLink)))
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "The PDF file is not available.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            },
+            onDismissRequest = {
+                viewModel.downloadPDF.value = false
+            }
+        )
     }
 
 }
 
 @Composable
-fun AboutUsBody() {
+fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
     var showContent by remember { mutableStateOf(false) }
     val transition = updateTransition(showContent, label = "")
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -118,8 +154,8 @@ fun AboutUsBody() {
                 shape = RoundedCornerShape(18.dp),
                 elevation = 4.dp
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_imagin1),
+                AsyncImage(
+                    model = data.volumeInfo.imageLinks.thumbnail,
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds
                 )
@@ -128,13 +164,13 @@ fun AboutUsBody() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Book name",
+                text = data.volumeInfo.title,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
             Text(
-                text = "by Writer Name",
+                text = "by ${data.volumeInfo.publisher}",
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W500
             )
@@ -159,13 +195,13 @@ fun AboutUsBody() {
                 .padding(horizontal = 8.dp)
         ) {
             Text(
-                text = "Published on: 2002",
+                text = "Published on: ${data.volumeInfo.publishedDate}",
                 fontSize = 16.sp,
                 fontStyle = FontStyle.Italic,
                 fontWeight = FontWeight.Medium
             )
             Text(
-                text = "120 pages",
+                text = "${data.volumeInfo.pageCount} pages",
                 fontSize = 16.sp,
                 fontStyle = FontStyle.Italic,
                 fontWeight = FontWeight.Medium
@@ -183,7 +219,7 @@ fun AboutUsBody() {
                         spring()
                     }
                 }, label = ""
-            ) { if (it) 300.dp else 0.dp }
+            ) { if (it) 200.dp else 0.dp }
 
             Box(
                 modifier = Modifier
@@ -192,7 +228,7 @@ fun AboutUsBody() {
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer  orem ipsum dolor sit amet, consectetur adipiscing elit. Integer  orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer orem ipsum dolor sit amet, consectetur adipiscing elit. Integer  nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris t amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris ...",
+                    text = data.volumeInfo.description,
                     textAlign = TextAlign.Justify,
                     modifier = Modifier.padding(16.dp)
                 )
@@ -200,33 +236,62 @@ fun AboutUsBody() {
         }
 
     }
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp)
-    ) {
-        InfoButton(txt = "Buy", txtColor = YellowBackground) {
-            // TODO("Handle Buy button")
+
+    Column (modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp, horizontal = 16.dp)
+        ) {
+            InfoButton(txt = "E-book") {
+                context.apply {
+                    val urlEbook = data.accessInfo.epub
+                    if (urlEbook.isAvailable) {
+                        onDownloadPDFClicked.invoke()
+                    } else {
+                        Toast.makeText(context, "The E-book is not available!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+
+            }
+            InfoButton(txt = "Preview") {
+                context.apply {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(data.volumeInfo.previewLink)))
+                }
+            }
+
         }
-        InfoButton(txt = "Preview") {
-            // TODO("Handle Preview button")
-        }
-        InfoButton(txt = "Read") {
-            // TODO("Handle Read button")
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        Button(
+            onClick = {
+                // download the pdf
+                onDownloadPDFClicked.invoke()
+            },
+            modifier = Modifier.fillMaxWidth(0.9f)
+        ) {
+            Text(text = "Download PDF", modifier = Modifier.padding(8.dp))
         }
     }
+
 }
 
 @Composable
 fun InfoButton(
-    txt: String, txtColor: Color = Color.White, onButtonClicked: () -> Unit
+    txt: String,
+    txtColor: Color = Color.White,
+    width: Dp = 120.dp, height: Dp = 60.dp,
+    onButtonClicked: () -> Unit
 ) {
     Button(
         onClick = onButtonClicked, modifier = Modifier
-            .size(120.dp, 60.dp)
+            .size(width, height)
             .clip(RoundedCornerShape(40))
+
     ) {
         Text(
             text = txt,

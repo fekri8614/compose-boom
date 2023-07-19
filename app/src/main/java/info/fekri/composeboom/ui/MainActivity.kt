@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.ShowBookScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()
@@ -78,12 +78,12 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(
-            MyScreens.ShowBookScreen.route //+ "/{$KEY_SHOW_BOOK}",
-//            arguments = listOf(navArgument(KEY_SHOW_BOOK) {
-//                type = NavType.StringType
-//            })
+            MyScreens.ShowBookScreen.route + "/{$KEY_SHOW_BOOK}",
+            arguments = listOf(navArgument(KEY_SHOW_BOOK) {
+                type = NavType.StringType
+            })
         ) {
-            ShowBookScreen(/*it.arguments!!.getString(KEY_SHOW_BOOK, "null")*/)
+            ShowBookScreen(it.arguments!!.getString(KEY_SHOW_BOOK, "null"))
         }
 
         composable(MyScreens.SplashScreen.route) {
@@ -113,6 +113,8 @@ fun MainAppUi(isFirstTime: Boolean) {
     }
 
 }
+
+
 
 @Composable
 fun PhotoLibScreen() {
