@@ -2,7 +2,7 @@ package info.fekri.composeboom.util
 
 import androidx.compose.ui.graphics.Color
 import info.fekri.composeboom.model.data.ByIdBook
-import java.io.Serializable
+import info.fekri.composeboom.model.data.SearchedBook
 
 const val IS_USER_FIRST_TIME = "IsUsersFirstTime"
 
@@ -26,7 +26,8 @@ val ABOUT_US_ITEMS: List<ThreePair<String, Color, String>> = listOf(
 )
 
 val BY_ID_BOOK_DATA_FAKE = ByIdBook(
-    ByIdBook.AccessInfo("", ByIdBook.AccessInfo.Epub("", false), ByIdBook.AccessInfo.Pdf("", false),
+    ByIdBook.AccessInfo(
+        "", ByIdBook.AccessInfo.Epub("", false), ByIdBook.AccessInfo.Pdf("", false),
         publicDomain = false,
         quoteSharingAllowed = false,
         textToSpeechPermission = "",
@@ -36,5 +37,16 @@ val BY_ID_BOOK_DATA_FAKE = ByIdBook(
     "",
     "",
     "",
-    ByIdBook.VolumeInfo("", ByIdBook.VolumeInfo.ImageLinks("", "", "", "", "", ""), "", "", "", 0, "", "", "", "")
+    ByIdBook.VolumeInfo(
+        "",
+        ByIdBook.VolumeInfo.ImageLinks("", "", "", "", "", ""),
+        "",
+        "",
+        "",
+        0,
+        "",
+        "",
+        "",
+        ""
+    )
 )
