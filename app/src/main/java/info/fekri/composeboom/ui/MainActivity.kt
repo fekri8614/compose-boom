@@ -21,7 +21,6 @@ import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.main.MainScreen
-import info.fekri.composeboom.ui.feature.search.SearchScreen
 import info.fekri.composeboom.ui.feature.showbook.ShowBookScreen
 import info.fekri.composeboom.ui.feature.splash.SplashScreen
 import info.fekri.composeboom.ui.theme.BackgroundMain
@@ -134,5 +133,8 @@ fun VoiceLibScreen() {
 
 
 
+@Composable
+fun SearchScreen() {
 
+}
 
