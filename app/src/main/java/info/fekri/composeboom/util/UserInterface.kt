@@ -28,6 +28,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import info.fekri.composeboom.R
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.Shapes
@@ -78,11 +79,11 @@ fun ShowAlertDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text(text = title, fontWeight = FontWeight.Bold) },
-        text = { Text(text = msg, fontWeight = FontWeight.Medium) },
+        title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
+        text = { Text(text = msg, fontWeight = FontWeight.Medium, fontSize = 15.sp) },
         confirmButton = {
             TextButton(onClick = onConfirmClicked) {
-                Text(text = btnMsg)
+                Text(text = btnMsg, modifier = Modifier.padding(8.dp), fontSize = 16.sp)
             }
         }
     )
