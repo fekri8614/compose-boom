@@ -12,8 +12,12 @@ import kotlinx.coroutines.launch
 class SearchScreenViewModel(private val bookRepository: BookRepository): ViewModel() {
     val search = MutableLiveData("")
     val dataSearch = mutableStateOf<List<SearchedBook>>(listOf())
+
     val showProgress = mutableStateOf(false)
     val showContent = mutableStateOf(false)
+
+    val showInfoDialog = mutableStateOf(false)
+    val showNetErrorDialog = mutableStateOf(false)
 
     fun loadDataSearch(search: String) {
         viewModelScope.launch(coroutineExceptionHandler) {
@@ -22,8 +26,8 @@ class SearchScreenViewModel(private val bookRepository: BookRepository): ViewMod
             val dataSearchToSet = bookRepository.getSearchedBook(search)
             dataSearch.value = dataSearchToSet
 
-            showContent.value = true
             showProgress.value = false
+            showContent.value = true
         }
     }
 
