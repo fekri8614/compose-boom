@@ -158,7 +158,7 @@ fun ProfileTopAppBar(onBackPressed: () -> Unit) {
     )
 }
 
-fun clearUserData(viewModel: ProfileViewModel) {
+private fun clearUserData(viewModel: ProfileViewModel) {
     viewModel.userId.value = ""
     viewModel.userName.value = ""
 }

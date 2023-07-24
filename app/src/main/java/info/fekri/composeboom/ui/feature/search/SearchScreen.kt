@@ -66,7 +66,28 @@ fun SearchScreen() {
         topBar = {
             SearchTopAppBar(
                 onBackPressed = {
-                    navigation.popBackStack()
+
+                    if (
+                        viewModel.dataSearch.value.isNotEmpty() &&
+                        viewModel.search.value.toString().isNotEmpty() ||
+                        viewModel.search.value.toString().isNotBlank()
+                    ) {
+                        Toast.makeText(
+                            context,
+                            "Cleared data before going ...",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        clearInput(viewModel)
+
+                        Toast.makeText(
+                            context,
+                            "You can press-again to go :-)",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        navigation.popBackStack()
+                    }
                 },
                 onInfoClicked = {
                     viewModel.showInfoDialog.value = true
@@ -295,4 +316,11 @@ fun SearchTopAppBar(onBackPressed: () -> Unit, onInfoClicked: () -> Unit) {
         title = {}, backgroundColor = BackgroundMain,
         elevation = 0.dp
     )
+}
+
+
+private fun clearInput(viewModel : SearchScreenViewModel) {
+    viewModel.search.value = ""
+    viewModel.showContent.value = false
+    viewModel.dataSearch.value = listOf()
 }
