@@ -318,7 +318,6 @@ fun SearchTopAppBar(onBackPressed: () -> Unit, onInfoClicked: () -> Unit) {
     )
 }
 
-
 private fun clearInput(viewModel : SearchScreenViewModel) {
     viewModel.search.value = ""
     viewModel.showContent.value = false
