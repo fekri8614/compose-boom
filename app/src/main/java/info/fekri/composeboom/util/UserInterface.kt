@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import info.fekri.composeboom.R
 import info.fekri.composeboom.ui.theme.BackgroundMain
+import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
 
@@ -38,14 +39,13 @@ import info.fekri.composeboom.ui.theme.YellowBackground
 @Composable
 fun IconMainApp() {
     Card(
-        border = BorderStroke(2.dp, YellowBackground),
-        backgroundColor = BackgroundMain,
-        modifier = Modifier.size(height = 90.dp, width = 120.dp),
+        border = BorderStroke(2.dp, Color.White),
+        modifier = Modifier.size(140.dp),
         shape = RoundedCornerShape(80.dp),
-        elevation = 4.dp,
+        elevation = 5.dp,
     ) {
         Image(
-            painter = painterResource(id = R.drawable.main_icon),
+            painter = painterResource(id = R.drawable.img_icon_main_no_back),
             contentDescription = null,
             modifier = Modifier.padding(8.dp),
             contentScale = ContentScale.Fit

@@ -21,6 +21,7 @@ import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.main.MainScreen
+import info.fekri.composeboom.ui.feature.profile.ProfileScreen
 import info.fekri.composeboom.ui.feature.search.SearchScreen
 import info.fekri.composeboom.ui.feature.showbook.ShowBookScreen
 import info.fekri.composeboom.ui.feature.splash.SplashScreen
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.ProfileScreen.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()
@@ -99,6 +100,10 @@ fun MainAppUi(isFirstTime: Boolean) {
             AboutUsScreen()
         }
 
+        composable(MyScreens.ProfileScreen.route) {
+            ProfileScreen()
+        }
+
         composable(MyScreens.VoiceLibScreen.route) {
             VoiceLibScreen()
         }
@@ -114,6 +119,7 @@ fun MainAppUi(isFirstTime: Boolean) {
     }
 
 }
+
 
 
 
