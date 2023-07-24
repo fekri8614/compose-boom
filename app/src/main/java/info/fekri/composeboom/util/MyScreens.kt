@@ -8,6 +8,7 @@ sealed class MyScreens(val route: String) {
     object SplashScreen: MyScreens("splashScreen")
     object SearchScreen: MyScreens("searchScreen")
     object AboutUsScreen: MyScreens("aboutUsScreen")
+    object ProfileScreen: MyScreens("profileScreen")
 
     object VoiceLibScreen: MyScreens("voiceLibScreen")
     object VideoLibScreen: MyScreens("videoLibScreen")

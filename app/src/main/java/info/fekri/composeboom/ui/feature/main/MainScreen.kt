@@ -20,8 +20,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExtendedFloatingActionButton
@@ -31,7 +29,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberDrawerState
@@ -247,6 +244,10 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
             Spacer(modifier = Modifier.height(10.dp))
 
             DrawerItem(
+                text = "Profile",
+                onItemClick = { onItemClicked.invoke(MyScreens.ProfileScreen.route) })
+
+            DrawerItem(
                 text = "Search",
                 onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) })
 
@@ -255,7 +256,10 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
                 onItemClick = { onItemClicked.invoke(MyScreens.AboutUsScreen.route) })
         }
 
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(bottom = 16.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(bottom = 16.dp)
+        ) {
             Text(
                 text = "Developed by ",
                 fontSize = 14.sp,
@@ -423,7 +427,9 @@ fun KidBookItem(
         elevation = 3.dp
     ) {
         val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.toString().isNotEmpty()) data.volumeInfo.imageLinks.thumbnail
+            if (!data.volumeInfo.imageLinks.thumbnail.toString()
+                    .isNotEmpty()
+            ) data.volumeInfo.imageLinks.thumbnail
             else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
@@ -489,7 +495,9 @@ fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit,
         elevation = 3.dp
     ) {
         val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.toString().isNotEmpty()) data.volumeInfo.imageLinks.thumbnail
+            if (!data.volumeInfo.imageLinks.thumbnail.toString()
+                    .isNotEmpty()
+            ) data.volumeInfo.imageLinks.thumbnail
             else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
@@ -559,7 +567,9 @@ fun ScienceBookItem(
         elevation = 3.dp
     ) {
         val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.toString().isNotEmpty()) data.volumeInfo.imageLinks.thumbnail
+            if (!data.volumeInfo.imageLinks.thumbnail.toString()
+                    .isNotEmpty()
+            ) data.volumeInfo.imageLinks.thumbnail
             else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
