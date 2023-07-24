@@ -2,6 +2,7 @@ package info.fekri.composeboom.util
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -108,43 +110,45 @@ fun ShowAlertByEditText(
         onDismissRequest = onDismissRequest,
         title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
         text = {
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Next
-                ),
-                label = { Text("You name ...") },
-                value = edtNameValue,
-                singleLine = true,
-                onValueChange = {
-                    onNameValueChanges.invoke(it)
-                },
-                placeholder = { Text("Your name ...") },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .padding(top = 16.dp),
-                shape = Shapes.medium,
-                leadingIcon = { Icon(Icons.Default.Person, null) },
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Next
+                    ),
+                    label = { Text("You name ...") },
+                    value = edtNameValue,
+                    singleLine = true,
+                    onValueChange = {
+                        onNameValueChanges.invoke(it)
+                    },
+                    placeholder = { Text("Your name ...") },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .padding(top = 16.dp),
+                    shape = Shapes.medium,
+                    leadingIcon = { Icon(Icons.Default.Person, null) },
+                )
 
-            OutlinedTextField(
-                keyboardOptions = KeyboardOptions(
-                    capitalization = KeyboardCapitalization.Words,
-                    imeAction = ImeAction.Done
-                ),
-                label = { Text("You id ...") },
-                value = edtIdValue,
-                singleLine = true,
-                onValueChange = {
-                    onIdValueChanges.invoke(it)
-                },
-                placeholder = { Text("Your id ...") },
-                modifier = Modifier
-                    .fillMaxWidth(0.9f)
-                    .padding(top = 16.dp),
-                shape = Shapes.medium,
-                leadingIcon = { Icon(Icons.Default.Info, null) },
-            )
+                OutlinedTextField(
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Words,
+                        imeAction = ImeAction.Done
+                    ),
+                    label = { Text("You id ...") },
+                    value = edtIdValue,
+                    singleLine = true,
+                    onValueChange = {
+                        onIdValueChanges.invoke(it)
+                    },
+                    placeholder = { Text("Your id ...") },
+                    modifier = Modifier
+                        .fillMaxWidth(0.9f)
+                        .padding(top = 16.dp),
+                    shape = Shapes.medium,
+                    leadingIcon = { Icon(Icons.Default.Info, null) },
+                )
+            }
         },
         confirmButton = {
             TextButton(onClick = onConfirmClicked) {

@@ -8,7 +8,6 @@ import info.fekri.composeboom.model.repository.user.UserRepository
 class ProfileViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     val showChangeDialog = mutableStateOf(false)
-
     val userName = MutableLiveData("")
     val userId = MutableLiveData("")
 

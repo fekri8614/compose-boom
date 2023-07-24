@@ -98,7 +98,7 @@ fun ProfileScreen() {
 
     if (viewModel.showChangeDialog.value) {
         ShowAlertByEditText(
-            title = "Edit your variants",
+            title = "Edit your data",
             btnMsg = "Change",
             edtNameValue = userNameState.value,
             onNameValueChanges = { userName ->
@@ -110,14 +110,14 @@ fun ProfileScreen() {
             },
             onConfirmClicked = {
                 if (
-                    userNameState.value.toString().isNotEmpty() ||
-                    userNameState.value.toString().isNotBlank() &&
+                    userNameState.value.toString().isEmpty() ||
+                    userNameState.value.toString().isBlank() &&
                     userIdState.value.toString().isEmpty() ||
                     userIdState.value.toString().isBlank()
                 ) {
                     Toast.makeText(
                         context.applicationContext,
-                        "Please, check your enteries out!",
+                        "Please, check your entries out!",
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -127,16 +127,13 @@ fun ProfileScreen() {
                 }
             },
             onDismissRequest = {
-                if (userIdState.value.toString().isEmpty() && userNameState.value.toString()
-                        .isEmpty()
+                if (
+                    userIdState.value.toString().isEmpty() &&
+                    userNameState.value.toString().isEmpty()
                 ) {
                     viewModel.showChangeDialog.value = false
                 } else {
-                    Toast.makeText(
-                        context.applicationContext,
-                        "Please, check your entries out!",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    clearUserData(viewModel)
                 }
             }
         )
@@ -159,4 +156,9 @@ fun ProfileTopAppBar(onBackPressed: () -> Unit) {
         backgroundColor = BackgroundMain,
         elevation = 0.dp
     )
+}
+
+fun clearUserData(viewModel: ProfileViewModel) {
+    viewModel.userId.value = ""
+    viewModel.userName.value = ""
 }
