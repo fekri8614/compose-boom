@@ -1,9 +1,13 @@
 ## Compose Boom!
 *You can read and search books by **Compose Boom!***
 
-## Info: 
+* ***Compose Boom!** is a cloned sample of Boom application. Boom is an application to read and search about books*
+
+---
+
+## Info:
 * **Language:** *Kotlin* 🔥✌😈
-* **Compose version:** *1.4.0* 
+* **Compose version:** *1.4.0*
 * **Gradle version:** *8.0*
 * **minSdk:** *24*
 * **targetSdk:** *33*
@@ -30,11 +34,11 @@ To add dependencies, copy and paste: `build.gradle (Module :app)` and Sync.
     implementation "androidx.navigation:navigation-compose:2.5.3"
 
 **LiveData**, to use livedata benefits.
-    
+
     implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
 
 **Coil**, to load images async.
-    
+
     implementation "io.coil-kt:coil-compose:2.3.0"
 
 **Kotlin-Coroutines**, to use kotlin coroutines benefits.
