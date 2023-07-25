@@ -5,6 +5,9 @@
 * **Language:** *Kotlin* 🔥✌😈
 * **Compose version:** *1.4.0* 
 * **Gradle version:** *8.0*
+* **minSdk:** *24*
+* **targetSdk:** *33*
+* **jvmTarget:** *11*
 * **Android Gradle Plugin Version:** *7.4.1*
 * **Architecture:** *MVVM* *(Single activity)*
 
