@@ -67,4 +67,3 @@ fun MyAnimaShower(name: Int) {
         modifier = Modifier.size(240.dp)
     )
 }
-
