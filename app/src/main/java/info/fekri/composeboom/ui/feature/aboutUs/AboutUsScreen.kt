@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import info.fekri.composeboom.R
+import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.BlueLightBack
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
@@ -221,7 +222,7 @@ fun AboutTopBar(onBackPressed: () -> Unit) {
 
     TopAppBar(
         elevation = 0.dp,
-        backgroundColor = PrimaryDarkColor,
+        backgroundColor = BackgroundMain,
         title = { Text(text = "About Us") },
         navigationIcon = {
             IconButton(onClick = {

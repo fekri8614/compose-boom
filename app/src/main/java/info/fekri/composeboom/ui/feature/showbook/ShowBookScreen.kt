@@ -314,7 +314,7 @@ fun ShowBookTopBar(title: String, onBackPressed: () -> Unit) {
             }) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
-        },
+        }, backgroundColor = BackgroundMain,
         title = { Text(text = textLengthStyle(title, 20)) }
     )
 }
