@@ -5,9 +5,12 @@ import info.fekri.composeboom.model.repository.user.UserRepository
 
 class SplashViewModel(private val userRepository: UserRepository) : ViewModel() {
 
-    fun isUserDataSaved(): Boolean = (!userRepository.getUserID().isNullOrEmpty() &&
+    fun isUserDataSaved(): Boolean = (
+            !userRepository.getUserID().isNullOrEmpty() &&
             !userRepository.getUserName().isNullOrEmpty() &&
-            !userRepository.getScienceSub().isNullOrEmpty() &&
-            !userRepository.getKidsSub().isNullOrEmpty())
+            userRepository.getScienceSub() &&
+            userRepository.getKidsSub() &&
+            userRepository.getPoemsSub()
+            )
 
 }

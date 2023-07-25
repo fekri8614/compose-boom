@@ -23,24 +23,24 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
         }.apply()
     }
 
-    override fun getScienceSub(): String? = sharedPreferences.getString(KEY_SUB_SCIENCE, null)
-    override fun saveScienceSub(sub: String?) {
+    override fun getScienceSub(): Boolean = sharedPreferences.getBoolean(KEY_SUB_SCIENCE, false)
+    override fun saveScienceSub(sub: Boolean) {
         sharedPreferences.edit().apply {
-            putString(KEY_SUB_SCIENCE, sub)
+            putBoolean(KEY_SUB_SCIENCE, sub)
         }.apply()
     }
 
-    override fun getKidsSub(): String? = sharedPreferences.getString(KEY_SUB_KIDS, null)
-    override fun saveKidsSub(sub: String?) {
+    override fun getKidsSub(): Boolean = sharedPreferences.getBoolean(KEY_SUB_KIDS, false)
+    override fun saveKidsSub(sub: Boolean) {
         sharedPreferences.edit().apply {
-            putString(KEY_SUB_KIDS, sub)
+            putBoolean(KEY_SUB_KIDS, sub)
         }.apply()
     }
 
-    override fun getPoemsSub(): String? = sharedPreferences.getString(KEY_SUB_POEMS, null)
-    override fun savePoems(sub: String?) {
+    override fun getPoemsSub():Boolean = sharedPreferences.getBoolean(KEY_SUB_POEMS, false)
+    override fun savePoems(sub: Boolean) {
         sharedPreferences.edit().apply {
-            putString(KEY_SUB_POEMS, sub)
+            putBoolean(KEY_SUB_POEMS, sub)
         }.apply()
     }
 

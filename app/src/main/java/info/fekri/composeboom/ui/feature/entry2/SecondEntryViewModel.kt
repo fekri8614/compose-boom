@@ -14,15 +14,15 @@ class SecondEntryViewModel(private val userRepository: UserRepository): ViewMode
     val showDialog = mutableStateOf(false)
 
     fun saveScienceSub(science: Boolean) {
-        if (science) userRepository.saveScienceSub("Science") else userRepository.saveScienceSub(null)
+        if (science) userRepository.saveScienceSub(true) else userRepository.saveScienceSub(false)
     }
 
     fun saveKidsSub(kids: Boolean) {
-        if (kids) userRepository.saveKidsSub("Kids") else userRepository.saveKidsSub(null)
+        if (kids) userRepository.saveKidsSub(true) else userRepository.saveKidsSub(false)
     }
 
     fun savePoems(poems: Boolean) {
-        if (poems) userRepository.savePoems("Poems") else userRepository.savePoems(null)
+        if (poems) userRepository.savePoems(true) else userRepository.savePoems(false)
     }
 
 }

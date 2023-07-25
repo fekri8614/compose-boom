@@ -8,13 +8,13 @@ interface UserRepository {
     fun getUserID(): String?
     fun saveUserID(id: String?)
 
-    fun getScienceSub(): String?
-    fun saveScienceSub(sub: String?)
+    fun getScienceSub(): Boolean
+    fun saveScienceSub(sub: Boolean)
 
-    fun getKidsSub(): String?
-    fun saveKidsSub(sub: String?)
+    fun getKidsSub(): Boolean
+    fun saveKidsSub(sub: Boolean)
 
-    fun getPoemsSub() : String?
-    fun savePoems(sub: String?)
+    fun getPoemsSub() : Boolean
+    fun savePoems(sub: Boolean)
 
 }

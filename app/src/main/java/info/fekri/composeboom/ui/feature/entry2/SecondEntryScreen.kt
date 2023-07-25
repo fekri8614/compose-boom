@@ -1,5 +1,6 @@
 package info.fekri.composeboom.ui.feature.entry2
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
@@ -28,15 +28,15 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.DialogProperties
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
-import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.util.IconMainApp
 import info.fekri.composeboom.util.MyScreens
+import info.fekri.composeboom.util.ShowAlertDialog
 
 @Composable
 fun EntrySecondScreen() {
+    val context = LocalContext.current
     val navigation = getNavController()
     val viewModel = getNavViewModel<SecondEntryViewModel>()
 
@@ -65,6 +65,11 @@ fun EntrySecondScreen() {
             modifier = Modifier.fillMaxWidth(0.9f)
         ) {
             Text(text = "Submit!", modifier = Modifier.padding(4.dp))
+        }
+
+        if (viewModel.isHistoryChecked.value) {
+            viewModel.isHistoryChecked.value = false
+            Toast.makeText(context, "History item is checked off", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -251,9 +256,13 @@ fun SelectableItems(
 
             if (viewModel.showDialog.value) {
                 viewModel.isHistoryChecked.value = false
-                ShowAnnounceDialog(
-                    viewModel = viewModel,
-                    msg = "History is checked off, this item is not completed yet"
+                ShowAlertDialog(
+                    title = "Info",
+                    msg = "We are still updating Boom! Thank you for understanding :-*",
+                    btnMsg = "Close",
+                    onConfirmClicked = { viewModel.showDialog.value = false }, onDismissRequest = {
+                        viewModel.showDialog.value = false
+                    }
                 )
             }
 
@@ -267,18 +276,3 @@ fun SelectableItems(
 
 }
 
-@Composable
-fun ShowAnnounceDialog(viewModel: SecondEntryViewModel, msg: String) {
-    AlertDialog(
-        onDismissRequest = { viewModel.showDialog.value = false },
-        title = { Text("Info!") },
-        text = { Text(msg) },
-        confirmButton = {
-            TextButton(onClick = { viewModel.showDialog.value = false }) {
-                Text(text = "Close")
-            }
-        },
-        shape = Shapes.medium,
-        properties = DialogProperties(dismissOnBackPress = false),
-    )
-}
