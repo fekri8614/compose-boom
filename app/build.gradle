@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
 }
 
 android {
@@ -92,10 +91,6 @@ dependencies {
 
     // Lottie
     implementation "com.airbnb.android:lottie-compose:5.2.0"
-
-    // Room
-    implementation "androidx.room:room-ktx:2.6.0-alpha01"
-    kapt "androidx.room:room-compiler:2.5.1"
 
     // collapsing toolbar
     implementation "me.onebone:toolbar-compose:2.3.5"
