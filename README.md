@@ -70,3 +70,7 @@ To add dependencies, copy and paste: `build.gradle (Module :app)` and Sync.
     implementation 'io.github.grizzi91:bouquet:1.1.2'
 
 ---
+
+This app is full developed by Mohammad Reza Fekri.
+
+---
