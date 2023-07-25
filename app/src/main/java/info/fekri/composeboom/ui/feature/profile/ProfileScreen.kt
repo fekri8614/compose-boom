@@ -32,6 +32,8 @@ import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.util.IconMainApp
 import info.fekri.composeboom.util.ShowAlertByEditText
+import info.fekri.composeboom.util.textIdStyle
+import info.fekri.composeboom.util.textLengthStyle
 
 @Composable
 fun ProfileScreen() {
@@ -66,7 +68,7 @@ fun ProfileScreen() {
                 IconMainApp()
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = viewModel.getUserName(),
+                    text = textLengthStyle(viewModel.getUserName(), 24),
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
@@ -75,7 +77,7 @@ fun ProfileScreen() {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "@${viewModel.getUserID()}",
+                    text = "@${textIdStyle(viewModel.getUserID())}",
                     style = TextStyle(
                         fontSize = 14.sp,
                         color = Color.Gray

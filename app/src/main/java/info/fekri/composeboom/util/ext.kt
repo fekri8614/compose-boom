@@ -20,3 +20,10 @@ fun textLengthStyle(txt: String, length: Int): String {
     if (txt.length > length) return txt.substring(0, length) + "..."
     return txt
 }
+
+fun textIdStyle(txt: String): String {
+    if (txt.lowercase().contains(" ")) {
+        txt.replace(txt, "_")
+    }
+    return txt
+}
