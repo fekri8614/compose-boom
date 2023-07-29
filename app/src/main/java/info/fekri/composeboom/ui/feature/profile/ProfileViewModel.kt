@@ -14,10 +14,10 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
     fun setUserName(userName: String) {
         userRepository.saveUserName(userName)
     }
-    fun getUserName(): String = userRepository.getUserName()!!
+    fun getUserName(): String = userRepository.getUserName() ?: "Add your name ..."
 
     fun setUserID(id: String) {
         userRepository.saveUserID(id)
     }
-    fun getUserID(): String = userRepository.getUserID()!!
+    fun getUserID(): String = userRepository.getUserID() ?: "Add your id"
 }

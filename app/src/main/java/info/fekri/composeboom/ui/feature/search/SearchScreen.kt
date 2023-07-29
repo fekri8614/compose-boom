@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.R
@@ -54,6 +56,11 @@ import info.fekri.composeboom.util.ShowAlertDialog
 
 @Composable
 fun SearchScreen() {
+    val uiController = rememberSystemUiController()
+    SideEffect {
+        uiController.setStatusBarColor(BackgroundMain)
+    }
+
     val context = LocalContext.current
     val navigation = getNavController()
     val viewModel = getNavViewModel<SearchScreenViewModel>()

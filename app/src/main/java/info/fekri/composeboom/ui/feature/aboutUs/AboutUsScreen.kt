@@ -58,7 +58,7 @@ import info.fekri.composeboom.util.NetworkChecker
 fun AboutUsScreen() {
     val uiController = rememberSystemUiController()
     SideEffect {
-        uiController.setStatusBarColor(PrimaryDarkColor)
+        uiController.setStatusBarColor(BackgroundMain)
     }
     val navigation = getNavController()
 

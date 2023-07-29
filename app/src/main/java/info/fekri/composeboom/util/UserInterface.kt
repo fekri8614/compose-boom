@@ -46,7 +46,7 @@ import info.fekri.composeboom.ui.theme.YellowBackground
 fun IconMainApp() {
     Card(
         border = BorderStroke(2.dp, Color.White),
-        modifier = Modifier.size(140.dp),
+        modifier = Modifier.size(120.dp),
         shape = RoundedCornerShape(80.dp),
         elevation = 5.dp,
     ) {

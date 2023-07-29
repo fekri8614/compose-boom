@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +28,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.ui.theme.BackgroundMain
@@ -37,6 +39,12 @@ import info.fekri.composeboom.util.textLengthStyle
 
 @Composable
 fun ProfileScreen() {
+
+    val uiController = rememberSystemUiController()
+    SideEffect {
+        uiController.setStatusBarColor(BackgroundMain)
+    }
+
     val context = LocalContext.current
     val viewModel = getNavViewModel<ProfileViewModel>()
     val navigation = getNavController()

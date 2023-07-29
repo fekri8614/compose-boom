@@ -6,14 +6,23 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
@@ -65,7 +74,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.ProfileScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()
@@ -120,22 +129,35 @@ fun MainAppUi(isFirstTime: Boolean) {
 
 }
 
-
-
-
 @Composable
 fun PhotoLibScreen() {
-
+    NoDataYetPage()
 }
 
 @Composable
 fun VideoLibScreen() {
-
+    NoDataYetPage()
 }
 
 @Composable
 fun VoiceLibScreen() {
-
+    NoDataYetPage()
 }
 
+@Composable
+fun NoDataYetPage() {
+    val uiController = rememberSystemUiController()
+    SideEffect {
+        uiController.setStatusBarColor(BackgroundMain)
+    }
 
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "This item is not added yet.")
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "We are working on it")
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Thank you for understanding :-*")
+        }
+    }
+}
