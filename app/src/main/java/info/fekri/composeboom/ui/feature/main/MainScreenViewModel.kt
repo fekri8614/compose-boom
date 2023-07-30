@@ -25,6 +25,7 @@ class MainScreenViewModel(
     val showUiKids    = mutableStateOf(false)
     val showUiScience = mutableStateOf(false)
     val showUiPoems   = mutableStateOf(false)
+    val showFromUs    = mutableStateOf(false)
 
     private fun showKids(): Boolean    = userRepository.getKidsSub()
     private fun showScience(): Boolean = userRepository.getScienceSub()
@@ -32,6 +33,7 @@ class MainScreenViewModel(
 
     init {
         getDataFromNet()
+        showFromUs.value = true
     }
 
     fun getDataFromNet() {

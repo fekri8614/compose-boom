@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -59,11 +60,13 @@ import info.fekri.composeboom.model.data.books.PoemBook
 import info.fekri.composeboom.model.data.books.ScienceBook
 import info.fekri.composeboom.ui.feature.splash.MyAnimaShower
 import info.fekri.composeboom.ui.theme.BackgroundMain
+import info.fekri.composeboom.ui.theme.BackgroundMainLight
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.GreenBackground
 import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.ui.theme.Shapes
 import info.fekri.composeboom.ui.theme.YellowBackground
+import info.fekri.composeboom.util.FROM_US_DATA
 import info.fekri.composeboom.util.MyScreens
 import info.fekri.composeboom.util.NetworkChecker
 import info.fekri.composeboom.util.ShowAlertDialog
@@ -356,6 +359,16 @@ private fun MyCollapsingBody(
                     )
                 }
 
+                if (viewModel.showFromUs.value) {
+                    FromUsBookSection(
+                        onBookItemClicked = { pdfUrl ->
+                            // open the pdf by the url
+                        },
+                        backColor = BackgroundMainLight,
+                        data = FROM_US_DATA
+                    )
+                }
+
             } else {
                 MyAnimaShower(name = R.raw.connection_error_owl)
                 viewModel.showNetDialog.value = true
@@ -378,6 +391,7 @@ fun KidBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
+            .border(2.dp, Color.White, Shapes.large)
             .padding(top = 8.dp),
         color = backColor
     ) {
@@ -453,6 +467,7 @@ fun PoemBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
+            .border(2.dp, Color.White, Shapes.large)
             .padding(top = 8.dp),
         color = backColor
     ) {
@@ -521,6 +536,7 @@ fun ScienceBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.medium)
+            .border(2.dp, Color.White, Shapes.large)
             .padding(top = 8.dp),
         color = backColor
     ) {
@@ -580,6 +596,73 @@ fun ScienceBookItem(
     }
 }
 
+// ------------------------------------------------------------
+
+@Composable
+fun FromUsBookSection(
+    modifier: Modifier = Modifier,
+    onBookItemClicked: (String) -> Unit,
+    backColor: Color,
+    data: List<Pair<String, String>>
+) {
+    Surface(
+        modifier = modifier
+            .fillMaxWidth(1f)
+            .clip(Shapes.medium)
+            .border(2.dp, Color.White, Shapes.large)
+            .padding(top = 8.dp),
+        color = backColor
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(Color.Transparent)
+                .padding(vertical = 16.dp, horizontal = 8.dp)
+        ) {
+            Text(
+                text = "From us...",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            )
+            LazyRow(
+                modifier = modifier.padding(top = 16.dp),
+                contentPadding = PaddingValues(start = 8.dp)
+            ) {
+                items(data.size) { index ->
+                    FromUsBookItem(onItemClicked = onBookItemClicked, data = data[index])
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun FromUsBookItem(
+    modifier: Modifier = Modifier,
+    onItemClicked: (String) -> Unit,
+    data: Pair<String, String>
+) {
+    Card(
+        modifier = modifier
+            .size(width = 160.dp, height = 200.dp)
+            .padding(end = 16.dp)
+            .clickable {
+                onItemClicked.invoke(data.second)
+            },
+        border = BorderStroke(2.dp, YellowBackground),
+        elevation = 3.dp
+    ) {
+        AsyncImage(
+            model = data.first,
+            contentDescription = null,
+            modifier = modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+        )
+    }
+}
 
 // -----------------------------------------------------------
 
