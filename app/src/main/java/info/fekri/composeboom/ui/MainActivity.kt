@@ -40,7 +40,8 @@ import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.KEY_SHOW_BOOK
-import info.fekri.composeboom.util.KEY_SHOW_PDF_ARG
+import info.fekri.composeboom.util.KEY_SHOW_HORIZONTAL_PDF_ARG
+import info.fekri.composeboom.util.KEY_SHOW_VERTICAL_PDF_ARG
 import info.fekri.composeboom.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 
@@ -88,7 +89,7 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(MyScreens.MainScreen.route) {
-            MainScreen(isFirstTime = isFirstTime)
+            MainScreen()
         }
 
         composable(
@@ -129,24 +130,24 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(
-            MyScreens.OpenVerticalPdfScreen.route + "/{$KEY_SHOW_PDF_ARG}",
+            MyScreens.OpenVerticalPdfScreen.route + "/{$KEY_SHOW_VERTICAL_PDF_ARG}",
             arguments = listOf(
-                navArgument(KEY_SHOW_PDF_ARG) {
+                navArgument(KEY_SHOW_VERTICAL_PDF_ARG) {
                     type = NavType.StringType
                 }
             )
         ) {
-            OpenVerticalPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF_ARG, "null"))
+            OpenVerticalPdfScreen(it.arguments!!.getString(KEY_SHOW_VERTICAL_PDF_ARG, "null"))
         }
 
-        composable(MyScreens.OpenHorizontalPdfScreen.route + "/{$KEY_SHOW_PDF_ARG}",
+        composable(MyScreens.OpenHorizontalPdfScreen.route + "/{$KEY_SHOW_HORIZONTAL_PDF_ARG}",
             arguments = listOf(
-                navArgument(KEY_SHOW_PDF_ARG) {
+                navArgument(KEY_SHOW_HORIZONTAL_PDF_ARG) {
                     type = NavType.StringType
                 }
             )
         ) {
-            OpenHorizontalPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF_ARG, "null"))
+            OpenHorizontalPdfScreen(it.arguments!!.getString(KEY_SHOW_HORIZONTAL_PDF_ARG, "null"))
         }
 
     }

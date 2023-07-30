@@ -2,14 +2,14 @@ package info.fekri.composeboom.util
 
 import androidx.compose.ui.graphics.Color
 import info.fekri.composeboom.model.data.ByIdBook
-import java.io.Serializable
 
 const val IS_USER_FIRST_TIME = "IsUsersFirstTime"
 
 const val KEY_USER_NAME = "userName"
 const val KEY_USER_ID = "userID"
 const val KEY_SHOW_BOOK = "showBookById"
-const val KEY_SHOW_PDF_ARG = "showPdfByUrlArgument"
+const val KEY_SHOW_VERTICAL_PDF_ARG = "showVerticalPdfByUrlArgument"
+const val KEY_SHOW_HORIZONTAL_PDF_ARG = "showHorizontalPdfByUrlArgument"
 
 const val KEY_SUB_SCIENCE = "scienceSubjectKey"
 const val KEY_SUB_KIDS = "kidsSubjectKey"

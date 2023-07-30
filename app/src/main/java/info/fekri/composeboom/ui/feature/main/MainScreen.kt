@@ -2,6 +2,7 @@ package info.fekri.composeboom.ui.feature.main
 
 import android.content.Context
 import android.content.res.Configuration
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -80,7 +81,7 @@ import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, isFirstTime: Boolean) {
+fun MainScreen(modifier: Modifier = Modifier) {
     val uiController = rememberSystemUiController()
     SideEffect {
         uiController.setStatusBarColor(PrimaryDarkColor)
@@ -191,24 +192,6 @@ fun MainScreen(modifier: Modifier = Modifier, isFirstTime: Boolean) {
         }
     )
 
-    if (isFirstTime) {
-        viewModel.showAboutAppDialog.value = true
-    }
-
-    if (viewModel.showAboutAppDialog.value) {
-        ShowAlertDialog(
-            title = "About App!",
-            msg = "When you want to read a book, pay attention to your device rotation, if it's Vertical book will be shown Vertical, if not, will shown Horizontal!",
-            btnMsg = "Alright!",
-            onConfirmClicked = {
-                viewModel.showAboutAppDialog.value = false
-            },
-            onDismissRequest = {
-                viewModel.showAboutAppDialog.value = false
-            }
-        )
-    }
-
     if (viewModel.showNetDialog.value) {
         ShowAlertDialog(
             title = "Check your Connection!",
@@ -299,7 +282,6 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
             )
         }
 
-
     }
 }
 
@@ -360,6 +342,8 @@ private fun MyCollapsingBody(
             )
             if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 
+            Spacer(modifier = Modifier.height(8.dp))
+
             if (NetworkChecker(context).isInternetConnected) {
 
                 if (viewModel.showUiKids.value) {
@@ -367,6 +351,7 @@ private fun MyCollapsingBody(
                         onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
                         backColor = GreenBackground,
                         data = dataKids,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     )
                 }
 
@@ -374,7 +359,8 @@ private fun MyCollapsingBody(
                     PoemBookSection(
                         onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
                         backColor = BlueBackground,
-                        data = dataPoems
+                        data = dataPoems,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     )
                 }
 
@@ -382,7 +368,8 @@ private fun MyCollapsingBody(
                     ScienceBookSection(
                         onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
                         backColor = GreenBackground,
-                        data = dataScience
+                        data = dataScience,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     )
                 }
 
@@ -390,12 +377,21 @@ private fun MyCollapsingBody(
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
                             if (NetworkChecker(context).isInternetConnected) {
-                                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                    // open horizontally
-                                    navigation.navigate(MyScreens.OpenHorizontalPdfScreen.route + "/" + pdfUrl)
-                                } else {
-                                    // open vertically
-                                    navigation.navigate(MyScreens.OpenVerticalPdfScreen.route + "/" + pdfUrl)
+                                try {
+                                    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                        // open horizontally
+                                        navigation.navigate(MyScreens.OpenHorizontalPdfScreen.route + "/$pdfUrl")
+                                    } else {
+                                        // open vertically
+                                        navigation.navigate(MyScreens.OpenVerticalPdfScreen.route + "/$pdfUrl")
+                                    }
+                                } catch (e: Exception) {
+                                    Log.e("MainScreen", e.message.toString(), e)
+                                    Toast.makeText(
+                                        context,
+                                        "Something went Wrong!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             } else {
                                 Toast.makeText(
@@ -406,7 +402,8 @@ private fun MyCollapsingBody(
                             }
                         },
                         backColor = BackgroundMainLight,
-                        data = FROM_US_DATA
+                        data = FROM_US_DATA,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     )
                 }
 
@@ -432,8 +429,7 @@ fun KidBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
-            .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
+            .border(2.dp, Color.White, Shapes.large),
         color = backColor
     ) {
         Column(
@@ -508,8 +504,7 @@ fun PoemBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
-            .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
+            .border(2.dp, Color.White, Shapes.large),
         color = backColor
     ) {
         Column(
@@ -577,8 +572,7 @@ fun ScienceBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.medium)
-            .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
+            .border(2.dp, Color.White, Shapes.large),
         color = backColor
     ) {
         Column(
