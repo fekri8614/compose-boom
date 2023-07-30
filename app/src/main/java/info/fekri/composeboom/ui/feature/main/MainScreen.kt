@@ -1,7 +1,6 @@
 package info.fekri.composeboom.ui.feature.main
 
 import android.content.Context
-import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -378,13 +377,7 @@ private fun MyCollapsingBody(
                         onBookItemClicked = { pdfUrl ->
                             if (NetworkChecker(context).isInternetConnected) {
                                 try {
-                                    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                                        // open horizontally
-                                        navigation.navigate(MyScreens.OpenHorizontalPdfScreen.route + "/$pdfUrl")
-                                    } else {
-                                        // open vertically
-                                        navigation.navigate(MyScreens.OpenVerticalPdfScreen.route + "/$pdfUrl")
-                                    }
+                                    // open horizontally
                                 } catch (e: Exception) {
                                     Log.e("MainScreen", e.message.toString(), e)
                                     Toast.makeText(
