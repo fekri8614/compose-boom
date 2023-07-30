@@ -21,6 +21,7 @@ class MainScreenViewModel(
 
     val showProgress  = mutableStateOf(false)
     val showNetDialog = mutableStateOf(false)
+    val showInfoDialog = mutableStateOf(false)
 
     val showUiKids    = mutableStateOf(false)
     val showUiScience = mutableStateOf(false)

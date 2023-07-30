@@ -26,11 +26,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
-import info.fekri.composeboom.ui.feature.OpenPdfScreen
+import info.fekri.composeboom.ui.feature.pdf.vertical.OpenVerticalPdfScreen
 import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.main.MainScreen
+import info.fekri.composeboom.ui.feature.pdf.horizontal.OpenHorizontalPdfScreen
 import info.fekri.composeboom.ui.feature.profile.ProfileScreen
 import info.fekri.composeboom.ui.feature.search.SearchScreen
 import info.fekri.composeboom.ui.feature.showbook.ShowBookScreen
@@ -128,14 +129,24 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(
-            MyScreens.OpenPdfScreen.route + "/{$KEY_SHOW_PDF_ARG}",
+            MyScreens.OpenVerticalPdfScreen.route + "/{$KEY_SHOW_PDF_ARG}",
             arguments = listOf(
                 navArgument(KEY_SHOW_PDF_ARG) {
                     type = NavType.StringType
                 }
             )
         ) {
-            OpenPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF_ARG, "null"))
+            OpenVerticalPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF_ARG, "null"))
+        }
+
+        composable(MyScreens.OpenHorizontalPdfScreen.route + "/{$KEY_SHOW_PDF_ARG}",
+            arguments = listOf(
+                navArgument(KEY_SHOW_PDF_ARG) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            OpenHorizontalPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF_ARG, "null"))
         }
 
     }

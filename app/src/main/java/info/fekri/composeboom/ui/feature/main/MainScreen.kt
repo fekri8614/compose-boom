@@ -1,6 +1,8 @@
 package info.fekri.composeboom.ui.feature.main
 
 import android.content.Context
+import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -318,6 +321,9 @@ private fun MyCollapsingBody(
     onVideoLibClicked: (String) -> Unit,
     onPhotoLibClicked: (String) -> Unit
 ) {
+
+    val configuration = LocalConfiguration.current
+
     Box {
         Column(
             modifier = modifier
@@ -365,7 +371,21 @@ private fun MyCollapsingBody(
                 if (viewModel.showFromUs.value) {
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
-                            navigation.navigate(MyScreens.OpenPdfScreen.route + "/" + pdfUrl)
+                            if (NetworkChecker(context).isInternetConnected) {
+                                if(configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                    // open horizontally
+                                    navigation.navigate(MyScreens.OpenHorizontalPdfScreen.route + "/" + pdfUrl)
+                                } else {
+                                    // open vertically
+                                    navigation.navigate(MyScreens.OpenVerticalPdfScreen.route + "/" + pdfUrl)
+                                }
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Please, check your Internet Connection!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         },
                         backColor = BackgroundMainLight,
                         data = FROM_US_DATA
