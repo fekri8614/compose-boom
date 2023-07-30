@@ -88,7 +88,7 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
         composable(MyScreens.MainScreen.route) {
-            MainScreen()
+            MainScreen(isFirstTime = isFirstTime)
         }
 
         composable(

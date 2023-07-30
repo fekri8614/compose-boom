@@ -80,7 +80,7 @@ import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(modifier: Modifier = Modifier, isFirstTime: Boolean) {
     val uiController = rememberSystemUiController()
     SideEffect {
         uiController.setStatusBarColor(PrimaryDarkColor)
@@ -190,6 +190,24 @@ fun MainScreen(modifier: Modifier = Modifier) {
             }
         }
     )
+
+    if (isFirstTime) {
+        viewModel.showAboutAppDialog.value = true
+    }
+
+    if (viewModel.showAboutAppDialog.value) {
+        ShowAlertDialog(
+            title = "About App!",
+            msg = "When you want to read a book, pay attention to your device rotation, if it's Vertical book will be shown Vertical, if not, will shown Horizontal!",
+            btnMsg = "Alright!",
+            onConfirmClicked = {
+                viewModel.showAboutAppDialog.value = false
+            },
+            onDismissRequest = {
+                viewModel.showAboutAppDialog.value = false
+            }
+        )
+    }
 
     if (viewModel.showNetDialog.value) {
         ShowAlertDialog(
@@ -372,7 +390,7 @@ private fun MyCollapsingBody(
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
                             if (NetworkChecker(context).isInternetConnected) {
-                                if(configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                                if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
                                     // open horizontally
                                     navigation.navigate(MyScreens.OpenHorizontalPdfScreen.route + "/" + pdfUrl)
                                 } else {
