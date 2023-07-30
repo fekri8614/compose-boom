@@ -50,6 +50,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
@@ -169,6 +170,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             ) {
                 MyCollapsingBody(
                     modifier,
+                    navigation,
                     viewModel,
                     context,
                     dataKids,
@@ -302,6 +304,7 @@ fun DrawerItem(text: String, onItemClick: () -> Unit) {
 @Composable
 private fun MyCollapsingBody(
     modifier: Modifier,
+    navigation: NavHostController,
     viewModel: MainScreenViewModel,
     context: Context,
     dataKids: List<KidBook>,
@@ -362,7 +365,7 @@ private fun MyCollapsingBody(
                 if (viewModel.showFromUs.value) {
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
-                            // open the pdf by the url
+                            navigation.navigate(MyScreens.OpenPdfScreen.route + "/" + pdfUrl)
                         },
                         backColor = BackgroundMainLight,
                         data = FROM_US_DATA

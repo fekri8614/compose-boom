@@ -26,6 +26,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.Koin
 import dev.burnoo.cokoin.navigation.KoinNavHost
 import info.fekri.composeboom.di.myModules
+import info.fekri.composeboom.ui.feature.OpenPdfScreen
 import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
@@ -138,11 +139,6 @@ fun MainAppUi(isFirstTime: Boolean) {
         }
 
     }
-
-}
-
-@Composable
-fun OpenPdfScreen(pdfUrl: String) {
 
 }
 
