@@ -38,6 +38,7 @@ import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.KEY_SHOW_BOOK
+import info.fekri.composeboom.util.KEY_SHOW_PDF_ARG
 import info.fekri.composeboom.util.MyScreens
 import org.koin.android.ext.koin.androidContext
 
@@ -125,7 +126,23 @@ fun MainAppUi(isFirstTime: Boolean) {
             PhotoLibScreen()
         }
 
+        composable(
+            MyScreens.OpenPdfScreen.route + "/{$KEY_SHOW_PDF_ARG}",
+            arguments = listOf(
+                navArgument(KEY_SHOW_PDF_ARG) {
+                    type = NavType.StringType
+                }
+            )
+        ) {
+            OpenPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF_ARG, "null"))
+        }
+
     }
+
+}
+
+@Composable
+fun OpenPdfScreen(pdfUrl: String) {
 
 }
 
