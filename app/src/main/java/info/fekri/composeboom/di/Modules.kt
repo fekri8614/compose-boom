@@ -9,6 +9,7 @@ import info.fekri.composeboom.model.repository.user.UserRepositoryImpl
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryViewModel
 import info.fekri.composeboom.ui.feature.entry2.SecondEntryViewModel
 import info.fekri.composeboom.ui.feature.main.MainScreenViewModel
+import info.fekri.composeboom.ui.feature.pdf.OpenPdfViewModel
 import info.fekri.composeboom.ui.feature.profile.ProfileViewModel
 import info.fekri.composeboom.ui.feature.search.SearchScreenViewModel
 import info.fekri.composeboom.ui.feature.showbook.ShowBookViewModel
@@ -33,5 +34,6 @@ val myModules = module {
     viewModel { ShowBookViewModel(get()) }
     viewModel { SearchScreenViewModel(get()) }
     viewModel { ProfileViewModel(get()) }
+    viewModel { OpenPdfViewModel() }
 
 }
