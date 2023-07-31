@@ -1,7 +1,6 @@
 package info.fekri.composeboom.ui.feature.main
 
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -44,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -186,6 +184,12 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onVoiceLibClicked = { id -> navigation.navigate(id) },
                     onVideoLibClicked = { id -> navigation.navigate(id) },
                     onPhotoLibClicked = { id -> navigation.navigate(id) },
+                    onFromUsClick = { pdfUrl ->
+                        Toast.makeText(
+                            context.applicationContext,
+                            "URL: $pdfUrl",
+                            Toast.LENGTH_SHORT
+                        ).show() }
                 )
             }
         }
@@ -318,10 +322,9 @@ private fun MyCollapsingBody(
     onAllLibClicked: () -> Unit,
     onVoiceLibClicked: (String) -> Unit,
     onVideoLibClicked: (String) -> Unit,
-    onPhotoLibClicked: (String) -> Unit
+    onPhotoLibClicked: (String) -> Unit,
+    onFromUsClick: (String) -> Unit
 ) {
-
-    val configuration = LocalConfiguration.current
 
     Box {
         Column(
@@ -376,16 +379,7 @@ private fun MyCollapsingBody(
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
                             if (NetworkChecker(context).isInternetConnected) {
-                                try {
-                                    // open horizontally
-                                } catch (e: Exception) {
-                                    Log.e("MainScreen", e.message.toString(), e)
-                                    Toast.makeText(
-                                        context,
-                                        "Something went Wrong!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                onFromUsClick(pdfUrl)
                             } else {
                                 Toast.makeText(
                                     context,

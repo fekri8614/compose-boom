@@ -31,7 +31,6 @@ import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.main.MainScreen
-import info.fekri.composeboom.ui.feature.pdf.OpenPdfScreen
 import info.fekri.composeboom.ui.feature.profile.ProfileScreen
 import info.fekri.composeboom.ui.feature.search.SearchScreen
 import info.fekri.composeboom.ui.feature.showbook.ShowBookScreen
@@ -41,7 +40,6 @@ import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.KEY_SHOW_BOOK
 import info.fekri.composeboom.util.MyScreens
-import info.fekri.composeboom.util.PDF_URL_ARG
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
@@ -100,15 +98,6 @@ fun MainAppUi(isFirstTime: Boolean) {
             ShowBookScreen(it.arguments!!.getString(KEY_SHOW_BOOK, "null"))
         }
 
-        composable(
-            MyScreens.OpenPdfScreen.route + "/{$PDF_URL_ARG}",
-            arguments = listOf(navArgument(PDF_URL_ARG) {
-                type = NavType.StringType
-            })
-        ) {
-            OpenPdfScreen(it.arguments!!.getString(PDF_URL_ARG, "null"))
-        }
-
         composable(MyScreens.SplashScreen.route) {
             SplashScreen(isFirstTime)
         }
@@ -164,7 +153,10 @@ fun NoDataYetPage() {
     }
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = "This item is not added yet.")
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "We are working on it")
