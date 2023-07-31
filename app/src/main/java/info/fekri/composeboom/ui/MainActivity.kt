@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +34,7 @@ import info.fekri.composeboom.ui.feature.aboutUs.AboutUsScreen
 import info.fekri.composeboom.ui.feature.entry1.FirstEntryScreen
 import info.fekri.composeboom.ui.feature.entry2.EntrySecondScreen
 import info.fekri.composeboom.ui.feature.main.MainScreen
+import info.fekri.composeboom.ui.feature.pdf.ShowPdfScreen
 import info.fekri.composeboom.ui.feature.profile.ProfileScreen
 import info.fekri.composeboom.ui.feature.search.SearchScreen
 import info.fekri.composeboom.ui.feature.showbook.ShowBookScreen
@@ -39,7 +43,9 @@ import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.ComposeBoomTheme
 import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.KEY_SHOW_BOOK
+import info.fekri.composeboom.util.KEY_SHOW_PDF
 import info.fekri.composeboom.util.MyScreens
+import info.fekri.composeboom.util.PDF_BASE_URL
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
@@ -98,6 +104,15 @@ fun MainAppUi(isFirstTime: Boolean) {
             ShowBookScreen(it.arguments!!.getString(KEY_SHOW_BOOK, "null"))
         }
 
+        composable(
+            MyScreens.ShowPdfScreen.route + "/{$KEY_SHOW_PDF}",
+            arguments = listOf(navArgument(KEY_SHOW_PDF) {
+                type = NavType.StringType
+            })
+        ) {
+            ShowPdfScreen(it.arguments!!.getString(KEY_SHOW_PDF, "null"))
+        }
+
         composable(MyScreens.SplashScreen.route) {
             SplashScreen(isFirstTime)
         }
@@ -129,6 +144,8 @@ fun MainAppUi(isFirstTime: Boolean) {
     }
 
 }
+
+
 
 @Composable
 fun PhotoLibScreen() {

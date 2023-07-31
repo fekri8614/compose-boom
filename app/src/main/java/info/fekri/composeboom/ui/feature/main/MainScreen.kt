@@ -1,6 +1,7 @@
 package info.fekri.composeboom.ui.feature.main
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -81,7 +82,8 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun MainScreen(modifier: Modifier = Modifier) {
     val uiController = rememberSystemUiController()
     SideEffect {
-        uiController.setStatusBarColor(PrimaryDarkColor)
+        uiController.setSystemBarsColor(PrimaryDarkColor)
+        uiController.setNavigationBarColor(BackgroundMain)
     }
 
     val context = LocalContext.current
@@ -171,7 +173,6 @@ fun MainScreen(modifier: Modifier = Modifier) {
             ) {
                 MyCollapsingBody(
                     modifier,
-                    navigation,
                     viewModel,
                     context,
                     dataKids,
@@ -185,11 +186,18 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onVideoLibClicked = { id -> navigation.navigate(id) },
                     onPhotoLibClicked = { id -> navigation.navigate(id) },
                     onFromUsClick = { pdfUrl ->
-                        Toast.makeText(
-                            context.applicationContext,
-                            "URL: $pdfUrl",
-                            Toast.LENGTH_SHORT
-                        ).show() }
+                        try {
+                            navigation.navigate(MyScreens.ShowPdfScreen.route + "/$pdfUrl")
+                        } catch (e: Exception) {
+                            Log.v("MainScreen", e.message.toString(), e)
+                            Toast.makeText(
+                                context.applicationContext,
+                                "Something went Wrong!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
                 )
             }
         }
@@ -310,7 +318,6 @@ fun DrawerItem(text: String, onItemClick: () -> Unit) {
 @Composable
 private fun MyCollapsingBody(
     modifier: Modifier,
-    navigation: NavHostController,
     viewModel: MainScreenViewModel,
     context: Context,
     dataKids: List<KidBook>,
@@ -379,7 +386,7 @@ private fun MyCollapsingBody(
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
                             if (NetworkChecker(context).isInternetConnected) {
-                                onFromUsClick(pdfUrl)
+                                onFromUsClick.invoke(pdfUrl)
                             } else {
                                 Toast.makeText(
                                     context,
