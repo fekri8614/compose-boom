@@ -47,12 +47,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
@@ -353,36 +353,36 @@ private fun MyCollapsingBody(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (NetworkChecker(context).isInternetConnected) {
+            if (viewModel.showUi()) {
+                if (NetworkChecker(context).isInternetConnected) {
 
-                if (viewModel.showUiKids.value) {
-                    KidBookSection(
-                        onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
-                        backColor = GreenBackground,
-                        data = dataKids,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                }
+                    if (viewModel.showUiKids.value) {
+                        KidBookSection(
+                            onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
+                            backColor = GreenBackground,
+                            data = dataKids,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
 
-                if (viewModel.showUiPoems.value) {
-                    PoemBookSection(
-                        onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
-                        backColor = BlueBackground,
-                        data = dataPoems,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                }
+                    if (viewModel.showUiPoems.value) {
+                        PoemBookSection(
+                            onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
+                            backColor = BlueBackground,
+                            data = dataPoems,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
 
-                if (viewModel.showUiScience.value) {
-                    ScienceBookSection(
-                        onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
-                        backColor = GreenBackground,
-                        data = dataScience,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                }
+                    if (viewModel.showUiScience.value) {
+                        ScienceBookSection(
+                            onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
+                            backColor = GreenBackground,
+                            data = dataScience,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
 
-                if (viewModel.showFromUs.value) {
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
                             if (NetworkChecker(context).isInternetConnected) {
@@ -399,11 +399,13 @@ private fun MyCollapsingBody(
                         data = FROM_US_DATA,
                         modifier = Modifier.padding(vertical = 4.dp)
                     )
+                } else {
+                    MyAnimaShower(name = R.raw.connection_error_owl)
+                    viewModel.showNetDialog.value = true
                 }
-
             } else {
-                MyAnimaShower(name = R.raw.connection_error_owl)
-                viewModel.showNetDialog.value = true
+                MyAnimaShower(name = R.raw.welcome_owl)
+                Text(text = "Loading ...", fontSize = 20.sp, fontFamily = FontFamily.Serif)
             }
 
         }

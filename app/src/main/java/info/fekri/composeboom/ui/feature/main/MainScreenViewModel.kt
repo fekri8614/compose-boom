@@ -15,25 +15,26 @@ class MainScreenViewModel(
     private val userRepository: UserRepository,
     private val bookRepository: BookRepository
 ) : ViewModel() {
-    val dataKids      = mutableStateOf<List<KidBook>>(listOf())
-    val dataScience   = mutableStateOf<List<ScienceBook>>(listOf())
-    val dataPoems     = mutableStateOf<List<PoemBook>>(listOf())
+    val dataKids = mutableStateOf<List<KidBook>>(listOf())
+    val dataScience = mutableStateOf<List<ScienceBook>>(listOf())
+    val dataPoems = mutableStateOf<List<PoemBook>>(listOf())
 
-    val showProgress  = mutableStateOf(false)
+    val showProgress = mutableStateOf(false)
     val showNetDialog = mutableStateOf(false)
 
-    val showUiKids    = mutableStateOf(false)
+    val showUiKids = mutableStateOf(false)
     val showUiScience = mutableStateOf(false)
-    val showUiPoems   = mutableStateOf(false)
-    val showFromUs    = mutableStateOf(false)
+    val showUiPoems = mutableStateOf(false)
 
-    private fun showKids(): Boolean    = userRepository.getKidsSub()
+    private fun showKids(): Boolean = userRepository.getKidsSub()
     private fun showScience(): Boolean = userRepository.getScienceSub()
-    private fun showPoems(): Boolean   = userRepository.getPoemsSub()
+    private fun showPoems(): Boolean = userRepository.getPoemsSub()
+
+    fun showUi(): Boolean = !showProgress.value // equal to false
+
 
     init {
         getDataFromNet()
-        showFromUs.value = true
     }
 
     fun getDataFromNet() {
@@ -57,28 +58,30 @@ class MainScreenViewModel(
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val poemsData   = bookRepository.getPoemBooks()
+            val poemsData = bookRepository.getPoemBooks()
             dataPoems.value = poemsData
 
             showProgress.value = false
         }
     }
+
     private fun setupScience() {
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
-            val scienceData   = bookRepository.getScienceBooks()
+            val scienceData = bookRepository.getScienceBooks()
             dataScience.value = scienceData
 
             showProgress.value = false
         }
     }
+
     private fun setupKids() {
         viewModelScope.launch(coroutineExceptionHandler) {
             showProgress.value = true
 
             val dataKidsFromServer = bookRepository.getKidBooks()
-            dataKids.value         = dataKidsFromServer
+            dataKids.value = dataKidsFromServer
 
             showProgress.value = false
         }
