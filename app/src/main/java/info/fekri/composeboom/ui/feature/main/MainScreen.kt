@@ -1,6 +1,8 @@
 package info.fekri.composeboom.ui.feature.main
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -79,7 +82,8 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun MainScreen(modifier: Modifier = Modifier) {
     val uiController = rememberSystemUiController()
     SideEffect {
-        uiController.setStatusBarColor(PrimaryDarkColor)
+        uiController.setSystemBarsColor(PrimaryDarkColor)
+        uiController.setNavigationBarColor(BackgroundMain)
     }
 
     val context = LocalContext.current
@@ -181,6 +185,19 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     onVoiceLibClicked = { id -> navigation.navigate(id) },
                     onVideoLibClicked = { id -> navigation.navigate(id) },
                     onPhotoLibClicked = { id -> navigation.navigate(id) },
+                    onFromUsClick = { pdfUrl ->
+                        try {
+                            navigation.navigate(MyScreens.ShowPdfScreen.route + "/$pdfUrl")
+                        } catch (e: Exception) {
+                            Log.v("MainScreen", e.message.toString(), e)
+                            Toast.makeText(
+                                context.applicationContext,
+                                "Something went Wrong!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                    }
                 )
             }
         }
@@ -276,7 +293,6 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
             )
         }
 
-
     }
 }
 
@@ -313,8 +329,10 @@ private fun MyCollapsingBody(
     onAllLibClicked: () -> Unit,
     onVoiceLibClicked: (String) -> Unit,
     onVideoLibClicked: (String) -> Unit,
-    onPhotoLibClicked: (String) -> Unit
+    onPhotoLibClicked: (String) -> Unit,
+    onFromUsClick: (String) -> Unit
 ) {
+
     Box {
         Column(
             modifier = modifier
@@ -333,45 +351,61 @@ private fun MyCollapsingBody(
             )
             if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 
-            if (NetworkChecker(context).isInternetConnected) {
+            Spacer(modifier = Modifier.height(8.dp))
 
-                if (viewModel.showUiKids.value) {
-                    KidBookSection(
-                        onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
-                        backColor = GreenBackground,
-                        data = dataKids,
-                    )
-                }
+            if (viewModel.showUi()) {
+                if (NetworkChecker(context).isInternetConnected) {
 
-                if (viewModel.showUiPoems.value) {
-                    PoemBookSection(
-                        onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
-                        backColor = BlueBackground,
-                        data = dataPoems
-                    )
-                }
+                    if (viewModel.showUiKids.value) {
+                        KidBookSection(
+                            onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
+                            backColor = GreenBackground,
+                            data = dataKids,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
 
-                if (viewModel.showUiScience.value) {
-                    ScienceBookSection(
-                        onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
-                        backColor = GreenBackground,
-                        data = dataScience
-                    )
-                }
+                    if (viewModel.showUiPoems.value) {
+                        PoemBookSection(
+                            onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
+                            backColor = BlueBackground,
+                            data = dataPoems,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
 
-                if (viewModel.showFromUs.value) {
+                    if (viewModel.showUiScience.value) {
+                        ScienceBookSection(
+                            onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
+                            backColor = GreenBackground,
+                            data = dataScience,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        )
+                    }
+
                     FromUsBookSection(
                         onBookItemClicked = { pdfUrl ->
-                            // open the pdf by the url
+                            if (NetworkChecker(context).isInternetConnected) {
+                                onFromUsClick.invoke(pdfUrl)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Please, check your Internet Connection!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         },
                         backColor = BackgroundMainLight,
-                        data = FROM_US_DATA
+                        data = FROM_US_DATA,
+                        modifier = Modifier.padding(vertical = 4.dp)
                     )
+                } else {
+                    MyAnimaShower(name = R.raw.connection_error_owl)
+                    viewModel.showNetDialog.value = true
                 }
-
             } else {
-                MyAnimaShower(name = R.raw.connection_error_owl)
-                viewModel.showNetDialog.value = true
+                MyAnimaShower(name = R.raw.welcome_owl)
+                Text(text = "Loading ...", fontSize = 20.sp, fontFamily = FontFamily.Serif)
             }
 
         }
@@ -391,8 +425,7 @@ fun KidBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
-            .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
+            .border(2.dp, Color.White, Shapes.large),
         color = backColor
     ) {
         Column(
@@ -467,8 +500,7 @@ fun PoemBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
-            .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
+            .border(2.dp, Color.White, Shapes.large),
         color = backColor
     ) {
         Column(
@@ -536,8 +568,7 @@ fun ScienceBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.medium)
-            .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
+            .border(2.dp, Color.White, Shapes.large),
         color = backColor
     ) {
         Column(
@@ -733,3 +764,4 @@ fun DrawerPreview() {
 
     }
 }
+

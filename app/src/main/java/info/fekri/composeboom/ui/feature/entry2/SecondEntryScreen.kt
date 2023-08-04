@@ -257,7 +257,7 @@ fun SelectableItems(
             if (viewModel.showDialog.value) {
                 viewModel.isHistoryChecked.value = false
                 ShowAlertDialog(
-                    title = "Info",
+                    title = "Still Working ...",
                     msg = "We are still updating Boom! Thank you for understanding :-*",
                     btnMsg = "Close",
                     onConfirmClicked = { viewModel.showDialog.value = false }, onDismissRequest = {
