@@ -238,4 +238,3 @@ fun AboutTopBar(onBackPressed: () -> Unit) {
         }
     )
 }
-
