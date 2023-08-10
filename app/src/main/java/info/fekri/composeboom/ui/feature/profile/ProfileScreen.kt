@@ -38,7 +38,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.ui.theme.BackgroundMain
-import info.fekri.composeboom.util.ShowAlertByEditText
+import info.fekri.composeboom.util.ShowAlertWithEditText
 import info.fekri.composeboom.util.textIdStyle
 import info.fekri.composeboom.util.textLengthStyle
 
@@ -85,7 +85,7 @@ fun ProfileScreen() {
                     elevation = 5.dp,
                 ) {
                     AsyncImage(
-                        model = "",
+                        model = viewModel.getProfileImage(),
                         contentDescription = null,
                         modifier = Modifier.padding(8.dp),
                         contentScale = ContentScale.Crop
@@ -125,7 +125,7 @@ fun ProfileScreen() {
     }
 
     if (viewModel.showChangeDialog.value) {
-        ShowAlertByEditText(
+        ShowAlertWithEditText(
             title = "Edit your data",
             btnMsg = "Change",
             edtNameValue = userNameState.value,

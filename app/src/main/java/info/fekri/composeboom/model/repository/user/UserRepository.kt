@@ -8,6 +8,9 @@ interface UserRepository {
     fun getUserID(): String?
     fun saveUserID(id: String?)
 
+    fun getProfileImage(): String?
+    fun saveProfileImage(img: String?)
+
     fun getScienceSub(): Boolean
     fun saveScienceSub(sub: Boolean)
 

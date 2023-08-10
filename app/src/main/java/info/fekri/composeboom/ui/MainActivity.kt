@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.ProfileScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.EntryScreenFirst.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()

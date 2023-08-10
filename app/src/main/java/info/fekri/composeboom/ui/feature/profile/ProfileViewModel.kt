@@ -1,6 +1,5 @@
 package info.fekri.composeboom.ui.feature.profile
 
-import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,5 +20,7 @@ class ProfileViewModel(private val userRepository: UserRepository) : ViewModel()
         userRepository.saveUserID(id)
     }
     fun getUserID(): String = userRepository.getUserID() ?: "Add your id"
+
+    fun getProfileImage(): String = userRepository.getProfileImage() ?: "https://www.animaker.com/blog/wp-content/uploads/2016/06/Boris-th"
 
 }

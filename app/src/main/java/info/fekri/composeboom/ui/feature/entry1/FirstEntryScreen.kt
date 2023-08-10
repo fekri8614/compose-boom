@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.burnoo.cokoin.navigation.getNavController
@@ -30,7 +31,10 @@ import info.fekri.composeboom.util.IconMainApp
 import info.fekri.composeboom.util.MyEditText
 import info.fekri.composeboom.util.MyScreens
 import info.fekri.composeboom.util.NetworkChecker
+import info.fekri.composeboom.util.PROFILE_IMAGES_DATA
+import info.fekri.composeboom.util.ShowProfileDialog
 
+@Preview
 @Composable
 fun FirstEntryScreen() {
     val context = LocalContext.current
@@ -39,6 +43,7 @@ fun FirstEntryScreen() {
 
     val userName = viewModel.fullName.observeAsState("")
     val userID = viewModel.userID.observeAsState("")
+    val profileImg = viewModel.profileImage
 
     Column(
         modifier = Modifier
@@ -66,7 +71,8 @@ fun FirstEntryScreen() {
         Spacer(modifier = Modifier.height(100.dp))
 
         Text(
-            text = "Let's get to know each other!", style = TextStyle(
+            text = "Let's get to know each other!",
+            style = TextStyle(
                 fontSize = 14.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold
@@ -79,7 +85,8 @@ fun FirstEntryScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "I'm Boom, your book owl friend!\nAnd you?", style = TextStyle(
+            text = "I'm Boom, your book owl friend!\nAnd you?",
+            style = TextStyle(
                 fontSize = 14.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold
@@ -93,17 +100,29 @@ fun FirstEntryScreen() {
 
         MyInputs(viewModel)
 
-        Spacer(modifier = Modifier.height(200.dp))
+        Button(
+            onClick = {
+                viewModel.showProfImgDialog.value = true
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(8.dp)
+        ) {
+            Text(text = "Choose your Profile Image")
+        }
+
+        Spacer(modifier = Modifier.height(100.dp))
 
         Button(
             onClick = {
                 if (NetworkChecker(context).isInternetConnected) {
                     if (
                         userName.value.isNotEmpty() || userName.value.isNotBlank() ||
-                        userID.value.isNotEmpty() || userID.value.isNotBlank()
+                        userID.value.isNotEmpty() || userID.value.isNotBlank() ||
+                        profileImg.value.isNotEmpty()
                     ) {
                         // save user entries
-                        viewModel.setupUserData(userName.value, userID.value)
+                        viewModel.setupUserData(userName.value, userID.value, profileImg.value)
 
                         if (viewModel.isUserDataSaved()) {
                             navigation.navigate(MyScreens.EntryScreenSecond.route) {
@@ -134,6 +153,22 @@ fun FirstEntryScreen() {
             Text(text = "Submit!", modifier = Modifier.padding(6.dp))
         }
 
+    }
+
+    if (viewModel.showProfImgDialog.value) {
+        ShowProfileDialog(
+            title = "Profile Images",
+            imgUrls = PROFILE_IMAGES_DATA,
+            onSelectedImage = { url ->
+                profileImg.value = url
+            },
+            onConfirmClicked = {
+                viewModel.showProfImgDialog.value = false
+            },
+            onDismissRequest = {
+                viewModel.showProfImgDialog.value = false
+            }
+        )
     }
 
 }
