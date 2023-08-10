@@ -78,15 +78,11 @@ fun ShowBookScreen(bookId: String) {
 
     val stateDataBook = viewModel.dataShowBook
 
-    Scaffold(
-        scaffoldState = rememberScaffoldState(),
-        backgroundColor = BackgroundMain,
-        topBar = {
-            ShowBookTopBar(stateDataBook.value.volumeInfo.title) {
-                navigation.popBackStack()
-            }
+    Scaffold(scaffoldState = rememberScaffoldState(), backgroundColor = BackgroundMain, topBar = {
+        ShowBookTopBar(stateDataBook.value.volumeInfo.title) {
+            navigation.popBackStack()
         }
-    ) {
+    }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,8 +98,7 @@ fun ShowBookScreen(bookId: String) {
     }
 
     if (viewModel.downloadPDF.value) {
-        ShowAlertDialog(
-            title = "Are you sure?",
+        ShowAlertDialog(title = "Are you sure?",
             msg = "The suffix of file is .ascm, which means you need to have Adobe Digital Editions as installed.",
             btnMsg = "I'm Sure",
             onConfirmClicked = {
@@ -111,20 +106,22 @@ fun ShowBookScreen(bookId: String) {
                 context.apply {
                     if (stateDataBook.value.accessInfo.pdf.isAvailable) {
                         // download
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(stateDataBook.value.accessInfo.pdf.acsTokenLink)))
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(stateDataBook.value.accessInfo.pdf.acsTokenLink)
+                            )
+                        )
                     } else {
                         Toast.makeText(
-                            context,
-                            "The PDF file is not available.",
-                            Toast.LENGTH_SHORT
+                            context, "The PDF file is not available.", Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             },
             onDismissRequest = {
                 viewModel.downloadPDF.value = false
-            }
-        )
+            })
     }
 
 }
@@ -238,7 +235,7 @@ fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
 
     }
 
-    Column (modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally){
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -260,7 +257,11 @@ fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
             }
             InfoButton(txt = "Preview") {
                 context.apply {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(data.volumeInfo.previewLink)))
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW, Uri.parse(data.volumeInfo.previewLink)
+                        )
+                    )
                 }
             }
 
@@ -272,8 +273,7 @@ fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
             onClick = {
                 // download the pdf
                 onDownloadPDFClicked.invoke()
-            },
-            modifier = Modifier.fillMaxWidth(0.9f)
+            }, modifier = Modifier.fillMaxWidth(0.9f)
         ) {
             Text(text = "Download PDF", modifier = Modifier.padding(8.dp))
         }
@@ -285,11 +285,13 @@ fun AboutUsBody(data: ByIdBook, onDownloadPDFClicked: () -> Unit) {
 fun InfoButton(
     txt: String,
     txtColor: Color = Color.White,
-    width: Dp = 120.dp, height: Dp = 60.dp,
+    width: Dp = 120.dp,
+    height: Dp = 60.dp,
     onButtonClicked: () -> Unit
 ) {
     Button(
-        onClick = onButtonClicked, modifier = Modifier
+        onClick = onButtonClicked,
+        modifier = Modifier
             .size(width, height)
             .clip(RoundedCornerShape(40))
 
@@ -307,14 +309,11 @@ fun InfoButton(
 
 @Composable
 fun ShowBookTopBar(title: String, onBackPressed: () -> Unit) {
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = {
-                onBackPressed.invoke()
-            }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-            }
-        }, backgroundColor = BackgroundMain,
-        title = { Text(text = textLengthStyle(title, 20)) }
-    )
+    TopAppBar(navigationIcon = {
+        IconButton(onClick = {
+            onBackPressed.invoke()
+        }) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+        }
+    }, backgroundColor = BackgroundMain, title = { Text(text = textLengthStyle(title, 20)) })
 }

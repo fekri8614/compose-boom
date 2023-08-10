@@ -20,7 +20,6 @@ import com.rizzi.bouquet.ResourceType
 import com.rizzi.bouquet.rememberHorizontalPdfReaderState
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
-import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.util.PDF_BASE_URL
 
 @Composable
@@ -35,22 +34,20 @@ fun ShowPdfScreen(pdfUrl: String) {
     val navigation = getNavController()
 
     val pdfState = rememberHorizontalPdfReaderState(
-        resource = ResourceType.Remote(viewModel.pdfUrl.value),
-        isZoomEnable = true
+        resource = ResourceType.Remote(viewModel.pdfUrl.value), isZoomEnable = true
     )
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = { ShowPdfTopBar {
-            viewModel.pdfUrl.value = ""
-            navigation.popBackStack()
-        } },
-        backgroundColor = Color.White
+        scaffoldState = scaffoldState, topBar = {
+            ShowPdfTopBar {
+                viewModel.pdfUrl.value = ""
+                navigation.popBackStack()
+            }
+        }, backgroundColor = Color.White
     ) { padding ->
         HorizontalPDFReader(
-            state = pdfState,
-            modifier = Modifier
+            state = pdfState, modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
         )
@@ -59,14 +56,10 @@ fun ShowPdfScreen(pdfUrl: String) {
 
 @Composable
 fun ShowPdfTopBar(onBackPressed: () -> Unit) {
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-            }
-        },
-        title = {},
-        backgroundColor = Color.White,
-        elevation = 0.dp
+    TopAppBar(navigationIcon = {
+        IconButton(onClick = onBackPressed) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+        }
+    }, title = {}, backgroundColor = Color.White, elevation = 0.dp
     )
 }

@@ -47,7 +47,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -99,113 +98,99 @@ fun MainScreen(modifier: Modifier = Modifier) {
     val dataPoems = viewModel.dataPoems.value
     val dataScience = viewModel.dataScience.value
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        drawerContent = {
-            DrawerContent(onItemClicked = { id ->
-                scope.launch {
-                    scaffoldState.drawerState.close()
-                }
-                navigation.navigate(id)
-            })
-        },
-        backgroundColor = BackgroundMain,
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                text = { Text(text = "Open Drawer") },
-                icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") },
-                onClick = { scope.launch { scaffoldState.drawerState.open() } }
-            )
-        },
-        content = {
-            CollapsingToolbarScaffold(
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(it),
-                state = collapsingState,
-                scrollStrategy = ScrollStrategy.EnterAlways,
-                toolbar = {
-                    val progress = collapsingState.toolbarState.progress
-
-                    Spacer(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp)
-                    )
-                    Box {
-                        Box {
-                            Image(
-                                painter = painterResource(id = R.drawable.img1),
-                                contentDescription = null,
-                                modifier = modifier
-                                    .fillMaxSize()
-                                    .parallax(ratio = 0.2f),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
-
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = modifier.align(Alignment.Center)
-                        ) {
-                            Text(
-                                text = "Boom!",
-                                style = TextStyle(
-                                    fontSize = (20 + (20 - 18) * progress).sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = Color.White,
-                                    textAlign = TextAlign.Justify
-                                )
-                            )
-                            Text(
-                                text = "Your book-owl friend!",
-                                style = TextStyle(
-                                    fontSize = (20 + (20 - 18) * progress).sp,
-                                    fontWeight = FontWeight.Medium,
-                                    color = Color.White,
-                                    textAlign = TextAlign.Justify
-                                )
-                            )
-                        }
-                    }
-                },
-                toolbarModifier = modifier.verticalScroll(rememberScrollState())
-            ) {
-                MyCollapsingBody(
-                    modifier,
-                    viewModel,
-                    context,
-                    dataKids,
-                    dataPoems,
-                    dataScience,
-                    onKidItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
-                    onScienceItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
-                    onPoemItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
-                    onAllLibClicked = { navigation.navigate(MyScreens.MainScreen.route) },
-                    onVoiceLibClicked = { id -> navigation.navigate(id) },
-                    onVideoLibClicked = { id -> navigation.navigate(id) },
-                    onPhotoLibClicked = { id -> navigation.navigate(id) },
-                    onFromUsClick = { pdfUrl ->
-                        try {
-                            navigation.navigate(MyScreens.ShowPdfScreen.route + "/$pdfUrl")
-                        } catch (e: Exception) {
-                            Log.v("MainScreen", e.message.toString(), e)
-                            Toast.makeText(
-                                context.applicationContext,
-                                "Something went Wrong!",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                        }
-                    }
-                )
+    Scaffold(scaffoldState = scaffoldState, drawerContent = {
+        DrawerContent(onItemClicked = { id ->
+            scope.launch {
+                scaffoldState.drawerState.close()
             }
+            navigation.navigate(id)
+        })
+    }, backgroundColor = BackgroundMain, floatingActionButton = {
+        ExtendedFloatingActionButton(text = { Text(text = "Open Drawer") },
+            icon = { Icon(Icons.Default.Menu, contentDescription = "Menu") },
+            onClick = { scope.launch { scaffoldState.drawerState.open() } })
+    }, content = {
+        CollapsingToolbarScaffold(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(it),
+            state = collapsingState,
+            scrollStrategy = ScrollStrategy.EnterAlways,
+            toolbar = {
+                val progress = collapsingState.toolbarState.progress
+
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp)
+                )
+                Box {
+                    Box {
+                        Image(
+                            painter = painterResource(id = R.drawable.img1),
+                            contentDescription = null,
+                            modifier = modifier
+                                .fillMaxSize()
+                                .parallax(ratio = 0.2f),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = modifier.align(Alignment.Center)
+                    ) {
+                        Text(
+                            text = "Boom!", style = TextStyle(
+                                fontSize = (20 + (20 - 18) * progress).sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White,
+                                textAlign = TextAlign.Justify
+                            )
+                        )
+                        Text(
+                            text = "Your book-owl friend!", style = TextStyle(
+                                fontSize = (20 + (20 - 18) * progress).sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White,
+                                textAlign = TextAlign.Justify
+                            )
+                        )
+                    }
+                }
+            },
+            toolbarModifier = modifier.verticalScroll(rememberScrollState())
+        ) {
+            MyCollapsingBody(modifier,
+                viewModel,
+                context,
+                dataKids,
+                dataPoems,
+                dataScience,
+                onKidItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
+                onScienceItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
+                onPoemItemClicked = { id -> navigation.navigate(MyScreens.ShowBookScreen.route + "/$id") },
+                onAllLibClicked = { navigation.navigate(MyScreens.MainScreen.route) },
+                onVoiceLibClicked = { id -> navigation.navigate(id) },
+                onVideoLibClicked = { id -> navigation.navigate(id) },
+                onPhotoLibClicked = { id -> navigation.navigate(id) },
+                onFromUsClick = { pdfUrl ->
+                    try {
+                        navigation.navigate(MyScreens.ShowPdfScreen.route + "/$pdfUrl")
+                    } catch (e: Exception) {
+                        Log.v("MainScreen", e.message.toString(), e)
+                        Toast.makeText(
+                            context.applicationContext,
+                            "Something went Wrong!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                })
         }
-    )
+    })
 
     if (viewModel.showNetDialog.value) {
-        ShowAlertDialog(
-            title = "Check your Connection!",
+        ShowAlertDialog(title = "Check your Connection!",
             msg = "Please, check your internet connection and try again!",
             btnMsg = "Try Again",
             onConfirmClicked = {
@@ -214,8 +199,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             },
             onDismissRequest = {
                 viewModel.showNetDialog.value = false
-            }
-        )
+            })
     }
 
 }
@@ -249,11 +233,8 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
                         alignment = Alignment.TopStart
                     )
                     Text(
-                        text = "Boom!",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White
+                        text = "Boom!", style = TextStyle(
+                            fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White
                         )
                     )
                     Text(text = "Search and Read book with Boom!", color = Color.White)
@@ -263,16 +244,13 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            DrawerItem(
-                text = "Profile",
+            DrawerItem(text = "Profile",
                 onItemClick = { onItemClicked.invoke(MyScreens.ProfileScreen.route) })
 
-            DrawerItem(
-                text = "Search",
+            DrawerItem(text = "Search",
                 onItemClick = { onItemClicked.invoke(MyScreens.SearchScreen.route) })
 
-            DrawerItem(
-                text = "About Us",
+            DrawerItem(text = "About Us",
                 onItemClick = { onItemClicked.invoke(MyScreens.AboutUsScreen.route) })
         }
 
@@ -281,9 +259,7 @@ fun DrawerContent(onItemClicked: (String) -> Unit) {
             modifier = Modifier.padding(bottom = 16.dp)
         ) {
             Text(
-                text = "Developed by ",
-                fontSize = 14.sp,
-                color = Color.Black
+                text = "Developed by ", fontSize = 14.sp, color = Color.Black
             )
             Text(
                 text = "fekri8614",
@@ -343,20 +319,20 @@ private fun MyCollapsingBody(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            TopCircularIcons(
-                onAllIconClicked = { onAllLibClicked.invoke() },
+            TopCircularIcons(onAllIconClicked = { onAllLibClicked.invoke() },
                 onVoiceLibClicked = { id -> onVoiceLibClicked.invoke(id) },
                 onVideoLibClicked = { id -> onVideoLibClicked.invoke(id) },
-                onPhotoLibClicked = { id -> onPhotoLibClicked.invoke(id) }
+                onPhotoLibClicked = { id -> onPhotoLibClicked.invoke(id) })
+            if (viewModel.showKidsProgress.value || viewModel.showScienceProgress.value || viewModel.showPoemsProgress.value) LinearProgressIndicator(
+                modifier = modifier.fillMaxWidth()
             )
-            if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (viewModel.showUi()) {
-                if (NetworkChecker(context).isInternetConnected) {
+            if (NetworkChecker(context).isInternetConnected) {
 
-                    if (viewModel.showUiKids.value) {
+                if (viewModel.showUiKids.value) {
+                    if (viewModel.showKidsUi()) {
                         KidBookSection(
                             onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
                             backColor = GreenBackground,
@@ -364,50 +340,48 @@ private fun MyCollapsingBody(
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
                     }
+                }
 
-                    if (viewModel.showUiPoems.value) {
+                if (viewModel.showUiPoems.value) {
+                    if (viewModel.showPoemsUi())
                         PoemBookSection(
                             onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
                             backColor = BlueBackground,
                             data = dataPoems,
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
-                    }
+                }
 
-                    if (viewModel.showUiScience.value) {
+                if (viewModel.showUiScience.value) {
+                    if (viewModel.showScienceUi())
                         ScienceBookSection(
                             onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
                             backColor = GreenBackground,
                             data = dataScience,
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
-                    }
-
-                    FromUsBookSection(
-                        onBookItemClicked = { pdfUrl ->
-                            if (NetworkChecker(context).isInternetConnected) {
-                                onFromUsClick.invoke(pdfUrl)
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Please, check your Internet Connection!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        },
-                        backColor = BackgroundMainLight,
-                        data = FROM_US_DATA,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                } else {
-                    MyAnimaShower(name = R.raw.connection_error_owl)
-                    viewModel.showNetDialog.value = true
                 }
-            } else {
-                MyAnimaShower(name = R.raw.welcome_owl)
-                Text(text = "Loading ...", fontSize = 20.sp, fontFamily = FontFamily.Serif)
-            }
 
+                FromUsBookSection(
+                    onBookItemClicked = { pdfUrl ->
+                        if (NetworkChecker(context).isInternetConnected) {
+                            onFromUsClick.invoke(pdfUrl)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Please, check your Internet Connection!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
+                    backColor = BackgroundMainLight,
+                    data = FROM_US_DATA,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            } else {
+                MyAnimaShower(name = R.raw.connection_error_owl)
+                viewModel.showNetDialog.value = true
+            }
         }
     }
 }
@@ -425,8 +399,7 @@ fun KidBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
-            .border(2.dp, Color.White, Shapes.large),
-        color = backColor
+            .border(2.dp, Color.White, Shapes.large), color = backColor
     ) {
         Column(
             modifier = modifier
@@ -435,11 +408,8 @@ fun KidBookSection(
                 .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = "For Kids",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                text = "For Kids", style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black
                 )
             )
             LazyRow(
@@ -448,8 +418,7 @@ fun KidBookSection(
             ) {
                 items(data.size) {
                     KidBookItem(
-                        onItemClicked = onBookItemClicked,
-                        data = data[it]
+                        onItemClicked = onBookItemClicked, data = data[it]
                     )
                 }
             }
@@ -459,9 +428,7 @@ fun KidBookSection(
 
 @Composable
 fun KidBookItem(
-    modifier: Modifier = Modifier,
-    onItemClicked: (String) -> Unit,
-    data: KidBook
+    modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, data: KidBook
 ) {
     Card(
         modifier = modifier
@@ -469,15 +436,12 @@ fun KidBookItem(
             .padding(end = 16.dp)
             .clickable {
                 onItemClicked.invoke(data.id)
-            },
-        border = BorderStroke(2.dp, YellowBackground),
-        elevation = 3.dp
+            }, border = BorderStroke(2.dp, YellowBackground), elevation = 3.dp
     ) {
-        val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.toString()
-                    .isNotEmpty()
-            ) data.volumeInfo.imageLinks.thumbnail
-            else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
+        val image = if (!data.volumeInfo.imageLinks.thumbnail.toString()
+                .isNotEmpty()
+        ) data.volumeInfo.imageLinks.thumbnail
+        else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
             contentDescription = null,
@@ -500,8 +464,7 @@ fun PoemBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.large)
-            .border(2.dp, Color.White, Shapes.large),
-        color = backColor
+            .border(2.dp, Color.White, Shapes.large), color = backColor
     ) {
         Column(
             modifier = modifier
@@ -510,11 +473,8 @@ fun PoemBookSection(
                 .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = "Poems",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                text = "Poems", style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black
                 )
             )
             LazyRow(
@@ -537,15 +497,12 @@ fun PoemBookItem(modifier: Modifier = Modifier, onItemClicked: (String) -> Unit,
             .padding(end = 16.dp)
             .clickable {
                 onItemClicked.invoke(data.id) // will pass the real id
-            },
-        border = BorderStroke(2.dp, YellowBackground),
-        elevation = 3.dp
+            }, border = BorderStroke(2.dp, YellowBackground), elevation = 3.dp
     ) {
-        val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.toString()
-                    .isNotEmpty()
-            ) data.volumeInfo.imageLinks.thumbnail
-            else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
+        val image = if (!data.volumeInfo.imageLinks.thumbnail.toString()
+                .isNotEmpty()
+        ) data.volumeInfo.imageLinks.thumbnail
+        else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
             contentDescription = null,
@@ -568,8 +525,7 @@ fun ScienceBookSection(
         modifier = modifier
             .fillMaxWidth(1f)
             .clip(Shapes.medium)
-            .border(2.dp, Color.White, Shapes.large),
-        color = backColor
+            .border(2.dp, Color.White, Shapes.large), color = backColor
     ) {
         Column(
             modifier = modifier
@@ -578,11 +534,8 @@ fun ScienceBookSection(
                 .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = "Science",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                text = "Science", style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black
                 )
             )
             LazyRow(
@@ -599,9 +552,7 @@ fun ScienceBookSection(
 
 @Composable
 fun ScienceBookItem(
-    modifier: Modifier = Modifier,
-    onItemClicked: (String) -> Unit,
-    data: ScienceBook
+    modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, data: ScienceBook
 ) {
     Card(
         modifier = modifier
@@ -609,15 +560,12 @@ fun ScienceBookItem(
             .padding(end = 16.dp)
             .clickable {
                 onItemClicked.invoke(data.id) // will pass the real id
-            },
-        border = BorderStroke(2.dp, YellowBackground),
-        elevation = 3.dp
+            }, border = BorderStroke(2.dp, YellowBackground), elevation = 3.dp
     ) {
-        val image =
-            if (!data.volumeInfo.imageLinks.thumbnail.toString()
-                    .isNotEmpty()
-            ) data.volumeInfo.imageLinks.thumbnail
-            else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
+        val image = if (!data.volumeInfo.imageLinks.thumbnail.toString()
+                .isNotEmpty()
+        ) data.volumeInfo.imageLinks.thumbnail
+        else "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg"
         AsyncImage(
             model = image,
             contentDescription = null,
@@ -641,8 +589,7 @@ fun FromUsBookSection(
             .fillMaxWidth(1f)
             .clip(Shapes.medium)
             .border(2.dp, Color.White, Shapes.large)
-            .padding(top = 8.dp),
-        color = backColor
+            .padding(top = 8.dp), color = backColor
     ) {
         Column(
             modifier = modifier
@@ -651,11 +598,8 @@ fun FromUsBookSection(
                 .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Text(
-                text = "From us...",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                text = "From us...", style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.Black
                 )
             )
             LazyRow(
@@ -672,9 +616,7 @@ fun FromUsBookSection(
 
 @Composable
 fun FromUsBookItem(
-    modifier: Modifier = Modifier,
-    onItemClicked: (String) -> Unit,
-    data: Pair<String, String>
+    modifier: Modifier = Modifier, onItemClicked: (String) -> Unit, data: Pair<String, String>
 ) {
     Card(
         modifier = modifier
@@ -682,9 +624,7 @@ fun FromUsBookItem(
             .padding(end = 16.dp)
             .clickable {
                 onItemClicked.invoke(data.second)
-            },
-        border = BorderStroke(2.dp, YellowBackground),
-        elevation = 3.dp
+            }, border = BorderStroke(2.dp, YellowBackground), elevation = 3.dp
     ) {
         AsyncImage(
             model = data.first,
@@ -707,30 +647,25 @@ fun TopCircularIcons(
     Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
         CircularIcon(img = R.drawable.img_all, title = "all") { onAllIconClicked.invoke() }
         CircularIcon(
-            img = R.drawable.img_audio_lib,
-            title = "voice lib"
+            img = R.drawable.img_audio_lib, title = "voice lib"
         ) { onVoiceLibClicked.invoke(MyScreens.VoiceLibScreen.route) }
         CircularIcon(
-            img = R.drawable.img_watch_list,
-            title = "video lib"
+            img = R.drawable.img_watch_list, title = "video lib"
         ) { onVideoLibClicked.invoke(MyScreens.VideoLibScreen.route) }
         CircularIcon(
-            img = R.drawable.img_library_all,
-            title = "photo lib"
+            img = R.drawable.img_library_all, title = "photo lib"
         ) { onPhotoLibClicked.invoke(MyScreens.PhotoLibScreen.route) }
     }
 }
 
 @Composable
 fun CircularIcon(
-    modifier: Modifier = Modifier,
-    img: Int,
-    title: String,
-    onIconClicked: () -> Unit
+    modifier: Modifier = Modifier, img: Int, title: String, onIconClicked: () -> Unit
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
-        .padding(8.dp)
-        .clickable { onIconClicked.invoke() }) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { onIconClicked.invoke() }) {
         Card(
             shape = RoundedCornerShape(64.dp),
             elevation = 4.dp,
@@ -745,11 +680,8 @@ fun CircularIcon(
         }
         Spacer(modifier = modifier.height(8.dp))
         Text(
-            text = title,
-            style = TextStyle(
-                color = Color.Black,
-                fontWeight = FontWeight.Medium,
-                fontSize = 16.sp
+            text = title, style = TextStyle(
+                color = Color.Black, fontWeight = FontWeight.Medium, fontSize = 16.sp
             )
         )
     }

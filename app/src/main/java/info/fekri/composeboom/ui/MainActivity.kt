@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,9 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -45,7 +42,6 @@ import info.fekri.composeboom.util.IS_USER_FIRST_TIME
 import info.fekri.composeboom.util.KEY_SHOW_BOOK
 import info.fekri.composeboom.util.KEY_SHOW_PDF
 import info.fekri.composeboom.util.MyScreens
-import info.fekri.composeboom.util.PDF_BASE_URL
 import org.koin.android.ext.koin.androidContext
 
 class MainActivity : ComponentActivity() {
@@ -66,8 +62,7 @@ class MainActivity : ComponentActivity() {
             }) {
                 ComposeBoomTheme {
                     Surface(
-                        modifier = Modifier.fillMaxSize(),
-                        color = BackgroundMain
+                        modifier = Modifier.fillMaxSize(), color = BackgroundMain
                     ) {
                         MainAppUi(isFirstTime)
                     }
@@ -81,7 +76,7 @@ class MainActivity : ComponentActivity() {
 fun MainAppUi(isFirstTime: Boolean) {
     val controller = rememberNavController()
 
-    KoinNavHost(navController = controller, startDestination = MyScreens.SplashScreen.route) {
+    KoinNavHost(navController = controller, startDestination = MyScreens.EntryScreenFirst.route) {
 
         composable(route = MyScreens.EntryScreenFirst.route) {
             FirstEntryScreen()
@@ -146,7 +141,6 @@ fun MainAppUi(isFirstTime: Boolean) {
 }
 
 
-
 @Composable
 fun PhotoLibScreen() {
     NoDataYetPage()
@@ -171,8 +165,7 @@ fun NoDataYetPage() {
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth()
+            horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "This item is not added yet.")
             Spacer(modifier = Modifier.height(8.dp))

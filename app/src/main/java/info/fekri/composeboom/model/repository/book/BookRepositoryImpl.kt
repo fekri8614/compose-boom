@@ -12,10 +12,12 @@ class BookRepositoryImpl(private val apiService: ApiService) : BookRepository {
         val dataKids = apiService.getKidBooks()
         return dataKids.kidsData
     }
+
     override suspend fun getScienceBooks(): List<ScienceBook> {
         val dataScience = apiService.getScienceBooks()
         return dataScience.scienceData
     }
+
     override suspend fun getPoemBooks(): List<PoemBook> {
         val dataPoem = apiService.getPoemBooks()
         return dataPoem.poemData
