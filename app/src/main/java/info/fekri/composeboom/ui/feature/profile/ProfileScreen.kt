@@ -153,6 +153,7 @@ fun ProfileScreen() {
                     viewModel.setUserID(userIdState.value)
                     viewModel.showChangeDialog.value = false
                 }
+                clearUserData(viewModel)
             },
             onDismissRequest = {
                 if (
