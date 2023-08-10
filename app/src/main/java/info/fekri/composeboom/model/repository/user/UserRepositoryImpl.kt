@@ -48,7 +48,7 @@ class UserRepositoryImpl(private val sharedPreferences: SharedPreferences) : Use
         }.apply()
     }
 
-    override fun getPoemsSub():Boolean = sharedPreferences.getBoolean(KEY_SUB_POEMS, false)
+    override fun getPoemsSub(): Boolean = sharedPreferences.getBoolean(KEY_SUB_POEMS, false)
     override fun savePoems(sub: Boolean) {
         sharedPreferences.edit().apply {
             putBoolean(KEY_SUB_POEMS, sub)

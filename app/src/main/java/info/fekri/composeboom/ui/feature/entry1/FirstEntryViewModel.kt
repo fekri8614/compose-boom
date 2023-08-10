@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import info.fekri.composeboom.model.repository.user.UserRepository
 
-class FirstEntryViewModel(private val userRepository: UserRepository): ViewModel() {
+class FirstEntryViewModel(private val userRepository: UserRepository) : ViewModel() {
     val fullName = MutableLiveData("")
     val userID = MutableLiveData("")
     val profileImage = mutableStateOf("")
@@ -20,7 +20,8 @@ class FirstEntryViewModel(private val userRepository: UserRepository): ViewModel
     }
 
     fun isUserDataSaved(): Boolean {
-        return (!userRepository.getUserID().isNullOrEmpty() && !userRepository.getUserName().isNullOrEmpty() && !userRepository.getProfileImage().isNullOrEmpty())
+        return (!userRepository.getUserID().isNullOrEmpty() && !userRepository.getUserName()
+            .isNullOrEmpty() && !userRepository.getProfileImage().isNullOrEmpty())
     }
 
 }

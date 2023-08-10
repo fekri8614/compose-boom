@@ -17,7 +17,7 @@ interface UserRepository {
     fun getKidsSub(): Boolean
     fun saveKidsSub(sub: Boolean)
 
-    fun getPoemsSub() : Boolean
+    fun getPoemsSub(): Boolean
     fun savePoems(sub: Boolean)
 
 }

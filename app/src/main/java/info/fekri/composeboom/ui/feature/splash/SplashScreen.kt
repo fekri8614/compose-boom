@@ -63,7 +63,8 @@ fun SplashScreen(isFirstTime: Boolean) {
 fun MyAnimaShower(name: Int) {
     val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(name))
     LottieAnimation(
-        composition = composition, iterations = LottieConstants.IterateForever,
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
         modifier = Modifier.size(240.dp)
     )
 }

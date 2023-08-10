@@ -57,15 +57,11 @@ fun ProfileScreen() {
     val userNameState = viewModel.userName.observeAsState("")
     val userIdState = viewModel.userId.observeAsState(initial = "")
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        backgroundColor = BackgroundMain,
-        topBar = {
-            ProfileTopAppBar {
-                navigation.popBackStack()
-            }
+    Scaffold(scaffoldState = scaffoldState, backgroundColor = BackgroundMain, topBar = {
+        ProfileTopAppBar {
+            navigation.popBackStack()
         }
-    ) { padding ->
+    }) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -79,8 +75,7 @@ fun ProfileScreen() {
             ) {
                 Card(
                     border = BorderStroke(2.dp, Color.White),
-                    modifier = Modifier
-                        .size(120.dp),
+                    modifier = Modifier.size(120.dp),
                     shape = RoundedCornerShape(80.dp),
                     elevation = 5.dp,
                 ) {
@@ -94,19 +89,14 @@ fun ProfileScreen() {
 
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = textLengthStyle(viewModel.getUserName(), 24),
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = Color.Black
+                    text = textLengthStyle(viewModel.getUserName(), 24), style = TextStyle(
+                        fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Black
                     )
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "@${textIdStyle(viewModel.getUserID())}",
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        color = Color.Gray
+                    text = "@${textIdStyle(viewModel.getUserID())}", style = TextStyle(
+                        fontSize = 14.sp, color = Color.Gray
                     )
                 )
             }
@@ -114,7 +104,8 @@ fun ProfileScreen() {
             Button(
                 onClick = {
                     viewModel.showChangeDialog.value = true
-                }, modifier = Modifier
+                },
+                modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .padding(bottom = 16.dp)
                     .align(Alignment.BottomCenter)
@@ -125,8 +116,7 @@ fun ProfileScreen() {
     }
 
     if (viewModel.showChangeDialog.value) {
-        ShowAlertWithEditText(
-            title = "Edit your data",
+        ShowAlertWithEditText(title = "Edit your data",
             btnMsg = "Change",
             edtNameValue = userNameState.value,
             onNameValueChanges = { userName ->
@@ -137,11 +127,9 @@ fun ProfileScreen() {
                 viewModel.userId.value = userId
             },
             onConfirmClicked = {
-                if (
-                    userNameState.value.toString().isEmpty() ||
-                    userNameState.value.toString().isBlank() &&
-                    userIdState.value.toString().isEmpty() ||
-                    userIdState.value.toString().isBlank()
+                if (userNameState.value.toString().isEmpty() || userNameState.value.toString()
+                        .isBlank() && userIdState.value.toString()
+                        .isEmpty() || userIdState.value.toString().isBlank()
                 ) {
                     Toast.makeText(
                         context.applicationContext,
@@ -156,16 +144,14 @@ fun ProfileScreen() {
                 clearUserData(viewModel)
             },
             onDismissRequest = {
-                if (
-                    userIdState.value.toString().isEmpty() &&
-                    userNameState.value.toString().isEmpty()
+                if (userIdState.value.toString().isEmpty() && userNameState.value.toString()
+                        .isEmpty()
                 ) {
                     viewModel.showChangeDialog.value = false
                 } else {
                     clearUserData(viewModel)
                 }
-            }
-        )
+            })
     }
 }
 
@@ -173,15 +159,11 @@ fun ProfileScreen() {
 
 @Composable
 fun ProfileTopAppBar(onBackPressed: () -> Unit) {
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-            }
-        },
-        title = { Text(text = "Profile") },
-        backgroundColor = BackgroundMain,
-        elevation = 0.dp
+    TopAppBar(navigationIcon = {
+        IconButton(onClick = onBackPressed) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+        }
+    }, title = { Text(text = "Profile") }, backgroundColor = BackgroundMain, elevation = 0.dp
     )
 }
 

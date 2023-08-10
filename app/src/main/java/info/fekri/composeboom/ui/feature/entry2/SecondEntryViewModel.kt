@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import info.fekri.composeboom.model.repository.user.UserRepository
 
-class SecondEntryViewModel(private val userRepository: UserRepository): ViewModel() {
+class SecondEntryViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     val isScienceChecked = mutableStateOf(false)
     val isPoemsChecked = mutableStateOf(false)

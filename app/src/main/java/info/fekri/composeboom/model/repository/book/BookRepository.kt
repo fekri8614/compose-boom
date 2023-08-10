@@ -2,7 +2,9 @@ package info.fekri.composeboom.model.repository.book
 
 import info.fekri.composeboom.model.data.ByIdBook
 import info.fekri.composeboom.model.data.SearchedBook
-import info.fekri.composeboom.model.data.books.*
+import info.fekri.composeboom.model.data.books.KidBook
+import info.fekri.composeboom.model.data.books.PoemBook
+import info.fekri.composeboom.model.data.books.ScienceBook
 
 interface BookRepository {
 

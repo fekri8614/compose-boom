@@ -12,8 +12,7 @@ import info.fekri.composeboom.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
-    private val userRepository: UserRepository,
-    private val bookRepository: BookRepository
+    private val userRepository: UserRepository, private val bookRepository: BookRepository
 ) : ViewModel() {
     val dataKids = mutableStateOf<List<KidBook>>(listOf())
     val dataScience = mutableStateOf<List<ScienceBook>>(listOf())

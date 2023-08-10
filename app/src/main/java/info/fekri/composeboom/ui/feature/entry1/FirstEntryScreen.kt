@@ -68,10 +68,8 @@ fun FirstEntryScreen() {
             IconMainApp()
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Boom!",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                text = "Boom!", style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold
                 )
             )
         }
@@ -85,24 +83,17 @@ fun FirstEntryScreen() {
             Text(
                 text = "Let's get to know each other!",
                 style = TextStyle(
-                    fontSize = 14.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Bold
                 ),
-                modifier = Modifier
-                    .padding(start = 8.dp),
+                modifier = Modifier.padding(start = 8.dp),
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "I'm Boom, your book owl friend!\nAnd you?",
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(start = 8.dp)
+                text = "I'm Boom, your book owl friend!\nAnd you?", style = TextStyle(
+                    fontSize = 14.sp, color = Color.Black, fontWeight = FontWeight.Bold
+                ), modifier = Modifier.padding(start = 8.dp)
             )
         }
 
@@ -117,28 +108,25 @@ fun FirstEntryScreen() {
                 onClick = {
                     viewModel.showProfImgDialog.value = true
                 },
-                modifier = Modifier
-                    .padding(8.dp),
+                modifier = Modifier.padding(8.dp),
             ) {
                 Text(text = "Your Profile Image:")
             }
-            Box(modifier = Modifier
-                .size(80.dp)
-                .clip(Shapes.medium)) {
+            Box(
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(Shapes.medium)
+            ) {
                 AsyncImage(model = profileImg.value, contentDescription = null)
             }
         }
-        
+
         Spacer(modifier = Modifier.height(100.dp))
 
         Button(
             onClick = {
                 if (NetworkChecker(context).isInternetConnected) {
-                    if (
-                        userName.value.isNotEmpty() || userName.value.isNotBlank() ||
-                        userID.value.isNotEmpty() || userID.value.isNotBlank() ||
-                        profileImg.value.isNotEmpty()
-                    ) {
+                    if (userName.value.isNotEmpty() || userName.value.isNotBlank() || userID.value.isNotEmpty() || userID.value.isNotBlank() || profileImg.value.isNotEmpty()) {
                         // save user entries
                         viewModel.setupUserData(userName.value, userID.value, profileImg.value)
 
@@ -153,16 +141,12 @@ fun FirstEntryScreen() {
 
                     } else {
                         Toast.makeText(
-                            context,
-                            "Please, check the Inputs!",
-                            Toast.LENGTH_SHORT
+                            context, "Please, check the Inputs!", Toast.LENGTH_SHORT
                         ).show()
                     }
                 } else {
                     Toast.makeText(
-                        context,
-                        "Please, check your Internet Connection!",
-                        Toast.LENGTH_SHORT
+                        context, "Please, check your Internet Connection!", Toast.LENGTH_SHORT
                     ).show()
                 }
             },
@@ -174,8 +158,7 @@ fun FirstEntryScreen() {
     }
 
     if (viewModel.showProfImgDialog.value) {
-        ShowProfileDialog(
-            title = "Profile Images",
+        ShowProfileDialog(title = "Profile Images",
             imgUrls = PROFILE_IMAGES_DATA,
             onSelectedImage = { url ->
                 profileImg.value = url
@@ -185,8 +168,7 @@ fun FirstEntryScreen() {
             },
             onDismissRequest = {
                 viewModel.showProfImgDialog.value = false
-            }
-        )
+            })
     }
 
 }
@@ -196,14 +178,12 @@ fun MyInputs(viewModel: FirstEntryViewModel) {
     val userName = viewModel.fullName.observeAsState("")
     val userID = viewModel.userID.observeAsState("")
 
-    MyEditText(
-        edtValue = userName.value,
+    MyEditText(edtValue = userName.value,
         icon = Icons.Default.Person,
         hint = "I'm ...",
         onValueChanges = { name ->
             viewModel.fullName.value = name
-        }
-    )
+        })
 
     Spacer(modifier = Modifier.height(8.dp))
 

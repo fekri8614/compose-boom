@@ -74,8 +74,7 @@ fun MyEditText(
         singleLine = true,
         onValueChange = onValueChanges,
         placeholder = { Text(hint, color = Color.Gray) },
-        modifier = Modifier
-            .fillMaxWidth(0.9f),
+        modifier = Modifier.fillMaxWidth(0.9f),
         shape = Shapes.medium,
         leadingIcon = { Icon(icon, null) },
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction)
@@ -90,16 +89,14 @@ fun ShowAlertDialog(
     onConfirmClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
+    AlertDialog(onDismissRequest = onDismissRequest,
         title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
         text = { Text(text = msg, fontWeight = FontWeight.Medium, fontSize = 15.sp) },
         confirmButton = {
             TextButton(onClick = onConfirmClicked) {
                 Text(text = btnMsg, modifier = Modifier.padding(8.dp), fontSize = 16.sp)
             }
-        }
-    )
+        })
 }
 
 @Composable
@@ -113,15 +110,13 @@ fun ShowAlertWithEditText(
     onConfirmClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
+    AlertDialog(onDismissRequest = onDismissRequest,
         title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
         text = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 OutlinedTextField(
                     keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
-                        imeAction = ImeAction.Next
+                        capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Next
                     ),
                     label = { Text("You name ...") },
                     value = edtNameValue,
@@ -139,8 +134,7 @@ fun ShowAlertWithEditText(
 
                 OutlinedTextField(
                     keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
-                        imeAction = ImeAction.Done
+                        capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done
                     ),
                     label = { Text("You id ...") },
                     value = edtIdValue,
@@ -161,8 +155,7 @@ fun ShowAlertWithEditText(
             TextButton(onClick = onConfirmClicked) {
                 Text(text = btnMsg, modifier = Modifier.padding(8.dp), fontSize = 16.sp)
             }
-        }
-    )
+        })
 }
 
 @Composable
@@ -173,14 +166,12 @@ fun ShowProfileDialog(
     onConfirmClicked: () -> Unit,
     onDismissRequest: () -> Unit
 ) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
+    AlertDialog(onDismissRequest = onDismissRequest,
         title = { Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp) },
         text = {
             Column(verticalArrangement = Arrangement.SpaceAround) {
                 Text(
-                    text = "Choose your favorite:",
-                    style = TextStyle(fontSize = 14.sp)
+                    text = "Choose your favorite:", style = TextStyle(fontSize = 14.sp)
                 )
                 LazyRow(
                     modifier = Modifier
@@ -198,18 +189,15 @@ fun ShowProfileDialog(
             TextButton(onClick = onConfirmClicked) {
                 Text(text = "Let's Go!", modifier = Modifier.padding(8.dp), fontSize = 16.sp)
             }
-        }
-    )
+        })
 }
 
 @Composable
 private fun ProfileImageItem(url: String, onSelectedImage: (String) -> Unit) {
-    Box(
-        modifier = Modifier
-            .size(120.dp)
-            .padding(horizontal = 4.dp)
-            .clickable { onSelectedImage.invoke(url) }
-    ) {
+    Box(modifier = Modifier
+        .size(120.dp)
+        .padding(horizontal = 4.dp)
+        .clickable { onSelectedImage.invoke(url) }) {
         AsyncImage(
             model = url,
             contentDescription = null,

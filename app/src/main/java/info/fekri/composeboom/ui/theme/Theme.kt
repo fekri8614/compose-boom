@@ -6,19 +6,14 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColors = lightColors(
-    primary = PrimaryDarkColor,
-    secondary = PrimaryDarkColor,
-    background = BackgroundMain
+    primary = PrimaryDarkColor, secondary = PrimaryDarkColor, background = BackgroundMain
 )
 
 @Composable
 fun ComposeBoomTheme(content: @Composable () -> Unit) {
 
     MaterialTheme(
-        colors = LightColors,
-        typography = Typography,
-        content = content,
-        shapes = Shapes
+        colors = LightColors, typography = Typography, content = content, shapes = Shapes
     )
 
     val uiController = rememberSystemUiController()
