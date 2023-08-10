@@ -47,7 +47,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -324,14 +323,16 @@ private fun MyCollapsingBody(
                 onVoiceLibClicked = { id -> onVoiceLibClicked.invoke(id) },
                 onVideoLibClicked = { id -> onVideoLibClicked.invoke(id) },
                 onPhotoLibClicked = { id -> onPhotoLibClicked.invoke(id) })
-            if (viewModel.showProgress.value) LinearProgressIndicator(modifier = modifier.fillMaxWidth())
+            if (viewModel.showKidsProgress.value || viewModel.showScienceProgress.value || viewModel.showPoemsProgress.value) LinearProgressIndicator(
+                modifier = modifier.fillMaxWidth()
+            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            if (viewModel.showUi()) {
-                if (NetworkChecker(context).isInternetConnected) {
+            if (NetworkChecker(context).isInternetConnected) {
 
-                    if (viewModel.showUiKids.value) {
+                if (viewModel.showUiKids.value) {
+                    if (viewModel.showKidsUi()) {
                         KidBookSection(
                             onBookItemClicked = { id -> onKidItemClicked.invoke(id) },
                             backColor = GreenBackground,
@@ -339,50 +340,48 @@ private fun MyCollapsingBody(
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
                     }
+                }
 
-                    if (viewModel.showUiPoems.value) {
+                if (viewModel.showUiPoems.value) {
+                    if (viewModel.showPoemsUi())
                         PoemBookSection(
                             onBookItemClicked = { id -> onPoemItemClicked.invoke(id) },
                             backColor = BlueBackground,
                             data = dataPoems,
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
-                    }
+                }
 
-                    if (viewModel.showUiScience.value) {
+                if (viewModel.showUiScience.value) {
+                    if (viewModel.showScienceUi())
                         ScienceBookSection(
                             onBookItemClicked = { id -> onScienceItemClicked.invoke(id) },
                             backColor = GreenBackground,
                             data = dataScience,
                             modifier = Modifier.padding(vertical = 4.dp)
                         )
-                    }
-
-                    FromUsBookSection(
-                        onBookItemClicked = { pdfUrl ->
-                            if (NetworkChecker(context).isInternetConnected) {
-                                onFromUsClick.invoke(pdfUrl)
-                            } else {
-                                Toast.makeText(
-                                    context,
-                                    "Please, check your Internet Connection!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        },
-                        backColor = BackgroundMainLight,
-                        data = FROM_US_DATA,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    )
-                } else {
-                    MyAnimaShower(name = R.raw.connection_error_owl)
-                    viewModel.showNetDialog.value = true
                 }
-            } else {
-                MyAnimaShower(name = R.raw.welcome_owl)
-                Text(text = "Loading ...", fontSize = 20.sp, fontFamily = FontFamily.Serif)
-            }
 
+                FromUsBookSection(
+                    onBookItemClicked = { pdfUrl ->
+                        if (NetworkChecker(context).isInternetConnected) {
+                            onFromUsClick.invoke(pdfUrl)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Please, check your Internet Connection!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
+                    backColor = BackgroundMainLight,
+                    data = FROM_US_DATA,
+                    modifier = Modifier.padding(vertical = 4.dp)
+                )
+            } else {
+                MyAnimaShower(name = R.raw.connection_error_owl)
+                viewModel.showNetDialog.value = true
+            }
         }
     }
 }
