@@ -1,8 +1,10 @@
 package info.fekri.composeboom.util
 
 import android.util.Log
+import androidx.compose.ui.text.toLowerCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.io.Serializable
+import java.util.Locale
 
 val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
     Log.e("coroutineExceptionHandler", throwable.message ?: "null-message", throwable)
@@ -19,9 +21,4 @@ fun textLengthStyle(txt: String, length: Int): String {
     return txt
 }
 
-fun textIdStyle(txt: String): String {
-    if (txt.lowercase().contains(" ")) {
-        txt.replace(txt, "_")
-    }
-    return txt
-}
+fun textIdStyle(txt: String): String = txt.replace(" ", "_").toLowerCase(Locale.US)
