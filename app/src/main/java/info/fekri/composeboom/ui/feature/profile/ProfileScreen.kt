@@ -39,6 +39,7 @@ import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.util.ShowAlertWithEditText
+import info.fekri.composeboom.util.firstBigText
 import info.fekri.composeboom.util.textIdStyle
 import info.fekri.composeboom.util.textLengthStyle
 
@@ -89,7 +90,7 @@ fun ProfileScreen() {
 
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = textLengthStyle(viewModel.getUserName(), 24), style = TextStyle(
+                    text = textLengthStyle(firstBigText(viewModel.getUserName()), 24), style = TextStyle(
                         fontWeight = FontWeight.Bold, fontSize = 20.sp, color = Color.Black
                     )
                 )

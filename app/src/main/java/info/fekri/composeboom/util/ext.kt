@@ -1,7 +1,6 @@
 package info.fekri.composeboom.util
 
 import android.util.Log
-import androidx.compose.ui.text.toLowerCase
 import kotlinx.coroutines.CoroutineExceptionHandler
 import java.io.Serializable
 import java.util.Locale
@@ -19,6 +18,14 @@ data class ThreePair<A, B, C>(
 fun textLengthStyle(txt: String, length: Int): String {
     if (txt.length > length) return txt.substring(0, length) + "..."
     return txt
+}
+
+fun firstBigText(txt: String): String {
+    return if (!txt[0].isUpperCase()) {
+        txt.replaceFirstChar { it.uppercase() }
+    } else {
+        txt
+    }
 }
 
 fun textIdStyle(txt: String): String = txt.replace(" ", "_").toLowerCase(Locale.US)
