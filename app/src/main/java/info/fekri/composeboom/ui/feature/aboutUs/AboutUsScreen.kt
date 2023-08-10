@@ -49,7 +49,6 @@ import info.fekri.composeboom.R
 import info.fekri.composeboom.ui.theme.BackgroundMain
 import info.fekri.composeboom.ui.theme.BlueBackground
 import info.fekri.composeboom.ui.theme.BlueLightBack
-import info.fekri.composeboom.ui.theme.PrimaryDarkColor
 import info.fekri.composeboom.util.ABOUT_US_ITEMS
 import info.fekri.composeboom.util.MyScreens
 import info.fekri.composeboom.util.NetworkChecker
@@ -58,7 +57,7 @@ import info.fekri.composeboom.util.NetworkChecker
 fun AboutUsScreen() {
     val uiController = rememberSystemUiController()
     SideEffect {
-        uiController.setStatusBarColor(PrimaryDarkColor)
+        uiController.setStatusBarColor(BackgroundMain)
     }
     val navigation = getNavController()
 
@@ -110,8 +109,7 @@ fun SecondInfoContact(onClick: (String) -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         items(ABOUT_US_ITEMS.size) {
-            CircularInfo(
-                ABOUT_US_ITEMS[it].first, // name
+            CircularInfo(ABOUT_US_ITEMS[it].first, // name
                 ABOUT_US_ITEMS[it].second, // color
                 onClick = { onClick.invoke(ABOUT_US_ITEMS[it].third) } // url
             )
@@ -121,8 +119,7 @@ fun SecondInfoContact(onClick: (String) -> Unit) {
 
 @Composable
 fun CircularInfo(text: String, txtColor: Color = Color.White, onClick: () -> Unit) {
-    Card(
-        shape = RoundedCornerShape(70),
+    Card(shape = RoundedCornerShape(70),
         elevation = 4.dp,
         border = BorderStroke(2.dp, BlueBackground),
         modifier = Modifier
@@ -130,8 +127,7 @@ fun CircularInfo(text: String, txtColor: Color = Color.White, onClick: () -> Uni
             .clickable {
                 onClick.invoke()
             }
-            .padding(8.dp)
-    ) {
+            .padding(8.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -154,8 +150,7 @@ fun CircularInfo(text: String, txtColor: Color = Color.White, onClick: () -> Uni
 @Composable
 fun TopImagePart() {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
     ) {
         Card(
             elevation = 5.dp,
@@ -173,17 +168,13 @@ fun TopImagePart() {
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Mohammad Reza Fekri",
-            style = TextStyle(
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                fontSize = 22.sp
+            text = "Mohammad Reza Fekri", style = TextStyle(
+                fontWeight = FontWeight.Medium, color = Color.Black, fontSize = 22.sp
             )
         )
 
         Text(
-            text = "(fekri8614)",
-            style = TextStyle(
+            text = "(fekri8614)", style = TextStyle(
                 color = Color.Gray
             )
         )
@@ -205,8 +196,7 @@ fun FirstInfoContent() {
             Text(
                 text = "Compose Boom! is a cloned version of Boom book library application. The aim of developing this application is to develop a sample version of the real applications. This application is developed by Mohammad Reza Fekri. Contact me by:",
                 style = TextStyle(
-                    fontSize = 14.sp,
-                    color = Color.Black
+                    fontSize = 14.sp, color = Color.Black
                 ),
                 modifier = Modifier.padding(16.dp)
             )
@@ -220,22 +210,17 @@ fun FirstInfoContent() {
 fun AboutTopBar(onBackPressed: () -> Unit) {
     val context = LocalContext.current
 
-    TopAppBar(
-        elevation = 0.dp,
+    TopAppBar(elevation = 0.dp,
         backgroundColor = BackgroundMain,
         title = { Text(text = "About Us") },
         navigationIcon = {
             IconButton(onClick = {
                 if (NetworkChecker(context).isInternetConnected) onBackPressed.invoke()
                 else Toast.makeText(
-                    context,
-                    "Please, check your Internet Connection!",
-                    Toast.LENGTH_SHORT
+                    context, "Please, check your Internet Connection!", Toast.LENGTH_SHORT
                 ).show()
             }) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
-        }
-    )
+        })
 }
-

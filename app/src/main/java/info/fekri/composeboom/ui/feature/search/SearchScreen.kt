@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +41,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dev.burnoo.cokoin.navigation.getNavController
 import dev.burnoo.cokoin.navigation.getNavViewModel
 import info.fekri.composeboom.R
@@ -54,47 +56,39 @@ import info.fekri.composeboom.util.ShowAlertDialog
 
 @Composable
 fun SearchScreen() {
+    val uiController = rememberSystemUiController()
+    SideEffect {
+        uiController.setStatusBarColor(BackgroundMain)
+    }
+
     val context = LocalContext.current
     val navigation = getNavController()
     val viewModel = getNavViewModel<SearchScreenViewModel>()
     val search = viewModel.search.observeAsState(initial = "")
     val scaffoldState = rememberScaffoldState()
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        backgroundColor = BackgroundMain,
-        topBar = {
-            SearchTopAppBar(
-                onBackPressed = {
+    Scaffold(scaffoldState = scaffoldState, backgroundColor = BackgroundMain, topBar = {
+        SearchTopAppBar(onBackPressed = {
 
-                    if (
-                        viewModel.dataSearch.value.isNotEmpty() &&
-                        viewModel.search.value.toString().isNotEmpty() ||
-                        viewModel.search.value.toString().isNotBlank()
-                    ) {
-                        Toast.makeText(
-                            context,
-                            "Cleared data before going ...",
-                            Toast.LENGTH_SHORT
-                        ).show()
+            if (viewModel.dataSearch.value.isNotEmpty() && viewModel.search.value.toString()
+                    .isNotEmpty() || viewModel.search.value.toString().isNotBlank()
+            ) {
+                Toast.makeText(
+                    context, "Cleared data before going ...", Toast.LENGTH_SHORT
+                ).show()
 
-                        clearInput(viewModel)
+                clearInput(viewModel)
 
-                        Toast.makeText(
-                            context,
-                            "You can press-again to go :-)",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        navigation.popBackStack()
-                    }
-                },
-                onInfoClicked = {
-                    viewModel.showInfoDialog.value = true
-                }
-            )
-        }
-    ) { padding ->
+                Toast.makeText(
+                    context, "You can press-again to go :-)", Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                navigation.popBackStack()
+            }
+        }, onInfoClicked = {
+            viewModel.showInfoDialog.value = true
+        })
+    }) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,8 +105,7 @@ fun SearchScreen() {
     }
 
     if (viewModel.showInfoDialog.value) {
-        ShowAlertDialog(
-            title = "Information!",
+        ShowAlertDialog(title = "Information!",
             msg = "The data of books are from Google Libraries. For more detail you can check github page of this project from Profile.",
             btnMsg = "Alright!",
             onConfirmClicked = {
@@ -120,13 +113,11 @@ fun SearchScreen() {
             },
             onDismissRequest = {
                 viewModel.showInfoDialog.value = false
-            }
-        )
+            })
     }
 
     if (viewModel.showNetErrorDialog.value) {
-        ShowAlertDialog(
-            title = "Check your Connection!",
+        ShowAlertDialog(title = "Check your Connection!",
             msg = "Please, check your internet connection and try again!",
             btnMsg = "Tray Again",
             onConfirmClicked = {
@@ -188,18 +179,15 @@ fun ShowSearchResult(data: List<SearchedBook>, onSearchedBookCLicked: (String) -
 
 @Composable
 fun SearchedBookItem(searchedBook: SearchedBook, onItemClicked: (String) -> Unit) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .clickable { onItemClicked.invoke(searchedBook.id) }
-    ) {
+            .clickable { onItemClicked.invoke(searchedBook.id) }) {
         AsyncImage(
             model = searchedBook.volumeInfo.imageLinks.thumbnail
                 ?: "https://cdn4.vectorstock.com/i/1000x1000/61/88/owl-and-book-vector-26576188.jpg",
             contentDescription = null,
-            modifier = Modifier
-                .border(1.dp, color = BlueBackground, shape = RoundedCornerShape(40))
+            modifier = Modifier.border(1.dp, color = BlueBackground, shape = RoundedCornerShape(40))
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -237,14 +225,10 @@ fun SearchContent(
 ) {
     val context = LocalContext.current
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
     ) {
         SearchItemBody(
-            edtValue = searchValue,
-            icon = icon,
-            hint = hint,
-            onValueChanges = onValueChanges
+            edtValue = searchValue, icon = icon, hint = hint, onValueChanges = onValueChanges
         )
 
         SearchedBookButton(viewModel) { text ->
@@ -262,8 +246,7 @@ fun SearchedBookButton(viewModel: SearchScreenViewModel, onSearchButtonClicked: 
     TextButton(
         onClick = {
             onSearchButtonClicked.invoke(viewModel.search.value)
-        },
-        modifier = Modifier
+        }, modifier = Modifier
             .fillMaxWidth(0.6f)
             .padding(top = 26.dp, start = 4.dp)
     ) {
@@ -273,15 +256,11 @@ fun SearchedBookButton(viewModel: SearchScreenViewModel, onSearchButtonClicked: 
 
 @Composable
 fun SearchItemBody(
-    edtValue: String,
-    icon: ImageVector,
-    hint: String,
-    onValueChanges: (String) -> Unit
+    edtValue: String, icon: ImageVector, hint: String, onValueChanges: (String) -> Unit
 ) {
     OutlinedTextField(
         keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Words,
-            imeAction = ImeAction.Done
+            capitalization = KeyboardCapitalization.Words, imeAction = ImeAction.Done
         ),
         label = { Text(hint) },
         value = edtValue,
@@ -302,23 +281,19 @@ fun SearchItemBody(
 
 @Composable
 fun SearchTopAppBar(onBackPressed: () -> Unit, onInfoClicked: () -> Unit) {
-    TopAppBar(
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-            }
-        },
-        actions = {
-            IconButton(onClick = onInfoClicked) {
-                Icon(imageVector = Icons.Default.Info, contentDescription = null)
-            }
-        },
-        title = {}, backgroundColor = BackgroundMain,
-        elevation = 0.dp
+    TopAppBar(navigationIcon = {
+        IconButton(onClick = onBackPressed) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+        }
+    }, actions = {
+        IconButton(onClick = onInfoClicked) {
+            Icon(imageVector = Icons.Default.Info, contentDescription = null)
+        }
+    }, title = {}, backgroundColor = BackgroundMain, elevation = 0.dp
     )
 }
 
-private fun clearInput(viewModel : SearchScreenViewModel) {
+private fun clearInput(viewModel: SearchScreenViewModel) {
     viewModel.search.value = ""
     viewModel.showContent.value = false
     viewModel.dataSearch.value = listOf()

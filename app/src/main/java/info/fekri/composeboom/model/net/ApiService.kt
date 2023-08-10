@@ -39,16 +39,14 @@ interface ApiService {
 
     @GET("volumes/{book_id}")
     suspend fun getBookById(
-        @Path("book_id")
-        book_id: String
+        @Path("book_id") book_id: String
     ): ByIdBook
 
 }
 
 fun createApiService(): ApiService {
-    val retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    val retrofit =
+        Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
+            .build()
     return retrofit.create(ApiService::class.java)
 }

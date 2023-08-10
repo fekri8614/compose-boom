@@ -9,7 +9,7 @@ import info.fekri.composeboom.model.repository.book.BookRepository
 import info.fekri.composeboom.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
-class SearchScreenViewModel(private val bookRepository: BookRepository): ViewModel() {
+class SearchScreenViewModel(private val bookRepository: BookRepository) : ViewModel() {
     val search = MutableLiveData("")
     val dataSearch = mutableStateOf<List<SearchedBook>>(listOf())
 

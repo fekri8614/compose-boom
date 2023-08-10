@@ -49,20 +49,17 @@ fun EntrySecondScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        MainDesign(
-            viewModel,
+        MainDesign(viewModel,
             isScienceChecked = { viewModel.saveScienceSub(it) },
             isKidsChecked = { viewModel.saveKidsSub(it) },
-            isPoemsChecked = { viewModel.savePoems(it) }
-        )
+            isPoemsChecked = { viewModel.savePoems(it) })
 
         Button(
             onClick = {
                 navigation.navigate(MyScreens.MainScreen.route) {
                     popUpTo(MyScreens.SplashScreen.route)
                 }
-            },
-            modifier = Modifier.fillMaxWidth(0.9f)
+            }, modifier = Modifier.fillMaxWidth(0.9f)
         ) {
             Text(text = "Submit!", modifier = Modifier.padding(4.dp))
         }
@@ -94,10 +91,8 @@ fun MainDesign(
             IconMainApp()
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Boom!",
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                text = "Boom!", style = TextStyle(
+                    fontSize = 18.sp, fontWeight = FontWeight.Bold
                 )
             )
         }
@@ -138,9 +133,7 @@ fun SelectableItems(
 
         Text(
             text = "Your favorites:", style = TextStyle(
-                fontSize = 18.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Bold
+                fontSize = 18.sp, color = Color.Black, fontWeight = FontWeight.Bold
             )
         )
 
@@ -256,14 +249,13 @@ fun SelectableItems(
 
             if (viewModel.showDialog.value) {
                 viewModel.isHistoryChecked.value = false
-                ShowAlertDialog(
-                    title = "Info",
+                ShowAlertDialog(title = "Still Working ...",
                     msg = "We are still updating Boom! Thank you for understanding :-*",
                     btnMsg = "Close",
-                    onConfirmClicked = { viewModel.showDialog.value = false }, onDismissRequest = {
+                    onConfirmClicked = { viewModel.showDialog.value = false },
+                    onDismissRequest = {
                         viewModel.showDialog.value = false
-                    }
-                )
+                    })
             }
 
             if (viewModel.isScienceChecked.value) isScienceChecked(true) else isScienceChecked(false)

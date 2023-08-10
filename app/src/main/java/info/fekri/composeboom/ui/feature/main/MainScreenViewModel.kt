@@ -12,23 +12,29 @@ import info.fekri.composeboom.util.coroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel(
-    private val userRepository: UserRepository,
-    private val bookRepository: BookRepository
+    private val userRepository: UserRepository, private val bookRepository: BookRepository
 ) : ViewModel() {
-    val dataKids      = mutableStateOf<List<KidBook>>(listOf())
-    val dataScience   = mutableStateOf<List<ScienceBook>>(listOf())
-    val dataPoems     = mutableStateOf<List<PoemBook>>(listOf())
+    val dataKids = mutableStateOf<List<KidBook>>(listOf())
+    val dataScience = mutableStateOf<List<ScienceBook>>(listOf())
+    val dataPoems = mutableStateOf<List<PoemBook>>(listOf())
 
-    val showProgress  = mutableStateOf(false)
+    val showKidsProgress = mutableStateOf(false)
+    val showScienceProgress = mutableStateOf(false)
+    val showPoemsProgress = mutableStateOf(false)
     val showNetDialog = mutableStateOf(false)
 
-    val showUiKids    = mutableStateOf(false)
+    val showUiKids = mutableStateOf(false)
     val showUiScience = mutableStateOf(false)
-    val showUiPoems   = mutableStateOf(false)
+    val showUiPoems = mutableStateOf(false)
 
-    private fun showKids(): Boolean    = userRepository.getKidsSub()
+    private fun showKids(): Boolean = userRepository.getKidsSub()
     private fun showScience(): Boolean = userRepository.getScienceSub()
-    private fun showPoems(): Boolean   = userRepository.getPoemsSub()
+    private fun showPoems(): Boolean = userRepository.getPoemsSub()
+
+    fun showKidsUi(): Boolean = !showKidsProgress.value // equal to false
+    fun showScienceUi(): Boolean = !showScienceProgress.value // equal to false
+    fun showPoemsUi(): Boolean = !showPoemsProgress.value // equal to false
+
 
     init {
         getDataFromNet()
@@ -53,32 +59,34 @@ class MainScreenViewModel(
 
     private fun setupPoems() {
         viewModelScope.launch(coroutineExceptionHandler) {
-            showProgress.value = true
+            showPoemsProgress.value = true
 
-            val poemsData   = bookRepository.getPoemBooks()
+            val poemsData = bookRepository.getPoemBooks()
             dataPoems.value = poemsData
 
-            showProgress.value = false
+            showPoemsProgress.value = false
         }
     }
+
     private fun setupScience() {
         viewModelScope.launch(coroutineExceptionHandler) {
-            showProgress.value = true
+            showScienceProgress.value = true
 
-            val scienceData   = bookRepository.getScienceBooks()
+            val scienceData = bookRepository.getScienceBooks()
             dataScience.value = scienceData
 
-            showProgress.value = false
+            showScienceProgress.value = false
         }
     }
+
     private fun setupKids() {
         viewModelScope.launch(coroutineExceptionHandler) {
-            showProgress.value = true
+            showKidsProgress.value = true
 
             val dataKidsFromServer = bookRepository.getKidBooks()
-            dataKids.value         = dataKidsFromServer
+            dataKids.value = dataKidsFromServer
 
-            showProgress.value = false
+            showKidsProgress.value = false
         }
     }
 }
